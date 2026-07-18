@@ -1,0 +1,37 @@
+# Secrets — never push
+.env
+**/.env
+!.env.example
+!**/.env.example
+
+# Python
+.venv/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / Expo
+node_modules/
+.expo/
+dist/
+web-build/
+*.jscache
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.swp
+
+# Leftover empty nest from flatten (safe to delete locally)
+apps/
+
+# Optional local overrides
+mobile/.env
+mobile/.env.local
+EXPO_PUBLIC_*.local

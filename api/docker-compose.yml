@@ -1,0 +1,14 @@
+# Optional local compose (API only). From api/:
+#   docker compose up --build
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    environment:
+      MOCK_AI: "false"
+      RATE_LIMIT_PER_MINUTE: "60"

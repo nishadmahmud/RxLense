@@ -1,0 +1,2508 @@
+[
+  {
+    "id": "allopurinol",
+    "brandNames": [
+      "Allopurinol",
+      "Zyloric",
+      "Allopur"
+    ],
+    "generic": "Allopurinol",
+    "drugClass": "Xanthine oxidase inhibitor",
+    "commonUses": [
+      "Gout prevention as prescribed"
+    ],
+    "foodFlags": [
+      "Hydration"
+    ],
+    "interactionTags": [
+      "azathioprine",
+      "mercaptopurine",
+      "ampicillin_rash"
+    ],
+    "commonSideEffects": [
+      "Rash",
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Severe skin reaction — stop and seek care",
+      "Liver signs"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Rash can be serious — seek care promptly."
+  },
+  {
+    "id": "antacid_simethicone",
+    "brandNames": [
+      "Entacyd",
+      "Entacyd Plus",
+      "Antacid Max",
+      "Digel"
+    ],
+    "generic": "Aluminium hydroxide + Magnesium hydroxide (+ Simethicone)",
+    "drugClass": "Antacid",
+    "commonUses": [
+      "Acidity",
+      "Gas-related discomfort"
+    ],
+    "foodFlags": [
+      "Can reduce absorption of some medicines — space doses"
+    ],
+    "interactionTags": [
+      "antibiotics_tetracycline_quinolone",
+      "iron",
+      "levothyroxine"
+    ],
+    "commonSideEffects": [
+      "Chalky taste",
+      "Constipation or diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask pharmacist which antacid is suitable.",
+    "notes": "Separate from many oral medicines by 1–2 hours if advised."
+  },
+  {
+    "id": "amiodarone",
+    "brandNames": [
+      "Amiodarone",
+      "Cordarone"
+    ],
+    "generic": "Amiodarone",
+    "drugClass": "Antiarrhythmic",
+    "commonUses": [
+      "Rhythm control as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "warfarin",
+      "digoxin",
+      "statins",
+      "qt_prolonging"
+    ],
+    "commonSideEffects": [
+      "Photosensitivity",
+      "Thyroid changes"
+    ],
+    "seriousSideEffects": [
+      "Lung symptoms",
+      "Liver signs",
+      "Vision changes"
+    ],
+    "pregnancyNote": "Specialist advice.",
+    "notes": "Many interactions — pharmacist review essential."
+  },
+  {
+    "id": "amlodipine",
+    "brandNames": [
+      "Amdocal",
+      "Amlodipine",
+      "Norvasc"
+    ],
+    "generic": "Amlodipine",
+    "drugClass": "Calcium channel blocker",
+    "commonUses": [
+      "High blood pressure",
+      "Angina as prescribed"
+    ],
+    "foodFlags": [
+      "Grapefruit caution for some calcium blockers — ask pharmacist"
+    ],
+    "interactionTags": [
+      "grapefruit",
+      "other_bp_meds"
+    ],
+    "commonSideEffects": [
+      "Ankle swelling",
+      "Flushing",
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Severe dizziness",
+      "Chest pain worsening"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Take regularly; do not stop suddenly without advice."
+  },
+  {
+    "id": "amoxicillin",
+    "brandNames": [
+      "Moxacil",
+      "Amoxil",
+      "Fymoxil",
+      "Amoxicap"
+    ],
+    "generic": "Amoxicillin",
+    "drugClass": "Penicillin antibiotic",
+    "commonUses": [
+      "Bacterial infections",
+      "Throat infections",
+      "Dental infections",
+      "Respiratory infections"
+    ],
+    "foodFlags": [
+      "Can take with food if stomach upset"
+    ],
+    "interactionTags": [
+      "allopurinol",
+      "methotrexate",
+      "warfarin"
+    ],
+    "commonSideEffects": [
+      "Mild nausea",
+      "Diarrhea",
+      "Rash"
+    ],
+    "seriousSideEffects": [
+      "Difficulty breathing",
+      "Severe rash",
+      "Swelling of face or throat"
+    ],
+    "pregnancyNote": "Often considered when prescribed by a doctor; confirm with clinician.",
+    "notes": "Complete the full course unless a doctor tells you otherwise."
+  },
+  {
+    "id": "amoxicillin_clavulanate",
+    "brandNames": [
+      "Moxaclav",
+      "Augmentin",
+      "Clavulanate"
+    ],
+    "generic": "Amoxicillin + Clavulanic acid",
+    "drugClass": "Penicillin antibiotic + beta-lactamase inhibitor",
+    "commonUses": [
+      "Broader bacterial infections as prescribed"
+    ],
+    "foodFlags": [
+      "With food if stomach upset"
+    ],
+    "interactionTags": [
+      "allopurinol",
+      "warfarin",
+      "methotrexate"
+    ],
+    "commonSideEffects": [
+      "Diarrhea",
+      "Nausea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Liver signs",
+      "Bloody diarrhea"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Finish course unless told otherwise."
+  },
+  {
+    "id": "vitamin_c",
+    "brandNames": [
+      "Ceevit",
+      "Vitamin C",
+      "Cevit"
+    ],
+    "generic": "Ascorbic acid",
+    "drugClass": "Vitamin",
+    "commonUses": [
+      "Supplement",
+      "Deficiency as advised"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Stomach upset at high dose"
+    ],
+    "seriousSideEffects": [
+      "Rare"
+    ],
+    "pregnancyNote": "Ask doctor about dose.",
+    "notes": "Supplement — not a cure for infection."
+  },
+  {
+    "id": "aspirin_low",
+    "brandNames": [
+      "Disprin",
+      "Aspirin",
+      "Ecosprin"
+    ],
+    "generic": "Aspirin (acetylsalicylic acid)",
+    "drugClass": "Antiplatelet / analgesic (dose-dependent)",
+    "commonUses": [
+      "Pain/fever at analgesic doses",
+      "Heart protection at low dose as prescribed"
+    ],
+    "foodFlags": [
+      "After food if stomach sensitive"
+    ],
+    "interactionTags": [
+      "warfarin",
+      "nsaids",
+      "alcohol"
+    ],
+    "commonSideEffects": [
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Bleeding",
+      "Black stools",
+      "Severe allergy",
+      "Breathing issues in some asthma"
+    ],
+    "pregnancyNote": "Ask doctor — not for self-medication in pregnancy.",
+    "notes": "Bleeding risk; never combine casually with other blood thinners."
+  },
+  {
+    "id": "atenolol",
+    "brandNames": [
+      "Atenolol",
+      "Tenormin",
+      "Cardinol"
+    ],
+    "generic": "Atenolol",
+    "drugClass": "Beta blocker",
+    "commonUses": [
+      "Hypertension",
+      "Angina as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "other_bp_meds"
+    ],
+    "commonSideEffects": [
+      "Fatigue",
+      "Cold extremities"
+    ],
+    "seriousSideEffects": [
+      "Severe bradycardia",
+      "Breathing issues"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Asthma history matters."
+  },
+  {
+    "id": "atorvastatin",
+    "brandNames": [
+      "Atorva",
+      "Lipitor",
+      "Atorvastatin"
+    ],
+    "generic": "Atorvastatin",
+    "drugClass": "Statin",
+    "commonUses": [
+      "High cholesterol",
+      "Cardiovascular risk reduction as prescribed"
+    ],
+    "foodFlags": [
+      "Limit grapefruit for some statins",
+      "Prefer evening for some regimens — follow label"
+    ],
+    "interactionTags": [
+      "grapefruit",
+      "some_antibiotics",
+      "fibrates"
+    ],
+    "commonSideEffects": [
+      "Muscle ache"
+    ],
+    "seriousSideEffects": [
+      "Severe muscle pain/weakness",
+      "Dark urine",
+      "Yellowing skin"
+    ],
+    "pregnancyNote": "Usually avoided — ask doctor.",
+    "notes": "Report unexplained muscle pain."
+  },
+  {
+    "id": "azithromycin",
+    "brandNames": [
+      "Azithrocin",
+      "Zithromax",
+      "Azithrox",
+      "Azicin"
+    ],
+    "generic": "Azithromycin",
+    "drugClass": "Macrolide antibiotic",
+    "commonUses": [
+      "Respiratory infections",
+      "Skin infections",
+      "Some STIs as prescribed"
+    ],
+    "foodFlags": [
+      "Usually once daily; follow label"
+    ],
+    "interactionTags": [
+      "antacids",
+      "warfarin",
+      "qt_prolonging"
+    ],
+    "commonSideEffects": [
+      "Stomach upset",
+      "Diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Irregular heartbeat",
+      "Severe allergy",
+      "Yellowing of eyes"
+    ],
+    "pregnancyNote": "Only if prescribed; ask doctor.",
+    "notes": "Do not stop early without medical advice."
+  },
+  {
+    "id": "bisoprolol",
+    "brandNames": [
+      "Bisoprolol",
+      "Concor",
+      "Bisoren"
+    ],
+    "generic": "Bisoprolol",
+    "drugClass": "Beta blocker",
+    "commonUses": [
+      "High blood pressure",
+      "Heart rate control as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "other_bp_meds",
+      "verapamil_diltiazem",
+      "inhalers_caution"
+    ],
+    "commonSideEffects": [
+      "Tiredness",
+      "Cold hands",
+      "Slow pulse"
+    ],
+    "seriousSideEffects": [
+      "Severe dizziness",
+      "Breathing worsening in asthma"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Do not stop suddenly without advice."
+  },
+  {
+    "id": "budesonide_formoterol",
+    "brandNames": [
+      "Symbicort",
+      "Foracort",
+      "Budesonide+Formoterol"
+    ],
+    "generic": "Budesonide + Formoterol",
+    "drugClass": "ICS/LABA inhaler",
+    "commonUses": [
+      "Asthma maintenance as prescribed"
+    ],
+    "foodFlags": [
+      "Rinse mouth after use"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Thrush",
+      "Tremor"
+    ],
+    "seriousSideEffects": [
+      "Severe breathing worsening"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Technique matters — ask pharmacist to check inhaler use."
+  },
+  {
+    "id": "calcium",
+    "brandNames": [
+      "Calbo",
+      "Calcium",
+      "Calcin-D"
+    ],
+    "generic": "Calcium (often with vitamin D)",
+    "drugClass": "Mineral supplement",
+    "commonUses": [
+      "Bone health",
+      "Deficiency as advised"
+    ],
+    "foodFlags": [
+      "Separate from some thyroid/iron meds"
+    ],
+    "interactionTags": [
+      "levothyroxine",
+      "iron",
+      "some_antibiotics"
+    ],
+    "commonSideEffects": [
+      "Constipation"
+    ],
+    "seriousSideEffects": [
+      "Severe hypercalcemia symptoms rare"
+    ],
+    "pregnancyNote": "Ask doctor about dose.",
+    "notes": "Timing vs other meds matters."
+  },
+  {
+    "id": "cefixixime",
+    "brandNames": [
+      "Cef-3",
+      "Cefixime",
+      "Taxim-O"
+    ],
+    "generic": "Cefixime",
+    "drugClass": "Cephalosporin antibiotic",
+    "commonUses": [
+      "Respiratory and urinary infections as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Diarrhea",
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Severe diarrhea"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Do not stop early because you feel better without advice."
+  },
+  {
+    "id": "cefuroxime",
+    "brandNames": [
+      "Cefotil",
+      "Zinnat",
+      "Cefuroxime"
+    ],
+    "generic": "Cefuroxime",
+    "drugClass": "Cephalosporin antibiotic",
+    "commonUses": [
+      "Respiratory",
+      "Skin",
+      "Urinary infections as prescribed"
+    ],
+    "foodFlags": [
+      "Follow label with/without food"
+    ],
+    "interactionTags": [
+      "probenecid"
+    ],
+    "commonSideEffects": [
+      "Diarrhea",
+      "Nausea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Bloody diarrhea"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Finish course unless doctor says otherwise."
+  },
+  {
+    "id": "cetirizine",
+    "brandNames": [
+      "Alatrol",
+      "Cetirizine",
+      "Zyrtec"
+    ],
+    "generic": "Cetirizine",
+    "drugClass": "Antihistamine",
+    "commonUses": [
+      "Allergy",
+      "Itching",
+      "Runny nose"
+    ],
+    "foodFlags": [
+      "Can take with or without food"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "sedatives"
+    ],
+    "commonSideEffects": [
+      "Drowsiness",
+      "Dry mouth"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy reaction rare"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Avoid driving if drowsy."
+  },
+  {
+    "id": "vitamin_d",
+    "brandNames": [
+      "Vitamin D",
+      "D-Rise",
+      "Calci-D"
+    ],
+    "generic": "Cholecalciferol / Vitamin D",
+    "drugClass": "Vitamin",
+    "commonUses": [
+      "Deficiency",
+      "Bone health as advised"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Nausea at high dose"
+    ],
+    "seriousSideEffects": [
+      "Hypercalcemia symptoms"
+    ],
+    "pregnancyNote": "Ask doctor about dose.",
+    "notes": "Do not megadose without advice."
+  },
+  {
+    "id": "ciprofloxacin",
+    "brandNames": [
+      "Ciprocin",
+      "Cipro",
+      "Neofloxin"
+    ],
+    "generic": "Ciprofloxacin",
+    "drugClass": "Fluoroquinolone antibiotic",
+    "commonUses": [
+      "Urinary tract infections",
+      "Some GI infections",
+      "Other bacterial infections as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid dairy/calcium close to dose if advised",
+      "Avoid antacids near dose"
+    ],
+    "interactionTags": [
+      "dairy",
+      "antacids",
+      "warfarin",
+      "theophylline"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Tendon pain",
+      "Severe allergy",
+      "Mood changes"
+    ],
+    "pregnancyNote": "Often avoided; ask doctor.",
+    "notes": "Serious tendon risks possible — seek care for sudden joint/tendon pain."
+  },
+  {
+    "id": "clarithromycin",
+    "brandNames": [
+      "Klaricid",
+      "Clarithromycin",
+      "Binoclar"
+    ],
+    "generic": "Clarithromycin",
+    "drugClass": "Macrolide antibiotic",
+    "commonUses": [
+      "Respiratory infections",
+      "H. pylori regimens as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "statins",
+      "qt_prolonging",
+      "warfarin"
+    ],
+    "commonSideEffects": [
+      "Taste change",
+      "Diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Irregular heartbeat",
+      "Severe allergy",
+      "Liver signs"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Many drug interactions — tell pharmacist everything you take."
+  },
+  {
+    "id": "clonazepam",
+    "brandNames": [
+      "Clonazepam",
+      "Rivotril",
+      "Clonapam",
+      "Lonapam"
+    ],
+    "generic": "Clonazepam",
+    "drugClass": "Benzodiazepine",
+    "commonUses": [
+      "Seizures",
+      "Panic as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid alcohol"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "opioids",
+      "sedatives"
+    ],
+    "commonSideEffects": [
+      "Drowsiness"
+    ],
+    "seriousSideEffects": [
+      "Slow breathing",
+      "Extreme sedation"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Dependence risk."
+  },
+  {
+    "id": "clopidogrel",
+    "brandNames": [
+      "Clopid",
+      "Plavix",
+      "Clopidogrel"
+    ],
+    "generic": "Clopidogrel",
+    "drugClass": "Antiplatelet",
+    "commonUses": [
+      "Heart/stent protection as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "omeprazole_some_ppis",
+      "nsaids",
+      "warfarin",
+      "aspirin"
+    ],
+    "commonSideEffects": [
+      "Bruising"
+    ],
+    "seriousSideEffects": [
+      "Unusual bleeding",
+      "Black stools",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Specialist advice.",
+    "notes": "Do not stop suddenly after stents without cardiologist advice."
+  },
+  {
+    "id": "colchicine",
+    "brandNames": [
+      "Colchicine",
+      "Colcine"
+    ],
+    "generic": "Colchicine",
+    "drugClass": "Gout anti-inflammatory",
+    "commonUses": [
+      "Acute gout flares as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid grapefruit"
+    ],
+    "interactionTags": [
+      "clarithromycin",
+      "statins",
+      "grapefruit"
+    ],
+    "commonSideEffects": [
+      "Diarrhea",
+      "Nausea"
+    ],
+    "seriousSideEffects": [
+      "Severe diarrhea/dehydration",
+      "Muscle weakness"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Toxicity risk with interacting drugs."
+  },
+  {
+    "id": "desloratadine",
+    "brandNames": [
+      "Deslor",
+      "Aerius",
+      "Desloratadine"
+    ],
+    "generic": "Desloratadine",
+    "drugClass": "Antihistamine",
+    "commonUses": [
+      "Allergic rhinitis",
+      "Hives as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Dry mouth",
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": ""
+  },
+  {
+    "id": "diazepam",
+    "brandNames": [
+      "Sedil",
+      "Diazepam",
+      "Valium"
+    ],
+    "generic": "Diazepam",
+    "drugClass": "Benzodiazepine",
+    "commonUses": [
+      "Anxiety",
+      "Muscle spasm",
+      "Seizure protocols as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid alcohol"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "opioids",
+      "sedatives"
+    ],
+    "commonSideEffects": [
+      "Drowsiness",
+      "Dizziness"
+    ],
+    "seriousSideEffects": [
+      "Slow breathing",
+      "Extreme sedation"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Dependence risk; do not combine with alcohol."
+  },
+  {
+    "id": "diclofenac",
+    "brandNames": [
+      "Voltaren",
+      "Diclofenac",
+      "Clofenac",
+      "Esdipon"
+    ],
+    "generic": "Diclofenac",
+    "drugClass": "NSAID",
+    "commonUses": [
+      "Pain",
+      "Inflammation"
+    ],
+    "foodFlags": [
+      "Prefer after food"
+    ],
+    "interactionTags": [
+      "warfarin",
+      "bp_meds",
+      "steroids",
+      "aspirin"
+    ],
+    "commonSideEffects": [
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Black stools",
+      "Chest pain",
+      "Kidney warning signs"
+    ],
+    "pregnancyNote": "Often avoided especially later pregnancy.",
+    "notes": "Ulcer / heart / kidney history matters."
+  },
+  {
+    "id": "digoxin",
+    "brandNames": [
+      "Digoxin",
+      "Lanoxin"
+    ],
+    "generic": "Digoxin",
+    "drugClass": "Cardiac glycoside",
+    "commonUses": [
+      "Heart rate / failure regimens as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "many_antibiotics",
+      "diuretics",
+      "amiodarone"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Visual changes if toxic"
+    ],
+    "seriousSideEffects": [
+      "Dangerous rhythm issues",
+      "Toxicity signs"
+    ],
+    "pregnancyNote": "Specialist care.",
+    "notes": "Narrow therapeutic window — app cannot manage digoxin."
+  },
+  {
+    "id": "domperidone",
+    "brandNames": [
+      "Domperidone",
+      "Motigut",
+      "Motilium",
+      "Paridon"
+    ],
+    "generic": "Domperidone",
+    "drugClass": "Prokinetic / antiemetic",
+    "commonUses": [
+      "Nausea",
+      "Bloating as prescribed"
+    ],
+    "foodFlags": [
+      "Often before meals"
+    ],
+    "interactionTags": [
+      "qt_prolonging"
+    ],
+    "commonSideEffects": [
+      "Dry mouth",
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Heart rhythm issues",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Heart warnings exist in some guidelines — follow clinician."
+  },
+  {
+    "id": "doxycycline",
+    "brandNames": [
+      "Doxycin",
+      "Vibramycin",
+      "Doxycycline"
+    ],
+    "generic": "Doxycycline",
+    "drugClass": "Tetracycline antibiotic",
+    "commonUses": [
+      "Respiratory",
+      "Skin",
+      "Some vector-borne infections as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid lying flat after dose if advised; dairy/antacids may reduce absorption"
+    ],
+    "interactionTags": [
+      "dairy",
+      "antacids",
+      "iron",
+      "retinoids"
+    ],
+    "commonSideEffects": [
+      "Stomach upset",
+      "Sun sensitivity"
+    ],
+    "seriousSideEffects": [
+      "Severe headache/vision changes",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Usually avoided — ask doctor.",
+    "notes": "Sun protection often advised."
+  },
+  {
+    "id": "esomeprazole",
+    "brandNames": [
+      "Maxpro",
+      "Nexum",
+      "Sergel",
+      "Esomep",
+      "Nexium"
+    ],
+    "generic": "Esomeprazole",
+    "drugClass": "Proton pump inhibitor (PPI)",
+    "commonUses": [
+      "GERD",
+      "Ulcers",
+      "H. pylori regimens as prescribed"
+    ],
+    "foodFlags": [
+      "Usually before food"
+    ],
+    "interactionTags": [
+      "clopidogrel",
+      "some_antifungals"
+    ],
+    "commonSideEffects": [
+      "Headache",
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Persistent diarrhea"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Follow written course especially with antibiotics."
+  },
+  {
+    "id": "oral_contraceptive_combined",
+    "brandNames": [
+      "Combined pill",
+      "Ovral",
+      "Femilon"
+    ],
+    "generic": "Estrogen + Progestin contraceptives",
+    "drugClass": "Hormonal contraceptive",
+    "commonUses": [
+      "Contraception as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "enzyme_inducers",
+      "some_antibiotics_debate",
+      "st_johns_wort"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Spotting"
+    ],
+    "seriousSideEffects": [
+      "Chest pain",
+      "Leg swelling",
+      "Severe headache — clot warnings"
+    ],
+    "pregnancyNote": "Stop and test if pregnancy suspected.",
+    "notes": "Smoking + age increases clot risk — clinician counseling."
+  },
+  {
+    "id": "famotidine",
+    "brandNames": [
+      "Famotid",
+      "Famotidine",
+      "Pepcid"
+    ],
+    "generic": "Famotidine",
+    "drugClass": "H2 receptor antagonist",
+    "commonUses": [
+      "Heartburn",
+      "Acid-related discomfort as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Headache",
+      "Constipation or diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Educational only — follow label."
+  },
+  {
+    "id": "fenofibrate",
+    "brandNames": [
+      "Fenofibrate",
+      "Lipanthyl",
+      "Fenolip"
+    ],
+    "generic": "Fenofibrate",
+    "drugClass": "Fibrate",
+    "commonUses": [
+      "High triglycerides as prescribed"
+    ],
+    "foodFlags": [
+      "With food if labeled"
+    ],
+    "interactionTags": [
+      "statins",
+      "warfarin"
+    ],
+    "commonSideEffects": [
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Severe muscle pain",
+      "Gallbladder symptoms"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Combination with statin needs clinician oversight."
+  },
+  {
+    "id": "fexofenadine",
+    "brandNames": [
+      "Fexo",
+      "Telfast",
+      "Fexofenadine"
+    ],
+    "generic": "Fexofenadine",
+    "drugClass": "Antihistamine (non-sedating)",
+    "commonUses": [
+      "Allergy",
+      "Hay fever"
+    ],
+    "foodFlags": [
+      "Fruit juice may reduce absorption for some products — follow label"
+    ],
+    "interactionTags": [
+      "antacids"
+    ],
+    "commonSideEffects": [
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Usually less drowsy."
+  },
+  {
+    "id": "finasteride",
+    "brandNames": [
+      "Finasteride",
+      "Proscar"
+    ],
+    "generic": "Finasteride",
+    "drugClass": "5-alpha reductase inhibitor",
+    "commonUses": [
+      "BPH",
+      "Hair loss protocols as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Sexual side effects"
+    ],
+    "seriousSideEffects": [
+      "Mood changes",
+      "Allergic swelling"
+    ],
+    "pregnancyNote": "Teratogenic handling warnings — keep away from pregnant contact with crushed tabs.",
+    "notes": "Important pregnancy handling caution."
+  },
+  {
+    "id": "flucloxacillin",
+    "brandNames": [
+      "Floxacillin",
+      "Fluclox",
+      "Flubex"
+    ],
+    "generic": "Flucloxacillin",
+    "drugClass": "Penicillinase-resistant penicillin",
+    "commonUses": [
+      "Skin and soft tissue infections as prescribed"
+    ],
+    "foodFlags": [
+      "Often empty stomach if labeled"
+    ],
+    "interactionTags": [
+      "methotrexate",
+      "warfarin"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Liver issues rare"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Allergy history to penicillins matters."
+  },
+  {
+    "id": "fluoxetine",
+    "brandNames": [
+      "Fluoxetine",
+      "Prozac",
+      "Flutin"
+    ],
+    "generic": "Fluoxetine",
+    "drugClass": "SSRI antidepressant",
+    "commonUses": [
+      "Depression",
+      "Anxiety disorders as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "maoi",
+      "other_serotonergic",
+      "tramadol"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Sleep changes"
+    ],
+    "seriousSideEffects": [
+      "Suicidal thoughts especially early",
+      "Serotonin syndrome"
+    ],
+    "pregnancyNote": "Specialist advice.",
+    "notes": "Do not stop suddenly; seek urgent help for suicidal thoughts."
+  },
+  {
+    "id": "furosemide",
+    "brandNames": [
+      "Furosemide",
+      "Lasix",
+      "Frusemide"
+    ],
+    "generic": "Furosemide",
+    "drugClass": "Loop diuretic",
+    "commonUses": [
+      "Fluid overload",
+      "Heart failure as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "lithium",
+      "nsaids",
+      "aminoglycosides"
+    ],
+    "commonSideEffects": [
+      "Frequent urination",
+      "Low potassium risk"
+    ],
+    "seriousSideEffects": [
+      "Severe dehydration",
+      "Hearing issues rare"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Dose timing affects sleep — ask clinician."
+  },
+  {
+    "id": "gabapentin",
+    "brandNames": [
+      "Gabapentin",
+      "Neurontin",
+      "Gabatin"
+    ],
+    "generic": "Gabapentin",
+    "drugClass": "Anticonvulsant / neuropathic pain agent",
+    "commonUses": [
+      "Nerve pain",
+      "Seizures as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "sedatives",
+      "alcohol"
+    ],
+    "commonSideEffects": [
+      "Drowsiness",
+      "Dizziness"
+    ],
+    "seriousSideEffects": [
+      "Severe mood changes",
+      "Allergic rash with fever"
+    ],
+    "pregnancyNote": "Specialist advice.",
+    "notes": "Do not stop seizure medicines suddenly."
+  },
+  {
+    "id": "gliclazide",
+    "brandNames": [
+      "Diamicron",
+      "Gliclazide",
+      "Comprid"
+    ],
+    "generic": "Gliclazide",
+    "drugClass": "Sulfonylurea antidiabetic",
+    "commonUses": [
+      "Type 2 diabetes"
+    ],
+    "foodFlags": [
+      "With meals"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "other_diabetes_meds"
+    ],
+    "commonSideEffects": [
+      "Hypoglycemia risk",
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Severe hypo",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Specialist advice.",
+    "notes": "Meal timing matters."
+  },
+  {
+    "id": "glimepiride",
+    "brandNames": [
+      "Amaryl",
+      "Glimepiride",
+      "Dipride"
+    ],
+    "generic": "Glimepiride",
+    "drugClass": "Sulfonylurea antidiabetic",
+    "commonUses": [
+      "Type 2 diabetes as prescribed"
+    ],
+    "foodFlags": [
+      "With breakfast/main meal to reduce hypoglycemia risk"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "other_diabetes_meds",
+      "nsaids"
+    ],
+    "commonSideEffects": [
+      "Low blood sugar symptoms",
+      "Weight gain"
+    ],
+    "seriousSideEffects": [
+      "Severe hypoglycemia",
+      "Allergic rash"
+    ],
+    "pregnancyNote": "Specialist advice required.",
+    "notes": "Know hypo symptoms; never change diabetes meds alone."
+  },
+  {
+    "id": "insulin_human",
+    "brandNames": [
+      "Actrapid",
+      "Insulatard",
+      "Human insulin"
+    ],
+    "generic": "Human insulin",
+    "drugClass": "Insulin",
+    "commonUses": [
+      "Diabetes as prescribed"
+    ],
+    "foodFlags": [
+      "Coordinate with meals as taught"
+    ],
+    "interactionTags": [
+      "other_diabetes_meds",
+      "steroids"
+    ],
+    "commonSideEffects": [
+      "Low blood sugar",
+      "Injection site reactions"
+    ],
+    "seriousSideEffects": [
+      "Severe hypoglycemia",
+      "Unconsciousness"
+    ],
+    "pregnancyNote": "Specialist obstetric diabetes care.",
+    "notes": "Never change insulin doses from an app — education only."
+  },
+  {
+    "id": "hydroxychloroquine",
+    "brandNames": [
+      "Hydroxychloroquine",
+      "Plaquenil",
+      "HCQS"
+    ],
+    "generic": "Hydroxychloroquine",
+    "drugClass": "DMARD / antimalarial",
+    "commonUses": [
+      "Autoimmune disease as prescribed"
+    ],
+    "foodFlags": [
+      "With food"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Vision changes — eye monitoring",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Specialist advice.",
+    "notes": "Eye checks may be required."
+  },
+  {
+    "id": "hyoscine_butylbromide",
+    "brandNames": [
+      "Buscopan",
+      "Hyoscine",
+      "Butylbromide"
+    ],
+    "generic": "Hyoscine Butylbromide",
+    "drugClass": "Antispasmodic",
+    "commonUses": [
+      "Abdominal cramps as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "other_anticholinergics"
+    ],
+    "commonSideEffects": [
+      "Dry mouth",
+      "Blurred vision"
+    ],
+    "seriousSideEffects": [
+      "Difficulty urinating",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Not for undiagnosed acute abdomen without clinician advice."
+  },
+  {
+    "id": "ibuprofen",
+    "brandNames": [
+      "Flamex",
+      "Ibuprofen",
+      "Profénid"
+    ],
+    "generic": "Ibuprofen",
+    "drugClass": "NSAID",
+    "commonUses": [
+      "Pain",
+      "Inflammation",
+      "Fever"
+    ],
+    "foodFlags": [
+      "Prefer after food to reduce stomach irritation"
+    ],
+    "interactionTags": [
+      "warfarin",
+      "aspirin",
+      "bp_meds",
+      "steroids"
+    ],
+    "commonSideEffects": [
+      "Stomach upset",
+      "Heartburn"
+    ],
+    "seriousSideEffects": [
+      "Black stools",
+      "Vomiting blood",
+      "Chest pain",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Often avoided especially later pregnancy — ask doctor.",
+    "notes": "Can irritate stomach; caution with ulcers or kidney disease."
+  },
+  {
+    "id": "indapamide",
+    "brandNames": [
+      "Indapamide",
+      "Natrilix",
+      "Indever"
+    ],
+    "generic": "Indapamide",
+    "drugClass": "Thiazide-like diuretic",
+    "commonUses": [
+      "High blood pressure"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "lithium",
+      "other_bp_meds"
+    ],
+    "commonSideEffects": [
+      "Frequent urination",
+      "Low sodium/potassium risk"
+    ],
+    "seriousSideEffects": [
+      "Severe dizziness",
+      "Muscle weakness"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Hydration and electrolytes — clinician guided."
+  },
+  {
+    "id": "iron_folate",
+    "brandNames": [
+      "Fefol",
+      "Iron Folate",
+      "Ferrous sulfate"
+    ],
+    "generic": "Iron + Folic acid",
+    "drugClass": "Hematinic",
+    "commonUses": [
+      "Anemia",
+      "Pregnancy supplementation as prescribed"
+    ],
+    "foodFlags": [
+      "May darken stools; tea/coffee can reduce absorption"
+    ],
+    "interactionTags": [
+      "antacids",
+      "calcium",
+      "levothyroxine"
+    ],
+    "commonSideEffects": [
+      "Constipation",
+      "Nausea",
+      "Dark stools"
+    ],
+    "seriousSideEffects": [
+      "Severe stomach pain",
+      "Allergic reaction"
+    ],
+    "pregnancyNote": "Common in pregnancy when prescribed.",
+    "notes": "Keep away from children — iron overdose is dangerous."
+  },
+  {
+    "id": "itopride",
+    "brandNames": [
+      "Itopride",
+      "Ganaton",
+      "Itoprid"
+    ],
+    "generic": "Itopride",
+    "drugClass": "Prokinetic",
+    "commonUses": [
+      "Functional dyspepsia",
+      "Bloating as prescribed"
+    ],
+    "foodFlags": [
+      "Often before meals"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Diarrhea",
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Common in BD GI regimens."
+  },
+  {
+    "id": "levocetirizine",
+    "brandNames": [
+      "Levocet",
+      "Xyzal",
+      "Levoxin"
+    ],
+    "generic": "Levocetirizine",
+    "drugClass": "Antihistamine",
+    "commonUses": [
+      "Allergy"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "alcohol",
+      "sedatives"
+    ],
+    "commonSideEffects": [
+      "Drowsiness"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": ""
+  },
+  {
+    "id": "levothyroxine",
+    "brandNames": [
+      "Thyrox",
+      "Euthyrox",
+      "Levothyroxine"
+    ],
+    "generic": "Levothyroxine",
+    "drugClass": "Thyroid hormone",
+    "commonUses": [
+      "Hypothyroidism"
+    ],
+    "foodFlags": [
+      "Empty stomach; separate from calcium/iron by hours"
+    ],
+    "interactionTags": [
+      "calcium",
+      "iron",
+      "antacids"
+    ],
+    "commonSideEffects": [
+      "If dose high: palpitations, anxiety"
+    ],
+    "seriousSideEffects": [
+      "Chest pain",
+      "Severe symptoms of over/under replacement"
+    ],
+    "pregnancyNote": "Dose often needs adjustment — obstetric/endocrine advice.",
+    "notes": "Timing consistency matters."
+  },
+  {
+    "id": "loratadine",
+    "brandNames": [
+      "Loratin",
+      "Claritin",
+      "Loratadine"
+    ],
+    "generic": "Loratadine",
+    "drugClass": "Antihistamine (less sedating)",
+    "commonUses": [
+      "Allergy",
+      "Hay fever"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Headache",
+      "Dry mouth"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Usually less drowsy than older antihistamines."
+  },
+  {
+    "id": "losartan",
+    "brandNames": [
+      "Osartil",
+      "Losartan",
+      "Covance"
+    ],
+    "generic": "Losartan",
+    "drugClass": "ARB antihypertensive",
+    "commonUses": [
+      "High blood pressure",
+      "Kidney protection in some diabetics as prescribed"
+    ],
+    "foodFlags": [
+      "Potassium-rich salt substitutes — ask doctor"
+    ],
+    "interactionTags": [
+      "potassium",
+      "nsaids",
+      "other_bp_meds"
+    ],
+    "commonSideEffects": [
+      "Dizziness"
+    ],
+    "seriousSideEffects": [
+      "Swelling of face/lips",
+      "Very high potassium symptoms"
+    ],
+    "pregnancyNote": "Usually avoided in pregnancy — critical to tell doctor if pregnant.",
+    "notes": "Pregnancy warning is important."
+  },
+  {
+    "id": "metformin",
+    "brandNames": [
+      "Comet",
+      "Metformin",
+      "Glycomet"
+    ],
+    "generic": "Metformin",
+    "drugClass": "Biguanide antidiabetic",
+    "commonUses": [
+      "Type 2 diabetes"
+    ],
+    "foodFlags": [
+      "With meals to reduce stomach upset"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "contrast_dye"
+    ],
+    "commonSideEffects": [
+      "Diarrhea",
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Lactic acidosis symptoms (rare)",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Specialist advice required.",
+    "notes": "Do not change diabetes meds without clinician."
+  },
+  {
+    "id": "methotrexate",
+    "brandNames": [
+      "Methotrexate",
+      "MTX"
+    ],
+    "generic": "Methotrexate",
+    "drugClass": "DMARD / antimetabolite",
+    "commonUses": [
+      "Rheumatoid arthritis",
+      "Other specialist uses"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "nsaids",
+      "trimethoprim",
+      "alcohol",
+      "folate"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Mouth ulcers"
+    ],
+    "seriousSideEffects": [
+      "Infection",
+      "Breathing issues",
+      "Severe blood count problems"
+    ],
+    "pregnancyNote": "Contraindicated in pregnancy — specialist only.",
+    "notes": "Weekly dosing confusion is dangerous — clinician only."
+  },
+  {
+    "id": "metoclopramide",
+    "brandNames": [
+      "Metoclopramide",
+      "Maxolon",
+      "Metoclo"
+    ],
+    "generic": "Metoclopramide",
+    "drugClass": "Prokinetic / antiemetic",
+    "commonUses": [
+      "Nausea",
+      "Gastric motility as prescribed"
+    ],
+    "foodFlags": [
+      "Often before meals"
+    ],
+    "interactionTags": [
+      "antipsychotics",
+      "sedatives"
+    ],
+    "commonSideEffects": [
+      "Drowsiness",
+      "Restlessness"
+    ],
+    "seriousSideEffects": [
+      "Abnormal movements",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Short courses preferred in many guidelines — follow clinician."
+  },
+  {
+    "id": "metronidazole",
+    "brandNames": [
+      "Filmet",
+      "Flagyl",
+      "Metro"
+    ],
+    "generic": "Metronidazole",
+    "drugClass": "Nitroimidazole antimicrobial",
+    "commonUses": [
+      "Anaerobic infections",
+      "Some dental infections",
+      "Protozoal infections as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid alcohol during and for 48h after — can cause severe reaction"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "warfarin",
+      "lithium"
+    ],
+    "commonSideEffects": [
+      "Metallic taste",
+      "Nausea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Numbness",
+      "Seizure-like symptoms"
+    ],
+    "pregnancyNote": "Ask doctor — trimester matters.",
+    "notes": "Alcohol warning is critical."
+  },
+  {
+    "id": "misoprostol",
+    "brandNames": [
+      "Misoprostol",
+      "Cytotec"
+    ],
+    "generic": "Misoprostol",
+    "drugClass": "Prostaglandin analogue",
+    "commonUses": [
+      "Ulcer protection",
+      "Obstetric uses ONLY under clinician"
+    ],
+    "foodFlags": [
+      "With food for GI indication"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Diarrhea",
+      "Cramping"
+    ],
+    "seriousSideEffects": [
+      "Pregnancy loss risk",
+      "Heavy bleeding"
+    ],
+    "pregnancyNote": "Dangerous in pregnancy except supervised obstetric use.",
+    "notes": "Educational app must redirect obstetric questions to clinicians."
+  },
+  {
+    "id": "montelukast",
+    "brandNames": [
+      "Montair",
+      "Singulair",
+      "Monas"
+    ],
+    "generic": "Montelukast",
+    "drugClass": "Leukotriene receptor antagonist",
+    "commonUses": [
+      "Asthma maintenance",
+      "Allergic rhinitis as prescribed"
+    ],
+    "foodFlags": [
+      "Usually evening"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Headache",
+      "Stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Mood/behavior changes — seek advice",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Not for sudden asthma attacks."
+  },
+  {
+    "id": "naproxen",
+    "brandNames": [
+      "Naproxen",
+      "Naprox",
+      "Synflex"
+    ],
+    "generic": "Naproxen",
+    "drugClass": "NSAID",
+    "commonUses": [
+      "Pain",
+      "Inflammation"
+    ],
+    "foodFlags": [
+      "After food"
+    ],
+    "interactionTags": [
+      "warfarin",
+      "bp_meds",
+      "steroids"
+    ],
+    "commonSideEffects": [
+      "Heartburn"
+    ],
+    "seriousSideEffects": [
+      "Bleeding",
+      "Black stools"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Do not stack multiple NSAIDs."
+  },
+  {
+    "id": "nitrofurantoin",
+    "brandNames": [
+      "Nitrofurantoin",
+      "Furadantin",
+      "Macrobid"
+    ],
+    "generic": "Nitrofurantoin",
+    "drugClass": "Urinary antibiotic",
+    "commonUses": [
+      "Uncomplicated UTI as prescribed"
+    ],
+    "foodFlags": [
+      "With food"
+    ],
+    "interactionTags": [
+      "antacids_magnesium"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Brown urine"
+    ],
+    "seriousSideEffects": [
+      "Breathing issues",
+      "Severe allergy",
+      "Numbness"
+    ],
+    "pregnancyNote": "Timing in pregnancy matters — ask doctor.",
+    "notes": ""
+  },
+  {
+    "id": "omeprazole",
+    "brandNames": [
+      "Seclo",
+      "Losec",
+      "Omeprazole",
+      "Prazol"
+    ],
+    "generic": "Omeprazole",
+    "drugClass": "Proton pump inhibitor (PPI)",
+    "commonUses": [
+      "Acid reflux",
+      "Stomach protection with some painkillers",
+      "Ulcers as prescribed"
+    ],
+    "foodFlags": [
+      "Often before meals"
+    ],
+    "interactionTags": [
+      "clopidogrel",
+      "some_antifungals"
+    ],
+    "commonSideEffects": [
+      "Headache",
+      "Mild stomach upset"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Persistent diarrhea"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Often paired with NSAIDs or antibiotics for stomach protection."
+  },
+  {
+    "id": "ondansetron",
+    "brandNames": [
+      "Onaset",
+      "Zofran",
+      "Ondansetron"
+    ],
+    "generic": "Ondansetron",
+    "drugClass": "Antiemetic",
+    "commonUses": [
+      "Nausea",
+      "Vomiting"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "qt_prolonging"
+    ],
+    "commonSideEffects": [
+      "Constipation",
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Irregular heartbeat",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Used short-term for nausea as prescribed."
+  },
+  {
+    "id": "ors",
+    "brandNames": [
+      "ORSaline",
+      "Oral Saline",
+      "ORS"
+    ],
+    "generic": "Oral rehydration salts",
+    "drugClass": "Rehydration",
+    "commonUses": [
+      "Dehydration from diarrhea/vomiting"
+    ],
+    "foodFlags": [
+      "Mix as instructed with clean water"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "None usual if mixed correctly"
+    ],
+    "seriousSideEffects": [
+      "Worsening dehydration — seek care"
+    ],
+    "pregnancyNote": "Generally supportive; seek care if severe.",
+    "notes": "Not a substitute for emergency care in severe dehydration."
+  },
+  {
+    "id": "pantoprazole",
+    "brandNames": [
+      "Pantonix",
+      "Pantoprazole",
+      "Pentadex",
+      "Panloc"
+    ],
+    "generic": "Pantoprazole",
+    "drugClass": "Proton pump inhibitor (PPI)",
+    "commonUses": [
+      "Acid reflux",
+      "Peptic ulcer disease",
+      "Stomach protection as prescribed"
+    ],
+    "foodFlags": [
+      "Often before meals"
+    ],
+    "interactionTags": [
+      "some_antifungals",
+      "methotrexate"
+    ],
+    "commonSideEffects": [
+      "Headache",
+      "Mild diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Persistent diarrhea",
+      "Bone fracture risk with long use — ask doctor"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Common in BD for PUD / GERD regimens."
+  },
+  {
+    "id": "paracetamol",
+    "brandNames": [
+      "Napa",
+      "Ace",
+      "Fast",
+      "Paracetamol",
+      "Tylenol"
+    ],
+    "generic": "Paracetamol (Acetaminophen)",
+    "drugClass": "Analgesic / antipyretic",
+    "commonUses": [
+      "Fever",
+      "Mild to moderate pain",
+      "Headache"
+    ],
+    "foodFlags": [
+      "Can take with or without food"
+    ],
+    "interactionTags": [
+      "alcohol",
+      "other_paracetamol"
+    ],
+    "commonSideEffects": [
+      "Rare at normal doses"
+    ],
+    "seriousSideEffects": [
+      "Signs of liver injury (yellow skin, dark urine)",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Often used when advised by a doctor; do not exceed dose.",
+    "notes": "Do not combine multiple products that contain paracetamol."
+  },
+  {
+    "id": "prednisolone",
+    "brandNames": [
+      "Prednisolone",
+      "Cortan",
+      "Pred"
+    ],
+    "generic": "Prednisolone",
+    "drugClass": "Corticosteroid",
+    "commonUses": [
+      "Inflammation",
+      "Allergy flares",
+      "Asthma exacerbations as prescribed"
+    ],
+    "foodFlags": [
+      "Prefer after food"
+    ],
+    "interactionTags": [
+      "nsaids",
+      "diabetes_meds",
+      "vaccines_live"
+    ],
+    "commonSideEffects": [
+      "Increased appetite",
+      "Mood changes",
+      "Sleep trouble"
+    ],
+    "seriousSideEffects": [
+      "Black stools",
+      "Severe infection signs",
+      "Vision changes"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Do not stop long courses suddenly."
+  },
+  {
+    "id": "pregabalin",
+    "brandNames": [
+      "Pregabalin",
+      "Lyrica",
+      "Pregeb"
+    ],
+    "generic": "Pregabalin",
+    "drugClass": "Neuropathic pain / anticonvulsant",
+    "commonUses": [
+      "Nerve pain",
+      "Anxiety in some protocols as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "sedatives",
+      "alcohol"
+    ],
+    "commonSideEffects": [
+      "Dizziness",
+      "Weight gain",
+      "Swelling"
+    ],
+    "seriousSideEffects": [
+      "Severe allergic swelling",
+      "Mood changes"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Sedation risk — caution with driving."
+  },
+  {
+    "id": "rabeprazole",
+    "brandNames": [
+      "Rabeprazole",
+      "Rabe",
+      "Pariet"
+    ],
+    "generic": "Rabeprazole",
+    "drugClass": "Proton pump inhibitor (PPI)",
+    "commonUses": [
+      "GERD",
+      "Ulcers as prescribed"
+    ],
+    "foodFlags": [
+      "Often before meals"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Headache",
+      "Diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy",
+      "Persistent diarrhea"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": ""
+  },
+  {
+    "id": "ramipril",
+    "brandNames": [
+      "Ramipril",
+      "Tritace",
+      "Ramace"
+    ],
+    "generic": "Ramipril",
+    "drugClass": "ACE inhibitor",
+    "commonUses": [
+      "Blood pressure",
+      "Heart/kidney protection as prescribed"
+    ],
+    "foodFlags": [
+      "Careful with potassium salt substitutes"
+    ],
+    "interactionTags": [
+      "potassium",
+      "nsaids",
+      "other_bp_meds"
+    ],
+    "commonSideEffects": [
+      "Dry cough",
+      "Dizziness"
+    ],
+    "seriousSideEffects": [
+      "Face/lip swelling",
+      "High potassium symptoms"
+    ],
+    "pregnancyNote": "Usually avoided in pregnancy — tell doctor if pregnant.",
+    "notes": "Pregnancy warning is critical."
+  },
+  {
+    "id": "ranitidine",
+    "brandNames": [
+      "Ranitidine",
+      "Rantac",
+      "Aciloc"
+    ],
+    "generic": "Ranitidine",
+    "drugClass": "H2 receptor antagonist",
+    "commonUses": [
+      "Acid reduction historically; availability varies"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Ask pharmacist — regulatory status may vary"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Confirm current local availability with pharmacist."
+  },
+  {
+    "id": "rebamipide",
+    "brandNames": [
+      "Rebamipide",
+      "Mucosta",
+      "Rebamp"
+    ],
+    "generic": "Rebamipide",
+    "drugClass": "Gastroprotective",
+    "commonUses": [
+      "Gastric mucosal protection as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Mild GI upset"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": ""
+  },
+  {
+    "id": "rosuvastatin",
+    "brandNames": [
+      "Rosuvastatin",
+      "Crestor",
+      "Rosuval"
+    ],
+    "generic": "Rosuvastatin",
+    "drugClass": "Statin",
+    "commonUses": [
+      "Cholesterol",
+      "Cardiovascular risk reduction"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "fibrates",
+      "some_antibiotics"
+    ],
+    "commonSideEffects": [
+      "Muscle ache"
+    ],
+    "seriousSideEffects": [
+      "Severe muscle pain",
+      "Dark urine",
+      "Yellowing skin"
+    ],
+    "pregnancyNote": "Usually avoided.",
+    "notes": "Report unexplained muscle pain."
+  },
+  {
+    "id": "salbutamol",
+    "brandNames": [
+      "Ventolin",
+      "Salbutamol",
+      "Asthalin"
+    ],
+    "generic": "Salbutamol (Albuterol)",
+    "drugClass": "Short-acting beta agonist (inhaler/oral)",
+    "commonUses": [
+      "Relief of wheeze/breathlessness as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "beta_blockers"
+    ],
+    "commonSideEffects": [
+      "Tremor",
+      "Fast heartbeat"
+    ],
+    "seriousSideEffects": [
+      "Chest pain",
+      "Severe breathing worsening"
+    ],
+    "pregnancyNote": "Ask doctor — often continued when needed.",
+    "notes": "Know your rescue vs preventer inhalers."
+  },
+  {
+    "id": "salmeterol_fluticasone",
+    "brandNames": [
+      "Seretide",
+      "Salmeterol+Fluticasone"
+    ],
+    "generic": "Salmeterol + Fluticasone",
+    "drugClass": "ICS/LABA inhaler",
+    "commonUses": [
+      "Asthma / COPD maintenance as prescribed"
+    ],
+    "foodFlags": [
+      "Rinse mouth after steroid inhalers"
+    ],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Thrush",
+      "Hoarse voice"
+    ],
+    "seriousSideEffects": [
+      "Worsening breathing",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor — often continued when needed.",
+    "notes": "Not a substitute for rescue inhaler unless labeled."
+  },
+  {
+    "id": "sertraline",
+    "brandNames": [
+      "Sertra",
+      "Zoloft",
+      "Sertraline"
+    ],
+    "generic": "Sertraline",
+    "drugClass": "SSRI antidepressant",
+    "commonUses": [
+      "Depression",
+      "Anxiety disorders as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "maoi",
+      "other_serotonergic",
+      "nsaids"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Sleep changes"
+    ],
+    "seriousSideEffects": [
+      "Suicidal thoughts especially early",
+      "Serotonin syndrome signs",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Specialist advice required.",
+    "notes": "Do not stop suddenly; seek urgent help for suicidal thoughts."
+  },
+  {
+    "id": "sildenafil",
+    "brandNames": [
+      "Sildenafil",
+      "Viagra",
+      "Penegra"
+    ],
+    "generic": "Sildenafil",
+    "drugClass": "PDE5 inhibitor",
+    "commonUses": [
+      "Erectile dysfunction as prescribed"
+    ],
+    "foodFlags": [
+      "High-fat meals may delay effect"
+    ],
+    "interactionTags": [
+      "nitrates",
+      "alpha_blockers",
+      "alcohol"
+    ],
+    "commonSideEffects": [
+      "Flushing",
+      "Headache",
+      "Indigestion"
+    ],
+    "seriousSideEffects": [
+      "Chest pain",
+      "Vision/hearing sudden loss",
+      "Priapism"
+    ],
+    "pregnancyNote": "N/A for typical use.",
+    "notes": "Never combine with nitrate heart medicines."
+  },
+  {
+    "id": "sitagliptin",
+    "brandNames": [
+      "Januvia",
+      "Sitagliptin",
+      "Siglit"
+    ],
+    "generic": "Sitagliptin",
+    "drugClass": "DPP-4 inhibitor",
+    "commonUses": [
+      "Type 2 diabetes as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Runny nose",
+      "Headache"
+    ],
+    "seriousSideEffects": [
+      "Severe abdominal pain (pancreatitis concern)",
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Specialist advice.",
+    "notes": "Educational only — follow diabetes clinic plan."
+  },
+  {
+    "id": "alginate_antacid",
+    "brandNames": [
+      "Algicid",
+      "Algicid DX",
+      "Algicid Plus",
+      "Gaviscon"
+    ],
+    "generic": "Sodium Alginate combinations",
+    "drugClass": "Alginate antacid / raft-forming",
+    "commonUses": [
+      "Heartburn",
+      "Reflux symptom relief"
+    ],
+    "foodFlags": [
+      "Often after meals and at bedtime — follow label"
+    ],
+    "interactionTags": [
+      "separate_from_some_antibiotics"
+    ],
+    "commonSideEffects": [
+      "Bloating",
+      "Constipation or diarrhea"
+    ],
+    "seriousSideEffects": [
+      "Severe allergy"
+    ],
+    "pregnancyNote": "Ask doctor/pharmacist about brand choice in pregnancy.",
+    "notes": "Different from Algin (tiemonium). Check spelling on Rx."
+  },
+  {
+    "id": "spironolactone",
+    "brandNames": [
+      "Spironolactone",
+      "Aldactone",
+      "Spiro"
+    ],
+    "generic": "Spironolactone",
+    "drugClass": "Potassium-sparing diuretic",
+    "commonUses": [
+      "Heart failure",
+      "Fluid retention",
+      "Hormonal uses as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid high-potassium salt substitutes unless told"
+    ],
+    "interactionTags": [
+      "potassium",
+      "ace_arb",
+      "nsaids"
+    ],
+    "commonSideEffects": [
+      "Breast tenderness",
+      "High potassium risk"
+    ],
+    "seriousSideEffects": [
+      "Muscle weakness",
+      "Irregular heartbeat from potassium"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": ""
+  },
+  {
+    "id": "tamsulosin",
+    "brandNames": [
+      "Tamsulosin",
+      "Flomax",
+      "Tamsolin"
+    ],
+    "generic": "Tamsulosin",
+    "drugClass": "Alpha blocker (prostate)",
+    "commonUses": [
+      "BPH urinary symptoms as prescribed"
+    ],
+    "foodFlags": [
+      "After the same meal daily if labeled"
+    ],
+    "interactionTags": [
+      "other_bp_meds"
+    ],
+    "commonSideEffects": [
+      "Dizziness",
+      "Runny nose"
+    ],
+    "seriousSideEffects": [
+      "Fainting",
+      "Painful erection lasting hours"
+    ],
+    "pregnancyNote": "Not for women generally.",
+    "notes": ""
+  },
+  {
+    "id": "tiemonium",
+    "brandNames": [
+      "Algin",
+      "Tiemonium",
+      "Visceralgine"
+    ],
+    "generic": "Tiemonium Methylsulphate",
+    "drugClass": "Antispasmodic / anticholinergic",
+    "commonUses": [
+      "Abdominal cramps",
+      "Spasm-related pain as prescribed"
+    ],
+    "foodFlags": [],
+    "interactionTags": [
+      "other_anticholinergics"
+    ],
+    "commonSideEffects": [
+      "Dry mouth",
+      "Constipation",
+      "Blurred vision"
+    ],
+    "seriousSideEffects": [
+      "Difficulty urinating",
+      "Severe allergy",
+      "Confusion in older adults"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Common BD brand Algin is tiemonium — not the same as alginate antacids."
+  },
+  {
+    "id": "tramadol",
+    "brandNames": [
+      "Tramadol",
+      "Ultram",
+      "Tramal"
+    ],
+    "generic": "Tramadol",
+    "drugClass": "Opioid-like analgesic",
+    "commonUses": [
+      "Moderate pain as prescribed"
+    ],
+    "foodFlags": [
+      "Avoid alcohol"
+    ],
+    "interactionTags": [
+      "sedatives",
+      "ssri",
+      "alcohol",
+      "maoi"
+    ],
+    "commonSideEffects": [
+      "Nausea",
+      "Dizziness",
+      "Constipation"
+    ],
+    "seriousSideEffects": [
+      "Slow breathing",
+      "Seizures",
+      "Serotonin syndrome signs"
+    ],
+    "pregnancyNote": "Ask doctor.",
+    "notes": "Dependence and interaction risks — clinician only."
+  },
+  {
+    "id": "warfarin",
+    "brandNames": [
+      "Warfarin",
+      "Coumadin"
+    ],
+    "generic": "Warfarin",
+    "drugClass": "Anticoagulant",
+    "commonUses": [
+      "Prevent clots as prescribed"
+    ],
+    "foodFlags": [
+      "Consistent vitamin K intake; many food/drug interactions"
+    ],
+    "interactionTags": [
+      "nsaids",
+      "antibiotics",
+      "alcohol",
+      "paracetamol_high"
+    ],
+    "commonSideEffects": [
+      "Easy bruising"
+    ],
+    "seriousSideEffects": [
+      "Bleeding",
+      "Severe headache",
+      "Black stools"
+    ],
+    "pregnancyNote": "Usually avoided — critical specialist care.",
+    "notes": "INR monitoring required — educational app cannot manage warfarin."
+  },
+  {
+    "id": "ors_zinc",
+    "brandNames": [
+      "ORS Zinc",
+      "Baby Zinc",
+      "Zinc sulfate"
+    ],
+    "generic": "Zinc (with ORS regimens)",
+    "drugClass": "Mineral / diarrhea adjunct",
+    "commonUses": [
+      "Childhood diarrhea protocols as advised"
+    ],
+    "foodFlags": [],
+    "interactionTags": [],
+    "commonSideEffects": [
+      "Metallic taste",
+      "Vomiting"
+    ],
+    "seriousSideEffects": [
+      "Seek care if dehydration worsens"
+    ],
+    "pregnancyNote": "Ask doctor for dose.",
+    "notes": "Supportive — not a substitute for emergency care."
+  }
+]
