@@ -28,7 +28,12 @@ async function request(path, options = {}) {
 export function analyzePrescription({ imageBase64, ocrHint, language, demoPreset }) {
   return request('/api/analyze', {
     method: 'POST',
-    body: JSON.stringify({ imageBase64, ocrHint, language, demoPreset }),
+    body: JSON.stringify({
+      imageBase64,
+      ocrHint,
+      language,
+      demoPreset,
+    }),
   });
 }
 
@@ -47,10 +52,27 @@ export function getMedicine(id) {
   return request(`/api/medicines/${encodeURIComponent(id)}`);
 }
 
-export function chatWithGemma({ messages, language, profileContext, scanContext }) {
+export function lookupPrices(q) {
+  return request(`/api/prices?q=${encodeURIComponent(q || '')}`);
+}
+
+export function chatWithGemma({ messages, language, profileContext, scanContext, imageBase64 }) {
   return request('/api/chat', {
     method: 'POST',
-    body: JSON.stringify({ messages, language, profileContext, scanContext }),
+    body: JSON.stringify({
+      messages,
+      language,
+      profileContext,
+      scanContext,
+      imageBase64,
+    }),
+  });
+}
+
+export function missedDoseCoach({ medicine, whenMissed, patientContext, language }) {
+  return request('/api/coach/missed-dose', {
+    method: 'POST',
+    body: JSON.stringify({ medicine, whenMissed, patientContext, language }),
   });
 }
 

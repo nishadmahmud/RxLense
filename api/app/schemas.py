@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 class PatientContext(BaseModel):
     ageBand: Literal["child", "adult", "older_adult"] = "adult"
     ageYears: Optional[str] = None
+    gender: Optional[Literal["male", "female", "other", "prefer_not"]] = None
     pregnancyOrBreastfeeding: Literal["yes", "no", "prefer_not"] = "no"
     conditions: list[str] = Field(default_factory=list)
     otherMedsText: str = ""
@@ -31,6 +32,8 @@ class AnalyzeRequest(BaseModel):
     ocrHint: str = ""
     language: Literal["en", "bn"] = "en"
     demoPreset: Optional[str] = None
+    # Kept for older clients; ignored — model auto-detects prescription vs packaging
+    sourceType: Optional[Literal["prescription", "packaging", "auto"]] = "auto"
 
 
 class BriefRequest(BaseModel):
@@ -50,6 +53,7 @@ class ExtractedMedicine(BaseModel):
 
 class ExtractResult(BaseModel):
     medicines: list[ExtractedMedicine]
+    sourceType: Literal["prescription", "packaging"] = "prescription"
 
 
 class ScheduleItem(BaseModel):
@@ -79,9 +83,10 @@ class Briefing(BaseModel):
     summary: str
     holisticExplanation: str
     schedule: list[ScheduleItem]
-    interactions: list[InteractionItem]
-    foodAndLifestyle: FoodLifestyle
-    sideEffects: SideEffects
+    interactions: list[InteractionItem] = Field(default_factory=list)
+    sideEffects: SideEffects = Field(default_factory=SideEffects)
+    # Kept optional for older cached responses; no longer requested from the model
+    foodAndLifestyle: FoodLifestyle = Field(default_factory=FoodLifestyle)
     doctorQuestions: list[str] = Field(default_factory=list)
 
 
@@ -91,7 +96,30 @@ class ChatMessage(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    messages: list[ChatMessage]
+    messages: list[ChatMessage] = Field(default_factory=list)
     language: Literal["en", "bn"] = "en"
     profileContext: Optional[Any] = None
     scanContext: Optional[Any] = None
+    imageBase64: Optional[str] = None
+
+
+class MissedDoseMedicine(BaseModel):
+    rawName: str = ""
+    brandName: str = ""
+    strength: str = ""
+    doseLine: str = ""
+
+
+class MissedDoseRequest(BaseModel):
+    medicine: MissedDoseMedicine
+    whenMissed: Literal["last_night", "this_morning", "earlier_today", "unsure"] = "unsure"
+    patientContext: PatientContext = Field(default_factory=PatientContext)
+    language: Literal["en", "bn"] = "en"
+
+
+class MissedDoseCoach(BaseModel):
+    title: str
+    whatToKnow: list[str] = Field(default_factory=list)
+    options: list[str] = Field(default_factory=list)
+    seekCareIf: list[str] = Field(default_factory=list)
+    disclaimer: str = ""

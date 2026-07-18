@@ -4,10 +4,34 @@ import re
 from typing import Any, Optional
 
 
-def mock_extract(*, ocr_hint: str = "", demo_preset: Optional[str] = None) -> dict[str, Any]:
+def mock_extract(
+    *,
+    ocr_hint: str = "",
+    demo_preset: Optional[str] = None,
+    source_type: str = "auto",
+) -> dict[str, Any]:
     hint = ocr_hint or ""
+    if source_type == "packaging" or demo_preset == "pack":
+        return {
+            "sourceType": "packaging",
+            "medicines": [
+                {
+                    "rawName": "Napa",
+                    "strength": "500mg",
+                    "doseLine": "as labeled",
+                    "confidence": 0.91,
+                },
+                {
+                    "rawName": "Seclo",
+                    "strength": "20mg",
+                    "doseLine": "as labeled",
+                    "confidence": 0.86,
+                },
+            ],
+        }
     if demo_preset == "throat" or re.search(r"napa|moxacil|seclo|amox", hint, re.I):
         return {
+            "sourceType": "prescription",
             "medicines": [
                 {
                     "rawName": "Moxacil",
@@ -27,13 +51,14 @@ def mock_extract(*, ocr_hint: str = "", demo_preset: Optional[str] = None) -> di
                     "doseLine": "1+0+0 before breakfast",
                     "confidence": 0.88,
                 },
-            ]
+            ],
         }
     return {
+        "sourceType": "prescription",
         "medicines": [
             {"rawName": "Napa", "strength": "500mg", "doseLine": "1+1+1 SOS", "confidence": 0.8},
             {"rawName": "Alatrol", "strength": "10mg", "doseLine": "0+0+1", "confidence": 0.75},
-        ]
+        ],
     }
 
 
@@ -77,18 +102,6 @@ def mock_brief(*, medicines: list[dict[str, Any]], patient_context: dict[str, An
                 "severity": "caution",
             }
         ],
-        "foodAndLifestyle": {
-            "avoid": (
-                ["অ্যালকোহল (প্রযোজ্য হলে)", "ডাক্তারের অজান্তে অতিরিক্ত ব্যথানাশক"]
-                if bn
-                else ["Alcohol if advised", "Extra painkillers without advice"]
-            ),
-            "doThis": (
-                ["অ্যান্টিবায়োটিক কোর্স শেষ করুন যদি ডাক্তার বলে থাকেন", "পানি পান করুন", "উন্নতি না হলে আবার দেখান"]
-                if bn
-                else ["Finish antibiotic course if prescribed", "Stay hydrated", "Return if symptoms worsen"]
-            ),
-        },
         "sideEffects": {
             "common": ["হালকা বমি বমি ভাব", "পেটের অস্বস্তি"] if bn else ["Mild nausea", "Stomach upset"],
             "seekCareNow": (
@@ -97,17 +110,72 @@ def mock_brief(*, medicines: list[dict[str, Any]], patient_context: dict[str, An
                 else ["Difficulty breathing", "Face/throat swelling", "Severe rash", "Black stools"]
             ),
         },
-        "doctorQuestions": (
+    }
+
+
+def mock_missed_dose(
+    *,
+    medicine: dict[str, Any],
+    when_missed: str,
+    language: str,
+) -> dict[str, Any]:
+    bn = language == "bn"
+    name = medicine.get("brandName") or medicine.get("rawName") or ("ওষুধ" if bn else "medicine")
+    dose = medicine.get("doseLine") or ""
+    when_label = {
+        "last_night": "গত রাতে" if bn else "last night",
+        "this_morning": "আজ সকালে" if bn else "this morning",
+        "earlier_today": "আজ আগে" if bn else "earlier today",
+        "unsure": "নিশ্চিত নন" if bn else "you are unsure when",
+    }.get(when_missed, when_missed)
+    return {
+        "title": (
+            f"{name}: একটি ডোজ মিস হয়েছে"
+            if bn
+            else f"Missed dose of {name}"
+        ),
+        "whatToKnow": (
             [
-                "জ্বর কমলেও অ্যান্টিবায়োটিক চালিয়ে যাবো?",
-                "আমার অন্য ওষুধের সাথে এগুলো নিরাপদ?",
-                "এক ডোজ মিস করলে কী করব?",
+                f"আপনি জানিয়েছেন ডোজ মিস: {when_label}।",
+                f"লেখা নির্দেশনা: {dose or 'লেবেলে যা আছে'} — সেটিই প্রাধান্য পাবে।",
+                "RxLens ডোজ বদলায় না; এটি শুধু শিক্ষামূলক ধারণা।",
             ]
             if bn
             else [
-                "Should I finish the antibiotic if I feel better?",
-                "Is this safe with my other medicines?",
-                "What if I miss a dose?",
+                f"You said a dose was missed ({when_label}).",
+                f"Written directions: {dose or 'as labeled'} — those take priority.",
+                "RxLens does not change doses; this is educational context only.",
             ]
+        ),
+        "options": (
+            [
+                "পরের নির্ধারিত সময়ে নিয়মিত ডোজ চালিয়ে যান যদি লেবেল/ডাক্তার তা বলে।",
+                "ডাবল ডোজ নেবেন না যদি না ডাক্তার/ফার্মাসিস্ট স্পষ্ট বলে।",
+                "অ্যান্টিবায়োটিক বা গুরুত্বপূর্ণ ওষুধ হলে আজই ফার্মাসিস্ট/ডাক্তারকে জিজ্ঞাসা করুন।",
+            ]
+            if bn
+            else [
+                "Take the next scheduled dose on time if your label/doctor says so.",
+                "Do not double up unless a doctor or pharmacist clearly says to.",
+                "For antibiotics or critical meds, ask a pharmacist or doctor today.",
+            ]
+        ),
+        "seekCareIf": (
+            [
+                "তীব্র উপসর্গ ফিরে আসা বা খারাপ হওয়া",
+                "অ্যালার্জির লক্ষণ (র্যাশ, ফোলা, শ্বাসকষ্ট)",
+                "গর্ভাবস্থা/শিশু/জটিল রোগ থাকলে দ্রুত পরামর্শ নিন",
+            ]
+            if bn
+            else [
+                "Symptoms return or worsen sharply",
+                "Allergy signs (rash, swelling, breathing trouble)",
+                "Pregnancy, child patient, or complex illness — seek advice sooner",
+            ]
+        ),
+        "disclaimer": (
+            "শিক্ষামূলক সহায়ক মাত্র; ডাক্তার বা ফার্মাসিস্টের বিকল্প নয়।"
+            if bn
+            else "Educational only — not a substitute for a doctor or pharmacist."
         ),
     }

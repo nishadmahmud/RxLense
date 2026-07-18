@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Modal,
   Pressable,
   ScrollView,
@@ -7,14 +8,134 @@ import {
   Text,
   View,
 } from 'react-native';
+import { lookupPrices } from '../api';
+import { useAppState } from '../AppState';
+import { upsertPerson } from '../profileStore';
+import { getCachedMedexPrices, setCachedMedexPrices, normalizePriceKey } from '../priceCache';
 import { colors } from '../theme';
 import { t } from '../i18n';
 import { disclaimerFor } from '../config';
 
+function sameMed(a, b) {
+  const ka = normalizePriceKey(a);
+  const kb = normalizePriceKey(b);
+  if (!ka || !kb) return false;
+  return ka === kb || ka.includes(kb) || kb.includes(ka);
+}
+
+function linesFromMedexPayload(data) {
+  const lines = [];
+  for (const item of data.items || []) {
+    const title = item.title || '';
+    const prices = item.prices || [];
+    if (prices.length) {
+      for (const p of prices) {
+        lines.push(title ? `${title}: ${p}` : p);
+      }
+    } else if (title) {
+      lines.push(title);
+    }
+  }
+  return lines;
+}
+
 export function MedicineModal({ visible, medicine, language, onClose }) {
+  const { setScanSession, profile, persist, activePerson } = useAppState();
+  const [medexLines, setMedexLines] = useState([]);
+  const [priceLoading, setPriceLoading] = useState(false);
+  const [priceError, setPriceError] = useState('');
+  const [fromCache, setFromCache] = useState(false);
+
+  const snap = medicine?.kbSnapshot || {};
+  const kbPrices = medicine?.examplePrices || snap.examplePrices || [];
+  const query = (medicine?.brandName || medicine?.rawName || '').trim();
+  const savedOnMed = medicine?.medexPrices;
+
+  async function persistPrices(q, lines) {
+    await setCachedMedexPrices(q, lines);
+
+    setScanSession((s) => ({
+      ...s,
+      medicines: (s.medicines || []).map((m) =>
+        sameMed(m.rawName || m.brandName, q)
+          ? { ...m, medexPrices: lines, examplePrices: lines }
+          : m
+      ),
+    }));
+
+    const person = activePerson || profile.people?.[0];
+    if (person?.regimen?.length) {
+      let changed = false;
+      const regimen = (person.regimen || []).map((m) => {
+        if (!sameMed(m.brandName, q)) return m;
+        changed = true;
+        return { ...m, medexPrices: lines, examplePrices: lines };
+      });
+      if (changed) {
+        await persist(upsertPerson(profile, { ...person, regimen }));
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!visible || !medicine || !query) {
+      setMedexLines([]);
+      setPriceError('');
+      setPriceLoading(false);
+      setFromCache(false);
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    (async () => {
+      if (savedOnMed?.length) {
+        setMedexLines(savedOnMed);
+        setFromCache(true);
+        setPriceLoading(false);
+        setPriceError('');
+        return;
+      }
+
+      const cached = await getCachedMedexPrices(query);
+      if (cancelled) return;
+      if (cached?.length) {
+        setMedexLines(cached);
+        setFromCache(true);
+        setPriceLoading(false);
+        setPriceError('');
+        // also stamp onto regimen/scan for next open
+        persistPrices(query, cached);
+        return;
+      }
+
+      setPriceLoading(true);
+      setPriceError('');
+      setMedexLines([]);
+      setFromCache(false);
+      try {
+        const data = await lookupPrices(query);
+        if (cancelled) return;
+        const lines = linesFromMedexPayload(data);
+        setMedexLines(lines);
+        if (lines.length) {
+          await persistPrices(query, lines);
+        } else {
+          setPriceError(data.error || t(language, 'pricingFailed'));
+        }
+      } catch {
+        if (!cancelled) setPriceError(t(language, 'pricingFailed'));
+      } finally {
+        if (!cancelled) setPriceLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [visible, query, language, savedOnMed]);
+
   if (!medicine) return null;
-  const snap = medicine.kbSnapshot || {};
-  const prices = medicine.examplePrices || snap.examplePrices || [];
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
@@ -92,14 +213,38 @@ export function MedicineModal({ visible, medicine, language, onClose }) {
             )}
 
             <Text style={styles.h}>{t(language, 'pricing')}</Text>
-            {prices.length === 0 ? (
-              <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
+            {priceLoading ? (
+              <View style={styles.priceLoading}>
+                <ActivityIndicator color={colors.accent} />
+                <Text style={styles.p}>{t(language, 'pricingLoading')}</Text>
+              </View>
+            ) : medexLines.length > 0 ? (
+              <>
+                {fromCache ? (
+                  <Text style={styles.meta}>{t(language, 'pricingCached')}</Text>
+                ) : null}
+                {medexLines.slice(0, 8).map((p, i) => (
+                  <Text key={i} style={styles.p}>
+                    · {p}
+                  </Text>
+                ))}
+              </>
             ) : (
-              prices.slice(0, 6).map((p, i) => (
-                <Text key={i} style={styles.p}>
-                  · {p}
-                </Text>
-              ))
+              <View>
+                {!!priceError && <Text style={styles.p}>{priceError}</Text>}
+                {kbPrices.length > 0 ? (
+                  <>
+                    <Text style={styles.meta}>{t(language, 'pricingKbFallback')}</Text>
+                    {kbPrices.slice(0, 6).map((p, i) => (
+                      <Text key={i} style={styles.p}>
+                        · {p}
+                      </Text>
+                    ))}
+                  </>
+                ) : (
+                  <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
+                )}
+              </View>
             )}
             <Text style={styles.tiny}>{t(language, 'pricingNote')}</Text>
             <Text style={styles.tiny}>{disclaimerFor(language)}</Text>
@@ -134,6 +279,7 @@ const styles = StyleSheet.create({
   meta: { fontSize: 13, color: colors.accent, marginBottom: 2 },
   tiny: { fontSize: 11, color: colors.muted, marginTop: 10, lineHeight: 16 },
   danger: { color: colors.errorText, fontWeight: '600' },
+  priceLoading: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4 },
   btn: {
     margin: 16,
     backgroundColor: colors.accent,

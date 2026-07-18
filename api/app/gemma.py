@@ -119,23 +119,28 @@ async def call_gemma(
 async def call_gemma_text(
     *,
     prompt: str,
+    image_base64: Optional[str] = None,
     model: Optional[str] = None,
 ) -> str:
-    """Plain-text Gemma reply (chat)."""
+    """Plain-text Gemma reply (chat). Optional image uses the vision model."""
     if not GEMINI_API_KEY:
         raise RuntimeError("GEMINI_API_KEY is not set")
 
-    use_model = model or GEMMA_TEXT_MODEL
+    use_model = model or (GEMMA_VISION_MODEL if image_base64 else GEMMA_TEXT_MODEL)
+    parts: list[dict[str, Any]] = [{"text": prompt}]
+    if image_base64:
+        parts.append(prepare_image_part(image_base64))
+
     url = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
         f"{use_model}:generateContent?key={GEMINI_API_KEY}"
     )
     payload = {
-        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+        "contents": [{"role": "user", "parts": parts}],
         "generationConfig": {"temperature": 0.4},
     }
 
-    async with httpx.AsyncClient(timeout=90.0) as client:
+    async with httpx.AsyncClient(timeout=120.0) as client:
         res = await client.post(url, json=payload)
         if res.status_code >= 400:
             raise RuntimeError(f"Gemma API error {res.status_code}: {res.text[:500]}")

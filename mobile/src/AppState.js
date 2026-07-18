@@ -25,6 +25,7 @@ export function AppStateProvider({ children }) {
     guest: null,
     imageUri: null,
     imageBase64: null,
+    sourceType: 'prescription',
   });
 
   useEffect(() => {

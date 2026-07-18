@@ -23,6 +23,7 @@ export default function OnboardingScreen() {
   const [step, setStep] = useState(0);
   const [name, setName] = useState(profile.people?.[0]?.name || '');
   const [ageYears, setAgeYears] = useState(String(profile.people?.[0]?.ageYears || ''));
+  const [gender, setGender] = useState(profile.people?.[0]?.gender || '');
   const [conditions, setConditions] = useState(profile.people?.[0]?.conditions || []);
   const [chronicMeds, setChronicMeds] = useState(profile.people?.[0]?.chronicMeds || []);
   const [condQuery, setCondQuery] = useState('');
@@ -69,6 +70,7 @@ export default function OnboardingScreen() {
       ...emptyMePerson(profile.people?.[0] || {}),
       name: name.trim() || 'Me',
       ageYears: ageYears.trim(),
+      gender: gender || '',
       conditions,
       chronicMeds,
     };
@@ -128,6 +130,26 @@ export default function OnboardingScreen() {
               keyboardType="number-pad"
               placeholder="25"
             />
+            <Text style={styles.label}>{t(language, 'yourGender')}</Text>
+            <View style={styles.wrap}>
+              {[
+                ['male', 'genderMale'],
+                ['female', 'genderFemale'],
+                ['other', 'genderOther'],
+                ['prefer_not', 'genderPreferNot'],
+              ].map(([id, key]) => {
+                const on = gender === id;
+                return (
+                  <Pressable
+                    key={id}
+                    style={[styles.chip, on && styles.chipOn]}
+                    onPress={() => setGender(on ? '' : id)}
+                  >
+                    <Text style={[styles.chipText, on && styles.chipTextOn]}>{t(language, key)}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
             <Pressable style={styles.primary} onPress={() => setStep(2)}>
               <Text style={styles.primaryText}>{t(language, 'next')}</Text>
             </Pressable>

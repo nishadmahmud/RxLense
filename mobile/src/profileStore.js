@@ -12,6 +12,7 @@ export function emptyMePerson(overrides = {}) {
     relation: 'me',
     name: '',
     ageYears: '',
+    gender: '', // male | female | other | prefer_not
     conditions: [],
     chronicMeds: [],
     regimen: [],
@@ -63,12 +64,13 @@ export function upsertPerson(profile, person) {
   return { ...profile, people };
 }
 
-export function addFamilyPerson(profile, { name, ageYears }) {
+export function addFamilyPerson(profile, { name, ageYears, gender }) {
   const person = {
     id: uid(),
     relation: 'family',
     name: name || 'Family member',
     ageYears: ageYears || '',
+    gender: gender || '',
     conditions: [],
     chronicMeds: [],
     regimen: [],

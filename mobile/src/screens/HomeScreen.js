@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -19,7 +19,7 @@ import { ageBandFromYears } from '../conditions';
 import { MedicineModal } from '../components/MedicineModal';
 import { MedicineConfirmCard } from '../components/MedicineConfirmCard';
 
-const TAB_KEYS = ['Summary', 'Schedule', 'Interactions', 'Food', 'Side effects', 'Ask doctor'];
+const TAB_KEYS = ['Summary', 'Schedule', 'Interactions', 'Side effects'];
 
 export default function HomeScreen() {
   const {
@@ -46,10 +46,23 @@ export default function HomeScreen() {
   const [modalMed, setModalMed] = useState(null);
   const [saveMsg, setSaveMsg] = useState('');
   const [newPersonName, setNewPersonName] = useState('');
+  const [prefetchStatus, setPrefetchStatus] = useState('idle'); // idle | loading | ready | error
+  const prefetchRef = useRef({
+    key: null,
+    promise: null,
+    result: null,
+    error: null,
+    gen: 0,
+  });
+  const briefBusyRef = useRef(false);
 
   const medicines = scanSession.medicines || [];
   const briefing = scanSession.briefing;
   const needsReviewCount = medicines.filter((m) => m.needsReview).length;
+  // API needs confirmUnmatched when any row still needs review
+  const confirmFlag = needsReviewCount > 0 ? confirmUnmatched : false;
+  // Prefetch optimistically with confirm=true so we don't wait for the checkbox
+  const prefetchConfirmFlag = needsReviewCount > 0;
   const canGenerate =
     medicines.length > 0 && (needsReviewCount === 0 || confirmUnmatched) && !loading;
 
@@ -58,6 +71,7 @@ export default function HomeScreen() {
       return {
         ageBand: ageBandFromYears(guestAge),
         ageYears: guestAge,
+        gender: undefined,
         pregnancyOrBreastfeeding: 'prefer_not',
         conditions: [],
         otherMedsText: '',
@@ -69,6 +83,7 @@ export default function HomeScreen() {
     return {
       ageBand: ageBandFromYears(person.ageYears),
       ageYears: person.ageYears,
+      gender: person.gender || undefined,
       pregnancyOrBreastfeeding: person.conditions?.some((c) => c.id === 'pregnancy')
         ? 'yes'
         : person.conditions?.some((c) => c.id === 'breastfeeding')
@@ -80,6 +95,95 @@ export default function HomeScreen() {
       personLabel: person.name || 'Me',
     };
   }, [guestMode, guestAge, guestName, profile.people, selectedPersonId, activePerson]);
+
+  /** Ignore medexPrices / stamps so price cache writes don't retrigger brief. */
+  const briefStableKey = useMemo(() => {
+    const medKey = (medicines || []).map((m) => ({
+      rawName: m.rawName || '',
+      strength: m.strength || '',
+      doseLine: m.doseLine || '',
+      kbId: m.kbId || null,
+      needsReview: !!m.needsReview,
+    }));
+    const ctxKey = {
+      ageBand: patientContext.ageBand,
+      ageYears: patientContext.ageYears,
+      gender: patientContext.gender,
+      pregnancyOrBreastfeeding: patientContext.pregnancyOrBreastfeeding,
+      conditions: patientContext.conditions,
+      otherMedsText: patientContext.otherMedsText,
+      personLabel: patientContext.personLabel,
+    };
+    return JSON.stringify({
+      medKey,
+      ctxKey,
+      language,
+      confirmUnmatched: prefetchConfirmFlag,
+    });
+  }, [medicines, patientContext, language, prefetchConfirmFlag]);
+
+  function invalidatePrefetch() {
+    prefetchRef.current.gen += 1;
+    prefetchRef.current = {
+      key: null,
+      promise: null,
+      result: null,
+      error: null,
+      gen: prefetchRef.current.gen,
+    };
+    setPrefetchStatus('idle');
+  }
+
+  function startBriefPrefetch() {
+    if (briefBusyRef.current) return;
+    if (step !== 'confirm' || medicines.length === 0) return;
+
+    const key = briefStableKey;
+    const cur = prefetchRef.current;
+    if (cur.key === key && (cur.result || cur.promise)) return;
+
+    const gen = cur.gen + 1;
+    prefetchRef.current = {
+      key,
+      promise: null,
+      result: null,
+      error: null,
+      gen,
+    };
+    setPrefetchStatus('loading');
+
+    const promise = generateBrief({
+      medicines,
+      patientContext,
+      language,
+      confirmUnmatched: prefetchConfirmFlag,
+    })
+      .then((data) => {
+        if (prefetchRef.current.gen !== gen || prefetchRef.current.key !== key) return null;
+        prefetchRef.current.result = data;
+        prefetchRef.current.promise = null;
+        setPrefetchStatus('ready');
+        return data;
+      })
+      .catch((err) => {
+        if (prefetchRef.current.gen !== gen) return null;
+        prefetchRef.current.error = err;
+        prefetchRef.current.promise = null;
+        setPrefetchStatus('error');
+        return null;
+      });
+
+    prefetchRef.current.promise = promise;
+  }
+
+  useEffect(() => {
+    if (step !== 'confirm' || medicines.length === 0 || briefBusyRef.current) {
+      return undefined;
+    }
+    const timer = setTimeout(() => startBriefPrefetch(), 600);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, briefStableKey]);
 
   async function pickImage(fromCamera) {
     setError('');
@@ -95,7 +199,11 @@ export default function HomeScreen() {
       : await ImagePicker.launchImageLibraryAsync({ base64: true, quality: 0.7 });
     if (result.canceled || !result.assets?.[0]) return;
     const asset = result.assets[0];
-    setScanSession((s) => ({ ...s, imageUri: asset.uri, imageBase64: asset.base64 }));
+    setScanSession((s) => ({
+      ...s,
+      imageUri: asset.uri,
+      imageBase64: asset.base64,
+    }));
   }
 
   async function runAnalyze(demoPreset) {
@@ -114,8 +222,10 @@ export default function HomeScreen() {
         medicines: data.medicines || [],
         briefing: null,
         disclaimer: data.disclaimer || disclaimerFor(language),
+        sourceType: data.sourceType || 'prescription',
       }));
       setConfirmUnmatched(false);
+      invalidatePrefetch();
       setStep('confirm');
     } catch (e) {
       setError(e.message);
@@ -127,16 +237,32 @@ export default function HomeScreen() {
 
   async function runBrief(langOverride) {
     const lang = langOverride || language;
+    briefBusyRef.current = true;
+    const cachedResult = prefetchRef.current.result;
+    const cachedPromise = prefetchRef.current.promise;
+    const cachedKey = prefetchRef.current.key;
     try {
       setLoading(true);
       setError('');
       setLoadingPhase(langOverride ? t(language, 'regenerating') : t(language, 'loadingBrief'));
-      const data = await generateBrief({
-        medicines,
-        patientContext,
-        language: lang,
-        confirmUnmatched: needsReviewCount > 0 ? confirmUnmatched : false,
-      });
+
+      let data = null;
+      if (!langOverride && cachedKey === briefStableKey) {
+        if (cachedResult) data = cachedResult;
+        else if (cachedPromise) data = await cachedPromise;
+      }
+      if (!data) {
+        data = await generateBrief({
+          medicines,
+          patientContext,
+          language: lang,
+          confirmUnmatched: confirmFlag || prefetchConfirmFlag,
+        });
+      }
+
+      // Leave confirm before writing session so prefetch effect cannot fire again
+      setStep('results');
+      setTab('Summary');
       setScanSession((s) => ({
         ...s,
         medicines: data.medicines || medicines,
@@ -154,11 +280,19 @@ export default function HomeScreen() {
         patientContext,
         personId: guestMode ? 'guest' : selectedPersonId,
       });
-      setStep('results');
-      setTab('Summary');
+      prefetchRef.current = {
+        key: null,
+        promise: null,
+        result: null,
+        error: null,
+        gen: prefetchRef.current.gen + 1,
+      };
+      setPrefetchStatus('idle');
     } catch (e) {
       setError(e.message);
+      setStep('confirm');
     } finally {
+      briefBusyRef.current = false;
       setLoading(false);
       setLoadingPhase('');
     }
@@ -354,8 +488,16 @@ export default function HomeScreen() {
 
       {step === 'confirm' && (
         <View>
-          <Text style={styles.h1}>{t(language, 'confirmTitle')}</Text>
-          <Text style={styles.p}>{t(language, 'confirmBody')}</Text>
+          <Text style={styles.h1}>
+            {scanSession.sourceType === 'packaging'
+              ? t(language, 'confirmPackTitle')
+              : t(language, 'confirmTitle')}
+          </Text>
+          <Text style={styles.p}>
+            {scanSession.sourceType === 'packaging'
+              ? t(language, 'confirmPackBody')
+              : t(language, 'confirmBody')}
+          </Text>
           {medicines.map((m, i) => (
             <MedicineConfirmCard
               key={`${m.rawName}-${i}`}
@@ -386,6 +528,12 @@ export default function HomeScreen() {
               <Text style={styles.primaryText}>{t(language, 'generate')}</Text>
             )}
           </Pressable>
+          {step === 'confirm' && prefetchStatus === 'loading' ? (
+            <Text style={styles.prefetchHint}>{t(language, 'prefetchPreparing')}</Text>
+          ) : null}
+          {step === 'confirm' && prefetchStatus === 'ready' ? (
+            <Text style={styles.prefetchHint}>{t(language, 'prefetchReady')}</Text>
+          ) : null}
           <Pressable style={styles.link} onPress={() => setStep('home')}>
             <Text style={styles.linkText}>{t(language, 'back')}</Text>
           </Pressable>
@@ -461,22 +609,6 @@ export default function HomeScreen() {
                 <Text style={styles.p}>{x.detail}</Text>
               </View>
             ))}
-          {tab === 'Food' && (
-            <View style={styles.card}>
-              <Text style={styles.h2}>{t(language, 'avoid')}</Text>
-              {(briefing.foodAndLifestyle?.avoid || []).map((x, i) => (
-                <Text key={i} style={styles.p}>
-                  · {x}
-                </Text>
-              ))}
-              <Text style={[styles.h2, { marginTop: 10 }]}>{t(language, 'doThis')}</Text>
-              {(briefing.foodAndLifestyle?.doThis || []).map((x, i) => (
-                <Text key={i} style={styles.p}>
-                  · {x}
-                </Text>
-              ))}
-            </View>
-          )}
           {tab === 'Side effects' && (
             <View style={styles.card}>
               <Text style={styles.h2}>{t(language, 'common')}</Text>
@@ -489,15 +621,6 @@ export default function HomeScreen() {
               {(briefing.sideEffects?.seekCareNow || []).map((x, i) => (
                 <Text key={i} style={[styles.p, styles.danger]}>
                   · {x}
-                </Text>
-              ))}
-            </View>
-          )}
-          {tab === 'Ask doctor' && (
-            <View style={styles.card}>
-              {(briefing.doctorQuestions || []).map((q, i) => (
-                <Text key={i} style={styles.p}>
-                  {i + 1}. {q}
                 </Text>
               ))}
             </View>
@@ -620,6 +743,13 @@ const styles = StyleSheet.create({
   },
   loadingText: { color: colors.graphite, fontWeight: '600', flex: 1 },
   disabled: { opacity: 0.55 },
+  prefetchHint: {
+    marginTop: 8,
+    marginBottom: 4,
+    fontSize: 12,
+    color: colors.accent,
+    lineHeight: 16,
+  },
   checkRow: { flexDirection: 'row', gap: 10, marginBottom: 10 },
   checkbox: {
     width: 22,
