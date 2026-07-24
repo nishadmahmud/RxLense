@@ -20,6 +20,7 @@ import { MedicineModal } from '../components/MedicineModal';
 import { MedicineConfirmCard } from '../components/MedicineConfirmCard';
 import { ClinicalPrescriptionCard } from '../components/ClinicalPrescriptionCard';
 import { BriefingTabs } from '../components/BriefingTabs';
+import { formatDoseSlots, parseDoseTiming, slotsToTimeOfDay } from '../doseTiming';
 
 export default function HomeScreen() {
   const {
@@ -47,6 +48,7 @@ export default function HomeScreen() {
   const [modalMed, setModalMed] = useState(null);
   const [saveMsg, setSaveMsg] = useState('');
   const [newPersonName, setNewPersonName] = useState('');
+  const [addingPerson, setAddingPerson] = useState(false);
   const [prefetchStatus, setPrefetchStatus] = useState('idle'); // idle | loading | ready | error
   const prefetchRef = useRef({
     key: null,
@@ -276,6 +278,17 @@ export default function HomeScreen() {
 
       // Leave confirm before writing session so prefetch effect cannot fire again
       setStep('results');
+      const title = (data.medicines || medicines).map((m) => m.rawName).join(', ').slice(0, 48);
+      const saved = await saveScanToHistory({
+        language: lang,
+        title,
+        medicines: data.medicines || medicines,
+        briefing: data.briefing,
+        disclaimer: data.disclaimer,
+        patientContext,
+        personId: guestMode ? 'guest' : selectedPersonId,
+        clinical: data.briefing?.clinicalContext || clinical || null,
+      });
       setScanSession((s) => ({
         ...s,
         medicines: data.medicines || medicines,
@@ -284,17 +297,10 @@ export default function HomeScreen() {
         clinical: data.briefing?.clinicalContext || clinical || s.clinical,
         forPersonId: guestMode ? 'guest' : selectedPersonId,
         guest: guestMode ? { name: guestName, ageYears: guestAge } : null,
+        scanId: saved?.id || null,
+        scanTitle: title,
+        scannedAt: saved?.createdAt || new Date().toISOString(),
       }));
-      await saveScanToHistory({
-        language: lang,
-        title: (data.medicines || medicines).map((m) => m.rawName).join(', ').slice(0, 48),
-        medicines: data.medicines || medicines,
-        briefing: data.briefing,
-        disclaimer: data.disclaimer,
-        patientContext,
-        personId: guestMode ? 'guest' : selectedPersonId,
-        clinical: data.briefing?.clinicalContext || clinical || null,
-      });
       prefetchRef.current = {
         key: null,
         promise: null,
@@ -338,20 +344,47 @@ export default function HomeScreen() {
   }
 
   function timingForMedicine(med) {
+    const slots = [];
+    const meals = [];
+    let timingSource = 'rx';
     for (const s of briefing?.schedule || []) {
       for (const name of s.medicines || []) {
         if (namesMatch(med.rawName, name)) {
-          return { timing: s.timeOfDay || '', mealTiming: s.mealTiming || '' };
+          if (s.timeOfDay && !slots.includes(s.timeOfDay)) slots.push(s.timeOfDay);
+          if (s.mealTiming && !meals.includes(s.mealTiming)) meals.push(s.mealTiming);
+          if (s.timingSource === 'assumed') timingSource = 'assumed';
         }
       }
     }
-    return { timing: '', mealTiming: '' };
+    if (!slots.length) {
+      const fromDose = slotsToTimeOfDay(parseDoseTiming(med.doseLine));
+      for (const s of fromDose) {
+        if (!slots.includes(s)) slots.push(s);
+      }
+    }
+    return {
+      timing:
+        slots.join(' · ') ||
+        formatDoseSlots(med.doseLine, {
+          morning: t(language, 'slotMorning'),
+          noon: t(language, 'slotNoon'),
+          night: t(language, 'slotNight'),
+        }),
+      mealTiming: meals[0] || '',
+      timingSource,
+    };
   }
 
   async function onSaveRegimen() {
     const personId = guestMode ? 'me' : selectedPersonId;
+    const scanId = scanSession.scanId || `local-${Date.now()}`;
+    const scanTitle =
+      scanSession.scanTitle ||
+      medicines.map((m) => m.rawName).join(', ').slice(0, 48) ||
+      t(language, 'scans');
+    const scannedAt = scanSession.scannedAt || new Date().toISOString();
     const items = medicines.map((med) => {
-      const { timing, mealTiming } = timingForMedicine(med);
+      const { timing, mealTiming, timingSource } = timingForMedicine(med);
       const snap = med.kbSnapshot || null;
       return {
         brandName: med.rawName,
@@ -359,6 +392,10 @@ export default function HomeScreen() {
         doseLine: med.doseLine || '',
         timing,
         mealTiming,
+        timingSource,
+        scanId,
+        scanTitle,
+        scannedAt,
         kbId: med.kbId,
         kbSnapshot: snap,
         examplePrices: snap?.examplePrices || med.examplePrices || [],
@@ -419,22 +456,47 @@ export default function HomeScreen() {
             />
           </View>
         )}
-        <TextInput
-          style={styles.input}
-          value={newPersonName}
-          onChangeText={setNewPersonName}
-          placeholder={t(language, 'addPerson')}
-        />
-        <Pressable
-          style={styles.secondary}
-          onPress={async () => {
-            if (!newPersonName.trim()) return;
-            await addFamily({ name: newPersonName.trim(), ageYears: '' });
-            setNewPersonName('');
-          }}
-        >
-          <Text style={styles.secondaryText}>{t(language, 'addPerson')}</Text>
-        </Pressable>
+        {!guestMode && (
+          <View>
+            {addingPerson ? (
+              <View>
+                <TextInput
+                  style={styles.input}
+                  value={newPersonName}
+                  onChangeText={setNewPersonName}
+                  placeholder={t(language, 'addPersonHint')}
+                  autoFocus
+                />
+                <View style={styles.wrap}>
+                  <Pressable
+                    style={styles.secondary}
+                    onPress={async () => {
+                      if (!newPersonName.trim()) return;
+                      await addFamily({ name: newPersonName.trim(), ageYears: '' });
+                      setNewPersonName('');
+                      setAddingPerson(false);
+                    }}
+                  >
+                    <Text style={styles.secondaryText}>{t(language, 'addPerson')}</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.secondary, { marginLeft: 8 }]}
+                    onPress={() => {
+                      setAddingPerson(false);
+                      setNewPersonName('');
+                    }}
+                  >
+                    <Text style={styles.secondaryText}>{t(language, 'close')}</Text>
+                  </Pressable>
+                </View>
+              </View>
+            ) : (
+              <Pressable style={styles.secondary} onPress={() => setAddingPerson(true)}>
+                <Text style={styles.secondaryText}>{t(language, 'addPerson')}</Text>
+              </Pressable>
+            )}
+          </View>
+        )}
       </View>
     );
   }

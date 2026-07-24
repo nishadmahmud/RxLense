@@ -83,11 +83,13 @@ export function mergeRegimen(profile, personId, items) {
   const people = profile.people.map((p) => {
     if (p.id !== personId) return p;
     const byKey = new Map();
+    const medKey = (r) =>
+      `${(r.brandName || '').toLowerCase()}|${r.strength || ''}|${r.scanId || ''}`;
     for (const r of p.regimen || []) {
-      byKey.set(`${(r.brandName || '').toLowerCase()}|${r.strength || ''}`, r);
+      byKey.set(medKey(r), r);
     }
     for (const item of items || []) {
-      const key = `${(item.brandName || '').toLowerCase()}|${item.strength || ''}`;
+      const key = medKey(item);
       byKey.set(key, { ...byKey.get(key), ...item, updatedAt: new Date().toISOString() });
     }
     return { ...p, regimen: Array.from(byKey.values()) };

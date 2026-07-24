@@ -36,7 +36,8 @@ Return JSON only, no markdown fences:
 Rules:
 - sourceType = "prescription" for Rx sheets; "packaging" for packs/labels.
 - Prefer brand names as printed. Include strength when visible.
-- For prescriptions: copy dose lines when readable (e.g. 1+0+1 after meal).
+- For prescriptions: copy dose lines when readable. Prefer BD triple form with pluses
+  (e.g. write "1+0+1 after meal" even if the Rx shows "1 0 1" or "1-0-1"). Keep meal words.
 - For packaging: doseLine should be "" or "as labeled" — do NOT invent a dosing schedule.
   Set diagnosis="", investigations=[], clinicalNotes=[] for packaging.
 - diagnosis: provisional/final diagnosis text as written (e.g. PUD, ? Nephrotic syndrome). Empty if none.
@@ -114,7 +115,16 @@ KB-FIRST RULES:
 - Prefer the KB grounding block for class, uses, food, interactions, side effects.
 - Paraphrase into plain language; do NOT invent strengths, new medicines, or diagnoses.
 - If NO_KB_MATCH, say the name may need pharmacist confirmation and keep advice generic.
-- Schedule must respect written doseLine when present.
+- SCHEDULE RULES (critical):
+  - Parse each doseLine like 1+0+1 / 1 0 1 / 1-0-0 into Morning (1st), Afternoon/Noon (2nd), Night (3rd).
+    Put that medicine into those schedule buckets. timeOfDay must be exactly Morning, Afternoon, or Night
+    (or Bangla সকাল / দুপুর / রাত when language is bn).
+  - If doseLine has meal words (before/after food), put them in mealTiming for those rows.
+  - If a medicine has NO usable timing on the Rx (empty, "as labeled", vague): use common educational
+    knowledge for that class (e.g. PPI often morning empty stomach; once-daily diuretic often morning)
+    and set timingSource to "assumed". Put a short note like "Typical use — confirm with doctor/label".
+  - When timing comes from the written doseLine, set timingSource to "rx". Written Rx always wins.
+  - Do NOT invent clock times (08:00) unless the Rx text itself has them.
 - Clinical context below is COPIED FROM THE PRESCRIPTION (educational only).
   You may mention it softly ("the prescription notes…", "investigations listed…").
   NEVER present it as your own diagnosis. Do NOT invent extra diagnoses or tests.
@@ -139,7 +149,7 @@ Return JSON only, no markdown fences, with exact keys:
 {{
   "summary": "string",
   "holisticExplanation": "string",
-  "schedule": [{{ "timeOfDay": "Morning|Afternoon|Night", "medicines": ["..."], "mealTiming": "", "notes": "" }}],
+  "schedule": [{{ "timeOfDay": "Morning|Afternoon|Night", "medicines": ["..."], "mealTiming": "", "notes": "", "timingSource": "rx|assumed" }}],
   "interactions": [{{ "title": "", "detail": "", "severity": "info|caution|important" }}],
   "sideEffects": {{ "common": [], "seekCareNow": [] }}
 }}"""

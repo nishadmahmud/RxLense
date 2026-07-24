@@ -3,7 +3,16 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme';
 import { t } from '../i18n';
+import { formatDoseSlots } from '../doseTiming';
 import { DoseTimingIcons } from './DoseTimingIcons';
+
+function slotLabels(language) {
+  return {
+    morning: t(language, 'slotMorning'),
+    noon: t(language, 'slotNoon'),
+    night: t(language, 'slotNight'),
+  };
+}
 
 export function MedicineConfirmCard({
   medicine,
@@ -13,6 +22,7 @@ export function MedicineConfirmCard({
 }) {
   const [editing, setEditing] = useState(false);
   const m = medicine;
+  const slotLabel = formatDoseSlots(m.doseLine, slotLabels(language));
 
   return (
     <View style={styles.card}>
@@ -70,6 +80,11 @@ export function MedicineConfirmCard({
           )}
           {!!m.doseLine && <Text style={styles.line}>{m.doseLine}</Text>}
           <DoseTimingIcons doseLine={m.doseLine} />
+          {!!slotLabel && (
+            <Text style={styles.slotLabel}>
+              {t(language, 'timing')}: {slotLabel}
+            </Text>
+          )}
           {m.kbSnapshot ? (
             <Text style={styles.meta}>
               {t(language, 'matched')}: {m.kbSnapshot.generic}
@@ -102,6 +117,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 18, fontWeight: '800', color: colors.graphite, marginBottom: 4 },
   line: { fontSize: 14, color: colors.muted, marginBottom: 2 },
+  slotLabel: { marginTop: 4, fontSize: 13, color: colors.accent, fontWeight: '600' },
   meta: { marginTop: 8, color: colors.accent, fontSize: 12, fontWeight: '600' },
   warn: { marginTop: 8, color: '#A65B00', fontSize: 12 },
   tapHint: { marginTop: 8, fontSize: 11, color: colors.foil },

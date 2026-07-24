@@ -15,16 +15,14 @@ export async function loadHistory() {
 
 export async function saveHistoryEntry(entry) {
   const list = await loadHistory();
-  const next = [
-    {
-      id: `${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      ...entry,
-    },
-    ...list,
-  ].slice(0, MAX);
+  const created = {
+    ...entry,
+    id: entry.id || `${Date.now()}`,
+    createdAt: entry.createdAt || new Date().toISOString(),
+  };
+  const next = [created, ...list].slice(0, MAX);
   await AsyncStorage.setItem(KEY, JSON.stringify(next));
-  return next;
+  return { list: next, entry: created };
 }
 
 export async function deleteHistoryEntry(id) {

@@ -98,6 +98,87 @@ def mock_brief(
     age = patient_context.get("ageBand", "adult")
     clinical = clinical_context or {}
     dx = (clinical.get("diagnosis") or "").strip()
+
+    morning_label = "সকাল" if bn else "Morning"
+    afternoon_label = "দুপুর" if bn else "Afternoon"
+    night_label = "রাত" if bn else "Night"
+    buckets: dict[str, list[str]] = {
+        morning_label: [],
+        afternoon_label: [],
+        night_label: [],
+    }
+    meal_by: dict[str, str] = {morning_label: "", afternoon_label: "", night_label: ""}
+    source_by: dict[str, str] = {
+        morning_label: "rx",
+        afternoon_label: "rx",
+        night_label: "rx",
+    }
+    assumed_note = (
+        "সাধারণ ব্যবহার — ডাক্তার/লেবেল দিয়ে নিশ্চিত করুন"
+        if bn
+        else "Typical use — confirm with doctor/label"
+    )
+
+    triple_re = re.compile(r"(\d+)\s*[+\-–−]\s*(\d+)\s*[+\-–−]\s*(\d+)")
+    space_re = re.compile(r"(\d+)\s+(\d+)\s+(\d+)(?!\s*\d)")
+
+    for m in medicines:
+        name = m.get("rawName") or "?"
+        dose = m.get("doseLine") or ""
+        low = dose.lower()
+        meal = ""
+        if re.search(r"before\s+(meal|breakfast|food)|খাবারের?\s*আগে", low):
+            meal = "খাবারের আগে" if bn else "Before meal"
+        elif re.search(r"after\s+(meal|food)|খাবারের?\s*পরে", low):
+            meal = "খাবারের পরে" if bn else "After meal"
+
+        match = triple_re.search(dose) or space_re.search(dose)
+        if match:
+            slots = [
+                (morning_label, int(match.group(1)) > 0),
+                (afternoon_label, int(match.group(2)) > 0),
+                (night_label, int(match.group(3)) > 0),
+            ]
+            for label, on in slots:
+                if on:
+                    buckets[label].append(name)
+                    if meal and not meal_by[label]:
+                        meal_by[label] = meal
+        elif not dose.strip() or "as labeled" in low or "label" in low:
+            # Typical once-daily morning for unknown / packaging
+            buckets[morning_label].append(name)
+            source_by[morning_label] = "assumed"
+            if not meal_by[morning_label]:
+                meal_by[morning_label] = assumed_note
+        else:
+            buckets[morning_label].append(name)
+            source_by[morning_label] = "assumed"
+
+    schedule = []
+    for label in (morning_label, afternoon_label, night_label):
+        if not buckets[label]:
+            continue
+        src = source_by[label]
+        schedule.append(
+            {
+                "timeOfDay": label,
+                "medicines": buckets[label],
+                "mealTiming": meal_by[label],
+                "notes": assumed_note if src == "assumed" else ("লিখিত নির্দেশনা অনুসরণ করুন" if bn else "Follow written instructions"),
+                "timingSource": src,
+            }
+        )
+    if not schedule:
+        schedule = [
+            {
+                "timeOfDay": morning_label,
+                "medicines": [m.get("rawName", "") for m in medicines],
+                "mealTiming": "",
+                "notes": assumed_note,
+                "timingSource": "assumed",
+            }
+        ]
+
     return {
         "summary": (
             (
@@ -117,20 +198,7 @@ def mock_brief(
             if bn
             else f"Together, these medicines are commonly used in combinations that address infection and symptom relief, sometimes with stomach protection. RxLens does not diagnose. Patient context age band: {age}. Always prefer the written dose on your prescription."
         ),
-        "schedule": [
-            {
-                "timeOfDay": "সকাল" if bn else "Morning",
-                "medicines": [m["rawName"] for m in medicines[:2]],
-                "mealTiming": "খাবারের সাথে/পরে (লেবেল অনুযায়ী)" if bn else "With/after food if labeled",
-                "notes": "লিখিত নির্দেশনা অনুসরণ করুন" if bn else "Follow written instructions",
-            },
-            {
-                "timeOfDay": "রাত" if bn else "Night",
-                "medicines": [m["rawName"] for m in medicines[:1]],
-                "mealTiming": "",
-                "notes": "",
-            },
-        ],
+        "schedule": schedule,
         "interactions": [
             {
                 "title": "সাধারণ সতর্কতা" if bn else "General caution",

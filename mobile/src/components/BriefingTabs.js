@@ -95,6 +95,12 @@ export function BriefingTabs({
                   );
                 })}
                 {!!s.mealTiming && <Text style={styles.meta}>{s.mealTiming}</Text>}
+                {s.timingSource === 'assumed' && (
+                  <Text style={styles.meta}>{t(language, 'timingAssumed')}</Text>
+                )}
+                {!!s.notes && s.timingSource !== 'assumed' && (
+                  <Text style={styles.meta}>{s.notes}</Text>
+                )}
               </View>
             </View>
           ))}

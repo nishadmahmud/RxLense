@@ -73,6 +73,8 @@ class ScheduleItem(BaseModel):
     medicines: list[str]
     mealTiming: str = ""
     notes: str = ""
+    # "rx" = from written doseLine; "assumed" = typical use when Rx had no times
+    timingSource: Literal["rx", "assumed"] = "rx"
 
 
 class InteractionItem(BaseModel):

@@ -28,6 +28,9 @@ export function AppStateProvider({ children }) {
     sourceType: 'prescription',
     clinical: null,
     openResults: false,
+    scanId: null,
+    scanTitle: '',
+    scannedAt: null,
   });
 
   useEffect(() => {
@@ -57,9 +60,9 @@ export function AppStateProvider({ children }) {
     history,
     setHistory,
     saveScanToHistory: async (entry) => {
-      const next = await saveHistoryEntry(entry);
-      setHistory(next);
-      return next;
+      const { list, entry: created } = await saveHistoryEntry(entry);
+      setHistory(list);
+      return created;
     },
     removeHistoryEntry: async (id) => {
       const next = await deleteHistoryEntry(id);
@@ -80,6 +83,9 @@ export function AppStateProvider({ children }) {
         sourceType: 'prescription',
         clinical: entry.clinical || entry.briefing?.clinicalContext || null,
         openResults: true,
+        scanId: entry.id || null,
+        scanTitle: entry.title || '',
+        scannedAt: entry.createdAt || null,
       });
     },
     upsertPerson: async (person) => persist(upsertPerson(profile, person)),

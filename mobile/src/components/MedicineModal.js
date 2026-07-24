@@ -15,6 +15,7 @@ import { getCachedMedexPrices, setCachedMedexPrices, normalizePriceKey } from '.
 import { colors } from '../theme';
 import { t } from '../i18n';
 import { disclaimerFor } from '../config';
+import { formatDoseSlots } from '../doseTiming';
 import { DoseTimingIcons } from './DoseTimingIcons';
 
 function sameMed(a, b) {
@@ -150,11 +151,33 @@ export function MedicineModal({ visible, medicine, language, onClose }) {
               </Text>
             )}
             <DoseTimingIcons doseLine={medicine.doseLine} size={18} />
-            {!!(medicine.timing || medicine.timeOfDay) && (
+            {(() => {
+              const fromDose = formatDoseSlots(medicine.doseLine, {
+                morning: t(language, 'slotMorning'),
+                noon: t(language, 'slotNoon'),
+                night: t(language, 'slotNight'),
+              });
+              const timingLabel =
+                medicine.timing || medicine.timeOfDay || fromDose || '';
+              if (!timingLabel && !medicine.doseLine) return null;
+              return (
+                <Text style={styles.meta}>
+                  {t(language, 'timing')}: {timingLabel}
+                  {medicine.doseLine && timingLabel !== medicine.doseLine
+                    ? ` · ${medicine.doseLine}`
+                    : !timingLabel && medicine.doseLine
+                      ? medicine.doseLine
+                      : ''}
+                </Text>
+              );
+            })()}
+            {!!medicine.mealTiming && (
               <Text style={styles.meta}>
-                {t(language, 'timing')}: {medicine.timing || medicine.timeOfDay}
-                {medicine.doseLine ? ` · ${medicine.doseLine}` : ''}
+                {t(language, 'mealTiming')}: {medicine.mealTiming}
               </Text>
+            )}
+            {medicine.timingSource === 'assumed' && (
+              <Text style={styles.meta}>{t(language, 'timingAssumed')}</Text>
             )}
             {!!snap.generic && <Text style={styles.meta}>Generic: {snap.generic}</Text>}
             {!!snap.drugClass && <Text style={styles.meta}>{snap.drugClass}</Text>}
