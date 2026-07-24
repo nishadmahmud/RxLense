@@ -37,10 +37,16 @@ export function analyzePrescription({ imageBase64, ocrHint, language, demoPreset
   });
 }
 
-export function generateBrief({ medicines, patientContext, language, confirmUnmatched }) {
+export function generateBrief({ medicines, patientContext, language, confirmUnmatched, clinicalContext }) {
   return request('/api/brief', {
     method: 'POST',
-    body: JSON.stringify({ medicines, patientContext, language, confirmUnmatched }),
+    body: JSON.stringify({
+      medicines,
+      patientContext,
+      language,
+      confirmUnmatched,
+      clinicalContext,
+    }),
   });
 }
 

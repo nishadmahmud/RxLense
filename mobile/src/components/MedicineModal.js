@@ -15,6 +15,7 @@ import { getCachedMedexPrices, setCachedMedexPrices, normalizePriceKey } from '.
 import { colors } from '../theme';
 import { t } from '../i18n';
 import { disclaimerFor } from '../config';
+import { DoseTimingIcons } from './DoseTimingIcons';
 
 function sameMed(a, b) {
   const ka = normalizePriceKey(a);
@@ -148,6 +149,7 @@ export function MedicineModal({ visible, medicine, language, onClose }) {
                 {t(language, 'strength')}: {medicine.strength}
               </Text>
             )}
+            <DoseTimingIcons doseLine={medicine.doseLine} size={18} />
             {!!(medicine.timing || medicine.timeOfDay) && (
               <Text style={styles.meta}>
                 {t(language, 'timing')}: {medicine.timing || medicine.timeOfDay}

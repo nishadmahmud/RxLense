@@ -26,3 +26,10 @@ export async function saveHistoryEntry(entry) {
   await AsyncStorage.setItem(KEY, JSON.stringify(next));
   return next;
 }
+
+export async function deleteHistoryEntry(id) {
+  const list = await loadHistory();
+  const next = list.filter((e) => e.id !== id);
+  await AsyncStorage.setItem(KEY, JSON.stringify(next));
+  return next;
+}

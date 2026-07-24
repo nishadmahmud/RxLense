@@ -5,6 +5,7 @@ import { useAppState } from '../AppState';
 import { t } from '../i18n';
 import { colors } from '../theme';
 import { MedicineModal } from '../components/MedicineModal';
+import { DoseTimingIcons } from '../components/DoseTimingIcons';
 
 export default function MedicinesScreen() {
   const { language, activePerson, profile, removeRegimenItem } = useAppState();
@@ -52,6 +53,7 @@ export default function MedicinesScreen() {
                 </Text>
               )}
               {!!m.doseLine && <Text style={styles.meta}>{m.doseLine}</Text>}
+              <DoseTimingIcons doseLine={m.doseLine} />
             </Pressable>
             <Pressable
               style={styles.removeBtn}

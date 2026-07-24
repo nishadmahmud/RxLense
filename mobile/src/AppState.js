@@ -9,7 +9,7 @@ import {
   upsertPerson,
   addFamilyPerson,
 } from './profileStore';
-import { loadHistory, saveHistoryEntry } from './history';
+import { loadHistory, saveHistoryEntry, deleteHistoryEntry } from './history';
 
 const AppStateContext = createContext(null);
 
@@ -26,6 +26,8 @@ export function AppStateProvider({ children }) {
     imageUri: null,
     imageBase64: null,
     sourceType: 'prescription',
+    clinical: null,
+    openResults: false,
   });
 
   useEffect(() => {
@@ -59,8 +61,27 @@ export function AppStateProvider({ children }) {
       setHistory(next);
       return next;
     },
+    removeHistoryEntry: async (id) => {
+      const next = await deleteHistoryEntry(id);
+      setHistory(next);
+      return next;
+    },
     scanSession,
     setScanSession,
+    openHistoryScan: (entry) => {
+      setScanSession({
+        medicines: entry.medicines || [],
+        briefing: entry.briefing || null,
+        disclaimer: entry.disclaimer || '',
+        forPersonId: entry.personId || 'me',
+        guest: null,
+        imageUri: null,
+        imageBase64: null,
+        sourceType: 'prescription',
+        clinical: entry.clinical || entry.briefing?.clinicalContext || null,
+        openResults: true,
+      });
+    },
     upsertPerson: async (person) => persist(upsertPerson(profile, person)),
     addFamily: async (fields) => persist(addFamilyPerson(profile, fields)),
     saveRegimen: async (personId, items) => persist(mergeRegimen(profile, personId, items)),

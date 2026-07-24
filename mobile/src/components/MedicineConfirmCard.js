@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme';
 import { t } from '../i18n';
+import { DoseTimingIcons } from './DoseTimingIcons';
 
 export function MedicineConfirmCard({
   medicine,
@@ -68,6 +69,7 @@ export function MedicineConfirmCard({
             </Text>
           )}
           {!!m.doseLine && <Text style={styles.line}>{m.doseLine}</Text>}
+          <DoseTimingIcons doseLine={m.doseLine} />
           {m.kbSnapshot ? (
             <Text style={styles.meta}>
               {t(language, 'matched')}: {m.kbSnapshot.generic}

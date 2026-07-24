@@ -12,14 +12,14 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { analyzePrescription, generateBrief } from '../api';
 import { useAppState } from '../AppState';
-import { t, tabLabel } from '../i18n';
+import { t } from '../i18n';
 import { colors } from '../theme';
 import { disclaimerFor } from '../config';
 import { ageBandFromYears } from '../conditions';
 import { MedicineModal } from '../components/MedicineModal';
 import { MedicineConfirmCard } from '../components/MedicineConfirmCard';
-
-const TAB_KEYS = ['Summary', 'Schedule', 'Interactions', 'Side effects'];
+import { ClinicalPrescriptionCard } from '../components/ClinicalPrescriptionCard';
+import { BriefingTabs } from '../components/BriefingTabs';
 
 export default function HomeScreen() {
   const {
@@ -31,6 +31,8 @@ export default function HomeScreen() {
     saveScanToHistory,
     saveRegimen,
     addFamily,
+    history,
+    openHistoryScan,
   } = useAppState();
 
   const [step, setStep] = useState('home');
@@ -38,7 +40,6 @@ export default function HomeScreen() {
   const [loadingPhase, setLoadingPhase] = useState('');
   const [error, setError] = useState('');
   const [confirmUnmatched, setConfirmUnmatched] = useState(false);
-  const [tab, setTab] = useState('Summary');
   const [guestMode, setGuestMode] = useState(false);
   const [guestName, setGuestName] = useState('');
   const [guestAge, setGuestAge] = useState('');
@@ -58,6 +59,8 @@ export default function HomeScreen() {
 
   const medicines = scanSession.medicines || [];
   const briefing = scanSession.briefing;
+  const clinical = scanSession.clinical || briefing?.clinicalContext || null;
+  const recentScans = (history || []).slice(0, 5);
   const needsReviewCount = medicines.filter((m) => m.needsReview).length;
   // API needs confirmUnmatched when any row still needs review
   const confirmFlag = needsReviewCount > 0 ? confirmUnmatched : false;
@@ -117,10 +120,11 @@ export default function HomeScreen() {
     return JSON.stringify({
       medKey,
       ctxKey,
+      clinical,
       language,
       confirmUnmatched: prefetchConfirmFlag,
     });
-  }, [medicines, patientContext, language, prefetchConfirmFlag]);
+  }, [medicines, patientContext, clinical, language, prefetchConfirmFlag]);
 
   function invalidatePrefetch() {
     prefetchRef.current.gen += 1;
@@ -157,6 +161,7 @@ export default function HomeScreen() {
       patientContext,
       language,
       confirmUnmatched: prefetchConfirmFlag,
+      clinicalContext: clinical || undefined,
     })
       .then((data) => {
         if (prefetchRef.current.gen !== gen || prefetchRef.current.key !== key) return null;
@@ -184,6 +189,13 @@ export default function HomeScreen() {
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, briefStableKey]);
+
+  useEffect(() => {
+    if (scanSession.openResults && scanSession.briefing) {
+      setStep('results');
+      setScanSession((s) => ({ ...s, openResults: false }));
+    }
+  }, [scanSession.openResults, scanSession.briefing, setScanSession]);
 
   async function pickImage(fromCamera) {
     setError('');
@@ -223,6 +235,7 @@ export default function HomeScreen() {
         briefing: null,
         disclaimer: data.disclaimer || disclaimerFor(language),
         sourceType: data.sourceType || 'prescription',
+        clinical: data.clinical || null,
       }));
       setConfirmUnmatched(false);
       invalidatePrefetch();
@@ -257,17 +270,18 @@ export default function HomeScreen() {
           patientContext,
           language: lang,
           confirmUnmatched: confirmFlag || prefetchConfirmFlag,
+          clinicalContext: clinical || undefined,
         });
       }
 
       // Leave confirm before writing session so prefetch effect cannot fire again
       setStep('results');
-      setTab('Summary');
       setScanSession((s) => ({
         ...s,
         medicines: data.medicines || medicines,
         briefing: data.briefing,
         disclaimer: data.disclaimer || disclaimerFor(lang),
+        clinical: data.briefing?.clinicalContext || clinical || s.clinical,
         forPersonId: guestMode ? 'guest' : selectedPersonId,
         guest: guestMode ? { name: guestName, ageYears: guestAge } : null,
       }));
@@ -279,6 +293,7 @@ export default function HomeScreen() {
         disclaimer: data.disclaimer,
         patientContext,
         personId: guestMode ? 'guest' : selectedPersonId,
+        clinical: data.briefing?.clinicalContext || clinical || null,
       });
       prefetchRef.current = {
         key: null,
@@ -483,6 +498,30 @@ export default function HomeScreen() {
             )}
           </Pressable>
           <Text style={styles.tiny}>{disclaimerFor(language)}</Text>
+
+          {recentScans.length > 0 && (
+            <View style={{ marginTop: 28 }}>
+              <Text style={styles.h2}>{t(language, 'history')}</Text>
+              {recentScans.map((entry) => (
+                <Pressable
+                  key={entry.id}
+                  style={styles.recentCard}
+                  onPress={() => {
+                    openHistoryScan(entry);
+                    setStep('results');
+                  }}
+                >
+                  <Text style={styles.recentTitle}>{entry.title || t(language, 'scans')}</Text>
+                  <Text style={styles.meta}>
+                    {t(language, 'medsCount').replace(
+                      '{n}',
+                      String((entry.medicines || []).length)
+                    )}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
         </View>
       )}
 
@@ -498,6 +537,7 @@ export default function HomeScreen() {
               ? t(language, 'confirmPackBody')
               : t(language, 'confirmBody')}
           </Text>
+          <ClinicalPrescriptionCard clinical={clinical} language={language} />
           {medicines.map((m, i) => (
             <MedicineConfirmCard
               key={`${m.rawName}-${i}`}
@@ -546,85 +586,14 @@ export default function HomeScreen() {
           <Text style={styles.meta}>
             {t(language, 'forWhom')} {patientContext.personLabel}
           </Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabs}>
-            {TAB_KEYS.map((key) => (
-              <Pressable
-                key={key}
-                style={[styles.tab, tab === key && styles.tabOn]}
-                onPress={() => setTab(key)}
-              >
-                <Text style={tab === key ? styles.tabTextOn : styles.tabText}>
-                  {tabLabel(language, key)}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-
-          {tab === 'Summary' && (
-            <View>
-              <View style={styles.card}>
-                <Text style={styles.h2}>{briefing.summary}</Text>
-                <Text style={styles.p}>{briefing.holisticExplanation}</Text>
-              </View>
-              {renderSaveBlock()}
-            </View>
-          )}
-          {tab === 'Schedule' && (
-            <View>
-              {(briefing.schedule || []).map((s, i) => (
-                <View key={i} style={styles.timelineRow}>
-                  <View style={styles.rail}>
-                    <View style={styles.dot} />
-                    {i < (briefing.schedule || []).length - 1 ? <View style={styles.line} /> : null}
-                  </View>
-                  <View style={[styles.card, { flex: 1 }]}>
-                    <Text style={styles.h2}>{s.timeOfDay}</Text>
-                    {(s.medicines || []).map((name) => (
-                      <Pressable
-                        key={name}
-                        onPress={() => {
-                          const med = medicines.find((m) => namesMatch(m.rawName, name));
-                          setModalMed({
-                            brandName: name,
-                            ...(med || {}),
-                            timing: s.timeOfDay,
-                            examplePrices: med?.kbSnapshot?.examplePrices,
-                          });
-                        }}
-                      >
-                        <Text style={styles.linkText}>{name}</Text>
-                      </Pressable>
-                    ))}
-                    {!!s.mealTiming && <Text style={styles.meta}>{s.mealTiming}</Text>}
-                  </View>
-                </View>
-              ))}
-              {renderSaveBlock()}
-            </View>
-          )}
-          {tab === 'Interactions' &&
-            (briefing.interactions || []).map((x, i) => (
-              <View key={i} style={styles.card}>
-                <Text style={styles.h2}>{x.title}</Text>
-                <Text style={styles.p}>{x.detail}</Text>
-              </View>
-            ))}
-          {tab === 'Side effects' && (
-            <View style={styles.card}>
-              <Text style={styles.h2}>{t(language, 'common')}</Text>
-              {(briefing.sideEffects?.common || []).map((x, i) => (
-                <Text key={i} style={styles.p}>
-                  · {x}
-                </Text>
-              ))}
-              <Text style={[styles.h2, { marginTop: 10 }]}>{t(language, 'seekCare')}</Text>
-              {(briefing.sideEffects?.seekCareNow || []).map((x, i) => (
-                <Text key={i} style={[styles.p, styles.danger]}>
-                  · {x}
-                </Text>
-              ))}
-            </View>
-          )}
+          <BriefingTabs
+            language={language}
+            briefing={briefing}
+            medicines={medicines}
+            clinical={clinical}
+            onOpenMedicine={setModalMed}
+            saveBlock={renderSaveBlock()}
+          />
 
           <Pressable
             style={styles.secondary}
@@ -637,9 +606,14 @@ export default function HomeScreen() {
                 guest: null,
                 imageUri: null,
                 imageBase64: null,
+                sourceType: 'prescription',
+                clinical: null,
+                openResults: false,
               });
               setStep('home');
               setSaveMsg('');
+              setConfirmUnmatched(false);
+              invalidatePrefetch();
             }}
           >
             <Text style={styles.secondaryText}>{t(language, 'newScan')}</Text>
@@ -716,6 +690,15 @@ const styles = StyleSheet.create({
   },
   preview: { width: '100%', height: 180, borderRadius: 12, marginVertical: 10 },
   meta: { color: colors.accent, fontSize: 12, marginBottom: 6 },
+  recentCard: {
+    backgroundColor: colors.bgElevated,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  recentTitle: { fontSize: 15, fontWeight: '700', color: colors.graphite, marginBottom: 2 },
   warn: { color: '#A65B00', fontSize: 12 },
   badge: {
     alignSelf: 'flex-start',

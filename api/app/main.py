@@ -120,11 +120,17 @@ async def analyze(body: AnalyzeRequest) -> dict[str, Any]:
                 status_code=422,
                 detail="No medicines detected. Try a clearer photo of a prescription or medicine pack.",
             )
+        clinical = {
+            "diagnosis": (extracted.get("diagnosis") or "").strip(),
+            "investigations": list(extracted.get("investigations") or []),
+            "clinicalNotes": list(extracted.get("clinicalNotes") or []),
+        }
         return {
             "medicines": medicines,
             "disclaimer": disclaimer_for(language),
             "requiresConfirmation": True,
             "sourceType": source_type,
+            "clinical": clinical,
         }
     except HTTPException:
         raise
@@ -169,12 +175,22 @@ async def brief(body: BriefRequest) -> dict[str, Any]:
             )
 
         ctx = body.patientContext.model_dump()
+        clinical = (
+            body.clinicalContext.model_dump()
+            if body.clinicalContext
+            else {"diagnosis": "", "investigations": [], "clinicalNotes": []}
+        )
         low_confidence = [m for m in enriched if (m.get("confidence") or 1) < 0.4]
 
         gemma_calls = 0
         if config.MOCK_AI or not config.GEMINI_API_KEY:
             t_mock = time.perf_counter()
-            briefing = mock_brief(medicines=enriched, patient_context=ctx, language=language)
+            briefing = mock_brief(
+                medicines=enriched,
+                patient_context=ctx,
+                language=language,
+                clinical_context=clinical,
+            )
             timing["gemma_ms"] = round((time.perf_counter() - t_mock) * 1000, 1)
             timing["gemma_calls"] = 0
         else:
@@ -182,6 +198,7 @@ async def brief(body: BriefRequest) -> dict[str, Any]:
                 medicines=enriched,
                 patient_context=ctx,
                 language=language,
+                clinical_context=clinical,
             )
             timing["prompt_chars"] = len(prompt)
             t_gemma = time.perf_counter()
@@ -198,6 +215,9 @@ async def brief(body: BriefRequest) -> dict[str, Any]:
                 briefing = Briefing.model_validate(raw).model_dump()
             timing["gemma_ms"] = round((time.perf_counter() - t_gemma) * 1000, 1)
             timing["gemma_calls"] = gemma_calls
+
+        # Always attach prescription clinical fields (do not invent)
+        briefing["clinicalContext"] = clinical
 
         timing["total_ms"] = round((time.perf_counter() - t0) * 1000, 1)
         print(

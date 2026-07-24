@@ -18,7 +18,7 @@ def extract_prompt(*, ocr_hint: str, language: str) -> str:
 Task: Look at the image (and optional OCR hint). It may be either:
 (A) a handwritten/printed PRESCRIPTION, or
 (B) medicine PACKAGING (blister, box, bottle label).
-Decide which it is, then list medicines you can see.
+Decide which it is, then extract medicines and any clinical text written on a prescription.
 Language preference for any text fields: {language}.
 
 OCR hint (may be empty/noisy): {ocr_hint or "(none)"}
@@ -28,14 +28,22 @@ Return JSON only, no markdown fences:
   "sourceType": "prescription" | "packaging",
   "medicines": [
     {{ "rawName": "string", "strength": "string", "doseLine": "string", "confidence": 0.0 }}
-  ]
+  ],
+  "diagnosis": "string",
+  "investigations": ["string"],
+  "clinicalNotes": ["string"]
 }}
 Rules:
 - sourceType = "prescription" for Rx sheets; "packaging" for packs/labels.
 - Prefer brand names as printed. Include strength when visible.
 - For prescriptions: copy dose lines when readable (e.g. 1+0+1 after meal).
 - For packaging: doseLine should be "" or "as labeled" — do NOT invent a dosing schedule.
-- If blank, blurry, or neither Rx nor packaging, return {{ "sourceType": "prescription", "medicines": [] }}.
+  Set diagnosis="", investigations=[], clinicalNotes=[] for packaging.
+- diagnosis: provisional/final diagnosis text as written (e.g. PUD, ? Nephrotic syndrome). Empty if none.
+- investigations: lab/imaging tests listed (CBC, USG Abdomen, etc.). Empty if none.
+- clinicalNotes: short bullets for symptoms, advice, referrals (e.g. swelling, hospitalization note). Empty if none.
+- Do NOT invent diagnosis, tests, or notes not suggested by the image.
+- If blank, blurry, or neither Rx nor packaging, return medicines [] with empty clinical fields.
 - If unclear, lower confidence. Do not invent medicines not suggested by the image/hint."""
 
 
@@ -92,9 +100,10 @@ def _language_block(language: str) -> str:
 - Keep medicine brand names as written."""
 
 
-def brief_prompt(*, medicines, patient_context, language: str) -> str:
+def brief_prompt(*, medicines, patient_context, language: str, clinical_context=None) -> str:
     compact = _compact_meds_for_brief(medicines)
     grounding = _kb_grounding_block(medicines)
+    clinical = clinical_context or {}
     return f"""{SAFETY_SYSTEM}
 
 Task: Create a SHORT patient-friendly educational briefing for this CONFIRMED medicine list.
@@ -106,6 +115,9 @@ KB-FIRST RULES:
 - Paraphrase into plain language; do NOT invent strengths, new medicines, or diagnoses.
 - If NO_KB_MATCH, say the name may need pharmacist confirmation and keep advice generic.
 - Schedule must respect written doseLine when present.
+- Clinical context below is COPIED FROM THE PRESCRIPTION (educational only).
+  You may mention it softly ("the prescription notes…", "investigations listed…").
+  NEVER present it as your own diagnosis. Do NOT invent extra diagnoses or tests.
 - Keep writing tight: summary <= 2 sentences; holisticExplanation <= 4 short sentences;
   at most 4 schedule rows; at most 3 interactions; at most 4 bullets per side-effect list.
   Fold any important food/meal timing into schedule mealTiming or interaction notes.
@@ -113,6 +125,9 @@ KB-FIRST RULES:
 
 Patient context:
 {patient_context}
+
+Clinical context from prescription (may be empty):
+{clinical}
 
 Confirmed medicines:
 {compact}

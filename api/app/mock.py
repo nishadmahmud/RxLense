@@ -14,6 +14,9 @@ def mock_extract(
     if source_type == "packaging" or demo_preset == "pack":
         return {
             "sourceType": "packaging",
+            "diagnosis": "",
+            "investigations": [],
+            "clinicalNotes": [],
             "medicines": [
                 {
                     "rawName": "Napa",
@@ -32,6 +35,9 @@ def mock_extract(
     if demo_preset == "throat" or re.search(r"napa|moxacil|seclo|amox", hint, re.I):
         return {
             "sourceType": "prescription",
+            "diagnosis": "PUD",
+            "investigations": ["CBC with ESR", "Serum Creatinine", "USG of Abdomen"],
+            "clinicalNotes": ["Provisional diagnosis noted on prescription"],
             "medicines": [
                 {
                     "rawName": "Moxacil",
@@ -55,22 +61,56 @@ def mock_extract(
         }
     return {
         "sourceType": "prescription",
+        "diagnosis": "? Nephrotic syndrome",
+        "investigations": ["S. Albumin", "24 H. UTP", "S. Electrolytes"],
+        "clinicalNotes": [
+            "Swelling of leg + face",
+            "Nausea / vomiting",
+            "Hospitalization under Nephrology noted",
+        ],
         "medicines": [
-            {"rawName": "Napa", "strength": "500mg", "doseLine": "1+1+1 SOS", "confidence": 0.8},
-            {"rawName": "Alatrol", "strength": "10mg", "doseLine": "0+0+1", "confidence": 0.75},
+            {"rawName": "Fusid", "strength": "40mg", "doseLine": "1+0+0", "confidence": 0.85},
+            {
+                "rawName": "Emistat",
+                "strength": "8mg",
+                "doseLine": "1+1+1 before meal",
+                "confidence": 0.84,
+            },
+            {
+                "rawName": "Pantonix",
+                "strength": "20mg",
+                "doseLine": "1+0+1 before meal",
+                "confidence": 0.88,
+            },
         ],
     }
 
 
-def mock_brief(*, medicines: list[dict[str, Any]], patient_context: dict[str, Any], language: str) -> dict[str, Any]:
+def mock_brief(
+    *,
+    medicines: list[dict[str, Any]],
+    patient_context: dict[str, Any],
+    language: str,
+    clinical_context: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
     names = ", ".join(m.get("rawName", "") for m in medicines)
     bn = language == "bn"
     age = patient_context.get("ageBand", "adult")
+    clinical = clinical_context or {}
+    dx = (clinical.get("diagnosis") or "").strip()
     return {
         "summary": (
-            f"এই প্রেসক্রিপশনে {len(medicines)}টি ওষুধ আছে ({names})। এটি শিক্ষামূলক সারাংশ। চূড়ান্ত নির্দেশনার জন্য ডাক্তার বা ফার্মাসিস্টের সাথে কথা বলুন।"
+            (
+                f"এই প্রেসক্রিপশনে {len(medicines)}টি ওষুধ আছে ({names})।"
+                + (f" প্রেসক্রিপশনে নোট: {dx}।" if dx else "")
+                + " এটি শিক্ষামূলক সারাংশ। চূড়ান্ত নির্দেশনার জন্য ডাক্তার বা ফার্মাসিস্টের সাথে কথা বলুন।"
+            )
             if bn
-            else f"This prescription lists {len(medicines)} medicine(s): {names}. Educational summary only. Confirm with your doctor or pharmacist."
+            else (
+                f"This prescription lists {len(medicines)} medicine(s): {names}."
+                + (f" The prescription notes: {dx}." if dx else "")
+                + " Educational summary only. Confirm with your doctor or pharmacist."
+            )
         ),
         "holisticExplanation": (
             f"এই ওষুধগুলো একসাথে সাধারণত সংক্রমণ, জ্বর বা পেট সুরক্ষার মতো লক্ষ্যে ব্যবহার হতে পারে। RxLens রোগ নির্ণয় করে না। রোগীর প্রসঙ্গ: বয়স {age}। লিখিত ডোজ থাকলে সেটিই প্রাধান্য পাবে।"
@@ -109,6 +149,11 @@ def mock_brief(*, medicines: list[dict[str, Any]], patient_context: dict[str, An
                 if bn
                 else ["Difficulty breathing", "Face/throat swelling", "Severe rash", "Black stools"]
             ),
+        },
+        "clinicalContext": {
+            "diagnosis": clinical.get("diagnosis") or "",
+            "investigations": list(clinical.get("investigations") or []),
+            "clinicalNotes": list(clinical.get("clinicalNotes") or []),
         },
     }
 

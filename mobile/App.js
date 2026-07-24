@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AppStateProvider, useAppState } from './src/AppState';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import ScansScreen from './src/screens/ScansScreen';
 import MedicinesScreen from './src/screens/MedicinesScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
@@ -30,6 +31,7 @@ const navTheme = {
 
 const TAB_ICONS = {
   Home: { outline: 'home-outline', solid: 'home' },
+  Scans: { outline: 'documents-outline', solid: 'documents' },
   Medicines: { outline: 'medical-outline', solid: 'medical' },
   Chat: { outline: 'chatbubble-ellipses-outline', solid: 'chatbubble-ellipses' },
   Profile: { outline: 'person-outline', solid: 'person' },
@@ -53,6 +55,7 @@ function MainTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: t(language, 'home') }} />
+      <Tab.Screen name="Scans" component={ScansScreen} options={{ title: t(language, 'scans') }} />
       <Tab.Screen
         name="Medicines"
         component={MedicinesScreen}

@@ -42,6 +42,7 @@ class BriefRequest(BaseModel):
     language: Literal["en", "bn"] = "en"
     # Escape hatch after user acknowledges unmatched / low-confidence rows
     confirmUnmatched: bool = False
+    clinicalContext: Optional["ClinicalContext"] = None
 
 
 class ExtractedMedicine(BaseModel):
@@ -51,9 +52,20 @@ class ExtractedMedicine(BaseModel):
     confidence: float = 0.6
 
 
+class ClinicalContext(BaseModel):
+    """Fields copied from the prescription — educational display only, not a diagnosis."""
+
+    diagnosis: str = ""
+    investigations: list[str] = Field(default_factory=list)
+    clinicalNotes: list[str] = Field(default_factory=list)
+
+
 class ExtractResult(BaseModel):
     medicines: list[ExtractedMedicine]
     sourceType: Literal["prescription", "packaging"] = "prescription"
+    diagnosis: str = ""
+    investigations: list[str] = Field(default_factory=list)
+    clinicalNotes: list[str] = Field(default_factory=list)
 
 
 class ScheduleItem(BaseModel):
@@ -88,6 +100,7 @@ class Briefing(BaseModel):
     # Kept optional for older cached responses; no longer requested from the model
     foodAndLifestyle: FoodLifestyle = Field(default_factory=FoodLifestyle)
     doctorQuestions: list[str] = Field(default_factory=list)
+    clinicalContext: ClinicalContext = Field(default_factory=ClinicalContext)
 
 
 class ChatMessage(BaseModel):
