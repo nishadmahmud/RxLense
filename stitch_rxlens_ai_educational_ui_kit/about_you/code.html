@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>RxLens AI - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#000309",
+                        "secondary": "#436086",
+                        "primary": "#010204",
+                        "surface-variant": "#e0e3e6",
+                        "primary-container": "#1a1d21",
+                        "surface": "#f7f9fc",
+                        "outline": "#75777b",
+                        "on-surface-variant": "#45474a",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eceef1",
+                        "primary-fixed-dim": "#c5c6cc",
+                        "on-primary-fixed": "#191c20",
+                        "tertiary-container": "#151e27",
+                        "secondary-container": "#b3d1fd",
+                        "tertiary-fixed": "#dae3f0",
+                        "on-secondary-fixed-variant": "#2a486d",
+                        "surface-container-low": "#f2f4f7",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "surface-tint": "#5c5e63",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c5c6ca",
+                        "on-tertiary-fixed": "#141c26",
+                        "on-primary-fixed-variant": "#44474b",
+                        "secondary-fixed": "#d3e3ff",
+                        "on-secondary-fixed": "#001c39",
+                        "background": "#f7f9fc",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-dim": "#d8dadd",
+                        "on-primary-container": "#82858a",
+                        "inverse-on-surface": "#eff1f4",
+                        "primary-fixed": "#e1e2e8",
+                        "on-tertiary-fixed-variant": "#3f4852",
+                        "surface-bright": "#f7f9fc",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#bec7d4",
+                        "on-surface": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#abc8f4",
+                        "on-secondary-container": "#3c597f",
+                        "on-tertiary-container": "#7d8692",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#c5c6cc",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "12px",
+                        "margin-main": "20px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "safe-bottom": "34px",
+                        "safe-top": "47px" 
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Epilogue"],
+                        "display-md": ["Epilogue"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Epilogue"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Epilogue"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-md": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["17px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["30px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-md": ["15px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["34px", {"lineHeight": "41px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .chip-active {
+            background-color: theme('colors.primary-container');
+            color: theme('colors.on-primary');
+            border-color: theme('colors.primary-container');
+        }
+        .chip-inactive {
+            background-color: transparent;
+            color: theme('colors.on-surface-variant');
+            border-color: theme('colors.outline-variant');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex flex-col text-on-surface antialiased">
+<!-- Top Navigation Placeholder (Hidden for Transactional Screen per strict instructions) -->
+<!-- Navigation intentionally omitted for onboarding flow -->
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col px-margin-main pt-safe-top pb-safe-bottom w-full max-w-md mx-auto">
+<!-- Progress Indicators -->
+<header class="flex flex-col pt-stack-md pb-stack-lg">
+<div class="flex items-center justify-between mb-stack-md">
+<button aria-label="Go back" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px] text-on-surface">arrow_back</span>
+</button>
+<div class="flex space-x-2">
+<div class="h-2 w-12 rounded-full bg-primary-container"></div>
+<div class="h-2 w-12 rounded-full bg-surface-variant"></div>
+<div class="h-2 w-12 rounded-full bg-surface-variant"></div>
+</div>
+<div class="w-10"></div> <!-- Spacer to center dots -->
+</div>
+<!-- In-content title -->
+<div class="pt-stack-md">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary mb-stack-sm">About you</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Help us tailor your prescription companion experience.</p>
+</div>
+</header>
+<!-- Form Section -->
+<form class="flex-grow flex flex-col space-y-stack-lg" onsubmit="event.preventDefault();">
+<div class="space-y-stack-md">
+<!-- Name Field -->
+<div class="flex flex-col">
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm uppercase" for="fullName">Full Name</label>
+<input class="bg-surface-container-lowest border-outline-variant/30 rounded-xl px-4 py-3 font-body-lg text-body-lg text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors outline-none shadow-sm" id="fullName" placeholder="e.g. Rahim Uddin" type="text"/>
+</div>
+<!-- Age Field -->
+<div class="flex flex-col">
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm uppercase" for="age">Age</label>
+<input class="bg-surface-container-lowest border-outline-variant/30 rounded-xl px-4 py-3 font-body-lg text-body-lg text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors outline-none shadow-sm w-32" id="age" placeholder="25" type="number"/>
+</div>
+</div>
+<!-- Gender Chips -->
+<div class="flex flex-col">
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm uppercase">Biological Sex (for medical context)</label>
+<div class="flex flex-wrap gap-3">
+<button class="chip-active border rounded-xl px-5 py-2.5 font-body-md text-body-md transition-colors shadow-sm" type="button">
+                        Male
+                    </button>
+<button class="chip-inactive border rounded-xl px-5 py-2.5 font-body-md text-body-md transition-colors shadow-sm hover:bg-surface-container-low" type="button">
+                        Female
+                    </button>
+<button class="chip-inactive border rounded-xl px-5 py-2.5 font-body-md text-body-md transition-colors shadow-sm hover:bg-surface-container-low" type="button">
+                        Other
+                    </button>
+<button class="chip-inactive border rounded-xl px-5 py-2.5 font-body-md text-body-md transition-colors shadow-sm hover:bg-surface-container-low mt-2" type="button">
+                        Prefer not to say
+                    </button>
+</div>
+</div>
+<div class="flex-grow"></div> <!-- Spacer to push actions to bottom -->
+<!-- Actions -->
+<div class="flex flex-col space-y-stack-sm mt-stack-lg">
+<button class="w-full bg-primary-container text-on-primary font-headline-sm text-headline-sm py-4 rounded-full transition-transform active:scale-[0.98] shadow-sm" type="button">
+                    Continue
+                </button>
+<button class="w-full bg-transparent text-on-surface-variant font-body-lg text-body-lg py-4 rounded-full border border-outline-variant/30 hover:bg-surface-container-lowest transition-colors" type="button">
+                    Back
+                </button>
+</div>
+</form>
+</main>
+<script>
+        // Simple script to handle chip selection for demonstration
+        document.querySelectorAll('button[type="button"]').forEach(btn => {
+            if(btn.textContent.trim() === 'Continue' || btn.textContent.trim() === 'Back') return;
+            
+            btn.addEventListener('click', (e) => {
+                const chips = e.target.parentElement.querySelectorAll('button');
+                chips.forEach(c => {
+                    c.classList.remove('chip-active');
+                    c.classList.add('chip-inactive');
+                });
+                e.target.classList.remove('chip-inactive');
+                e.target.classList.add('chip-active');
+            });
+        });
+    </script>
+</body></html>

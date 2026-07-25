@@ -114,12 +114,12 @@ def mock_brief(
         night_label: "rx",
     }
     assumed_note = (
-        "সাধারণ ব্যবহার — ডাক্তার/লেবেল দিয়ে নিশ্চিত করুন"
+        "সাধারণ ব্যবহার - ডাক্তার/লেবেল দিয়ে নিশ্চিত করুন"
         if bn
-        else "Typical use — confirm with doctor/label"
+        else "Typical use - confirm with doctor/label"
     )
 
-    triple_re = re.compile(r"(\d+)\s*[+\-–−]\s*(\d+)\s*[+\-–−]\s*(\d+)")
+    triple_re = re.compile(r"(\d+)\s*[+\--−]\s*(\d+)\s*[+\--−]\s*(\d+)")
     space_re = re.compile(r"(\d+)\s+(\d+)\s+(\d+)(?!\s*\d)")
 
     for m in medicines:
@@ -203,9 +203,9 @@ def mock_brief(
             {
                 "title": "সাধারণ সতর্কতা" if bn else "General caution",
                 "detail": (
-                    "অন্যান্য ওষুধ (বিশেষ করে রক্ত পাতলা করা/ব্যথানাশক) একসাথে খেলে ঝুঁকি বাড়তে পারে — ফার্মাসিস্টকে জানান।"
+                    "অন্যান্য ওষুধ (বিশেষ করে রক্ত পাতলা করা/ব্যথানাশক) একসাথে খেলে ঝুঁকি বাড়তে পারে - ফার্মাসিস্টকে জানান।"
                     if bn
-                    else "Taking other medicines (especially blood thinners or extra painkillers) may add risk — tell your pharmacist everything you take."
+                    else "Taking other medicines (especially blood thinners or extra painkillers) may add risk - tell your pharmacist everything you take."
                 ),
                 "severity": "caution",
             }
@@ -250,13 +250,13 @@ def mock_missed_dose(
         "whatToKnow": (
             [
                 f"আপনি জানিয়েছেন ডোজ মিস: {when_label}।",
-                f"লেখা নির্দেশনা: {dose or 'লেবেলে যা আছে'} — সেটিই প্রাধান্য পাবে।",
+                f"লেখা নির্দেশনা: {dose or 'লেবেলে যা আছে'} - সেটিই প্রাধান্য পাবে।",
                 "RxLens ডোজ বদলায় না; এটি শুধু শিক্ষামূলক ধারণা।",
             ]
             if bn
             else [
                 f"You said a dose was missed ({when_label}).",
-                f"Written directions: {dose or 'as labeled'} — those take priority.",
+                f"Written directions: {dose or 'as labeled'} - those take priority.",
                 "RxLens does not change doses; this is educational context only.",
             ]
         ),
@@ -283,12 +283,12 @@ def mock_missed_dose(
             else [
                 "Symptoms return or worsen sharply",
                 "Allergy signs (rash, swelling, breathing trouble)",
-                "Pregnancy, child patient, or complex illness — seek advice sooner",
+                "Pregnancy, child patient, or complex illness - seek advice sooner",
             ]
         ),
         "disclaimer": (
             "শিক্ষামূলক সহায়ক মাত্র; ডাক্তার বা ফার্মাসিস্টের বিকল্প নয়।"
             if bn
-            else "Educational only — not a substitute for a doctor or pharmacist."
+            else "Educational only - not a substitute for a doctor or pharmacist."
         ),
     }

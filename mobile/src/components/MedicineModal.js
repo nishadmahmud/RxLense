@@ -8,14 +8,20 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { lookupPrices } from '../api';
 import { useAppState } from '../AppState';
 import { upsertPerson } from '../profileStore';
 import { getCachedMedexPrices, setCachedMedexPrices, normalizePriceKey } from '../priceCache';
-import { colors } from '../theme';
+import { colors, fonts, radii, spacing } from '../theme';
 import { t } from '../i18n';
 import { disclaimerFor } from '../config';
-import { formatDoseSlots } from '../doseTiming';
+import {
+  formatDoseSlots,
+  hasAnyTiming,
+  normalizeDoseLine,
+  resolveDoseSlots,
+} from '../doseTiming';
 import { DoseTimingIcons } from './DoseTimingIcons';
 
 function sameMed(a, b) {
@@ -39,6 +45,24 @@ function linesFromMedexPayload(data) {
     }
   }
   return lines;
+}
+
+function SectionHeading({ icon, iconColor, children }) {
+  return (
+    <View style={styles.sectionHead}>
+      <Ionicons name={icon} size={20} color={iconColor || colors.accent} />
+      <Text style={styles.h}>{children}</Text>
+    </View>
+  );
+}
+
+function Bullet({ children, danger }) {
+  return (
+    <Text style={[styles.p, styles.bullet, danger && styles.danger]}>
+      {'\u2022  '}
+      {children}
+    </Text>
+  );
 }
 
 export function MedicineModal({ visible, medicine, language, onClose }) {
@@ -106,7 +130,6 @@ export function MedicineModal({ visible, medicine, language, onClose }) {
         setFromCache(true);
         setPriceLoading(false);
         setPriceError('');
-        // also stamp onto regimen/scan for next open
         persistPrices(query, cached);
         return;
       }
@@ -139,144 +162,201 @@ export function MedicineModal({ visible, medicine, language, onClose }) {
 
   if (!medicine) return null;
 
+  const doseSlots = resolveDoseSlots({
+    doseLine: medicine.doseLine,
+    timing: medicine.timing,
+    timeOfDay: medicine.timeOfDay,
+  });
+  const hasTiming =
+    hasAnyTiming(doseSlots) || !!medicine.doseLine || !!medicine.timing || !!medicine.timeOfDay;
+  const doseSummary = medicine.doseLine
+    ? normalizeDoseLine(medicine.doseLine).replace(/\+/g, ' + ')
+    : '';
+  const fromDose = formatDoseSlots(medicine.doseLine, {
+    morning: t(language, 'slotMorning'),
+    noon: t(language, 'slotNoon'),
+    night: t(language, 'slotNight'),
+  });
+  const timingLabel = medicine.timing || medicine.timeOfDay || fromDose || '';
+
+  const whyItems =
+    (snap.commonUses || []).length > 0
+      ? snap.commonUses
+      : medicine.why
+        ? String(medicine.why)
+            .split(',')
+            .map((u) => u.trim())
+            .filter(Boolean)
+        : [];
+
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={styles.backdrop}>
+        <Pressable style={styles.backdropTap} onPress={onClose} accessibilityRole="button" />
         <View style={styles.sheet}>
-          <ScrollView contentContainerStyle={styles.pad}>
-            <Text style={styles.title}>{medicine.brandName || medicine.rawName}</Text>
-            {!!medicine.strength && (
-              <Text style={styles.meta}>
-                {t(language, 'strength')}: {medicine.strength}
-              </Text>
-            )}
-            <DoseTimingIcons doseLine={medicine.doseLine} size={18} />
-            {(() => {
-              const fromDose = formatDoseSlots(medicine.doseLine, {
-                morning: t(language, 'slotMorning'),
-                noon: t(language, 'slotNoon'),
-                night: t(language, 'slotNight'),
-              });
-              const timingLabel =
-                medicine.timing || medicine.timeOfDay || fromDose || '';
-              if (!timingLabel && !medicine.doseLine) return null;
-              return (
-                <Text style={styles.meta}>
-                  {t(language, 'timing')}: {timingLabel}
-                  {medicine.doseLine && timingLabel !== medicine.doseLine
-                    ? ` · ${medicine.doseLine}`
-                    : !timingLabel && medicine.doseLine
-                      ? medicine.doseLine
-                      : ''}
+          <View style={styles.grabberWrap}>
+            <View style={styles.grabber} />
+          </View>
+
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <View style={styles.titleRow}>
+                <Text style={styles.title} numberOfLines={2}>
+                  {medicine.brandName || medicine.rawName}
                 </Text>
-              );
-            })()}
-            {!!medicine.mealTiming && (
-              <Text style={styles.meta}>
-                {t(language, 'mealTiming')}: {medicine.mealTiming}
-              </Text>
-            )}
-            {medicine.timingSource === 'assumed' && (
-              <Text style={styles.meta}>{t(language, 'timingAssumed')}</Text>
-            )}
-            {!!snap.generic && <Text style={styles.meta}>Generic: {snap.generic}</Text>}
-            {!!snap.drugClass && <Text style={styles.meta}>{snap.drugClass}</Text>}
-
-            <Text style={styles.h}>{t(language, 'why')}</Text>
-            {(snap.commonUses || []).length > 0 ? (
-              (snap.commonUses || []).map((u, i) => (
-                <Text key={i} style={styles.p}>
-                  · {u}
-                </Text>
-              ))
-            ) : medicine.why ? (
-              String(medicine.why)
-                .split(',')
-                .map((u) => u.trim())
-                .filter(Boolean)
-                .map((u, i) => (
-                  <Text key={i} style={styles.p}>
-                    · {u}
-                  </Text>
-                ))
-            ) : (
-              <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
-            )}
-
-            <Text style={styles.h}>{t(language, 'sideEffects')}</Text>
-            {(snap.commonSideEffects || []).length === 0 &&
-            (snap.seriousSideEffects || []).length === 0 ? (
-              <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
-            ) : (
-              <>
-                {(snap.commonSideEffects || []).map((u, i) => (
-                  <Text key={`c${i}`} style={styles.p}>
-                    · {u}
-                  </Text>
-                ))}
-                {(snap.seriousSideEffects || []).map((u, i) => (
-                  <Text key={`s${i}`} style={[styles.p, styles.danger]}>
-                    · {u}
-                  </Text>
-                ))}
-              </>
-            )}
-
-            <Text style={styles.h}>{t(language, 'cautions')}</Text>
-            {(snap.foodFlags || []).length === 0 && !snap.notes && !snap.pregnancyNote ? (
-              <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
-            ) : (
-              <>
-                {(snap.foodFlags || []).map((u, i) => (
-                  <Text key={`f${i}`} style={styles.p}>
-                    · {u}
-                  </Text>
-                ))}
-                {!!snap.notes && <Text style={styles.p}>{snap.notes}</Text>}
-                {!!snap.pregnancyNote && <Text style={styles.p}>{snap.pregnancyNote}</Text>}
-              </>
-            )}
-
-            <Text style={styles.h}>{t(language, 'pricing')}</Text>
-            {priceLoading ? (
-              <View style={styles.priceLoading}>
-                <ActivityIndicator color={colors.accent} />
-                <Text style={styles.p}>{t(language, 'pricingLoading')}</Text>
-              </View>
-            ) : medexLines.length > 0 ? (
-              <>
-                {fromCache ? (
-                  <Text style={styles.meta}>{t(language, 'pricingCached')}</Text>
-                ) : null}
-                {medexLines.slice(0, 8).map((p, i) => (
-                  <Text key={i} style={styles.p}>
-                    · {p}
-                  </Text>
-                ))}
-              </>
-            ) : (
-              <View>
-                {!!priceError && <Text style={styles.p}>{priceError}</Text>}
-                {kbPrices.length > 0 ? (
-                  <>
-                    <Text style={styles.meta}>{t(language, 'pricingKbFallback')}</Text>
-                    {kbPrices.slice(0, 6).map((p, i) => (
-                      <Text key={i} style={styles.p}>
-                        · {p}
-                      </Text>
-                    ))}
-                  </>
-                ) : (
-                  <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
+                {!!medicine.strength && (
+                  <View style={styles.badge}>
+                    <Text style={styles.badgeText}>{medicine.strength}</Text>
+                  </View>
                 )}
               </View>
+              {!!snap.generic && (
+                <Text style={styles.generic}>
+                  {t(language, 'genericLabel')}: {snap.generic}
+                </Text>
+              )}
+            </View>
+            <Pressable
+              style={styles.closeBtn}
+              onPress={onClose}
+              accessibilityRole="button"
+              accessibilityLabel={t(language, 'close')}
+              hitSlop={8}
+            >
+              <Ionicons name="close" size={22} color={colors.onSurface} />
+            </Pressable>
+          </View>
+
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.pad}
+            showsVerticalScrollIndicator={false}
+          >
+            {hasTiming ? (
+              <View style={styles.timingCard}>
+                <View style={styles.timingHead}>
+                  <Text style={styles.labelCaps}>{t(language, 'prescribedTiming')}</Text>
+                  {!!doseSummary && <Text style={styles.doseSummary}>{doseSummary}</Text>}
+                </View>
+                <DoseTimingIcons
+                  timing={doseSlots}
+                  size={16}
+                  boxed
+                  showLabels
+                  language={language}
+                  style={styles.timingIcons}
+                />
+                {!!timingLabel && timingLabel !== doseSummary && !hasAnyTiming(doseSlots) ? (
+                  <Text style={styles.timingMeta}>
+                    {t(language, 'timing')}: {timingLabel}
+                  </Text>
+                ) : null}
+                {!!medicine.mealTiming && (
+                  <Text style={styles.timingMeta}>
+                    {t(language, 'mealTiming')}: {medicine.mealTiming}
+                  </Text>
+                )}
+                {medicine.timingSource === 'assumed' && (
+                  <Text style={styles.timingMeta}>{t(language, 'timingAssumed')}</Text>
+                )}
+              </View>
+            ) : null}
+
+            {!!snap.drugClass && (
+              <View style={styles.section}>
+                <SectionHeading icon="grid-outline">{t(language, 'drugClass')}</SectionHeading>
+                <Text style={styles.bodyLg}>{snap.drugClass}</Text>
+              </View>
             )}
-            <Text style={styles.tiny}>{t(language, 'pricingNote')}</Text>
-            <Text style={styles.tiny}>{disclaimerFor(language)}</Text>
+
+            <View style={styles.section}>
+              <SectionHeading icon="medkit-outline">{t(language, 'why')}</SectionHeading>
+              {whyItems.length > 0 ? (
+                whyItems.map((u, i) => <Bullet key={i}>{u}</Bullet>)
+              ) : (
+                <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
+              )}
+            </View>
+
+            <View style={styles.section}>
+              <SectionHeading icon="warning-outline" iconColor={colors.severityImportant}>
+                {t(language, 'sideEffects')}
+              </SectionHeading>
+              {(snap.commonSideEffects || []).length === 0 &&
+              (snap.seriousSideEffects || []).length === 0 ? (
+                <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
+              ) : (
+                <>
+                  {(snap.commonSideEffects || []).map((u, i) => (
+                    <Bullet key={`c${i}`}>{u}</Bullet>
+                  ))}
+                  {(snap.seriousSideEffects || []).map((u, i) => (
+                    <Bullet key={`s${i}`} danger>
+                      {u}
+                    </Bullet>
+                  ))}
+                </>
+              )}
+            </View>
+
+            <View style={styles.section}>
+              <SectionHeading icon="information-circle-outline" iconColor={colors.warnText}>
+                {t(language, 'cautions')}
+              </SectionHeading>
+              {(snap.foodFlags || []).length === 0 && !snap.notes && !snap.pregnancyNote ? (
+                <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
+              ) : (
+                <>
+                  {(snap.foodFlags || []).map((u, i) => (
+                    <Bullet key={`f${i}`}>{u}</Bullet>
+                  ))}
+                  {!!snap.notes && <Text style={styles.p}>{snap.notes}</Text>}
+                  {!!snap.pregnancyNote && <Text style={styles.p}>{snap.pregnancyNote}</Text>}
+                </>
+              )}
+            </View>
+
+            <View style={styles.section}>
+              <SectionHeading icon="pricetag-outline">{t(language, 'pricing')}</SectionHeading>
+              {priceLoading ? (
+                <View style={styles.priceLoading}>
+                  <ActivityIndicator color={colors.accent} />
+                  <Text style={styles.p}>{t(language, 'pricingLoading')}</Text>
+                </View>
+              ) : medexLines.length > 0 ? (
+                <>
+                  {fromCache ? (
+                    <Text style={styles.meta}>{t(language, 'pricingCached')}</Text>
+                  ) : null}
+                  {medexLines.slice(0, 8).map((p, i) => (
+                    <Bullet key={i}>{p}</Bullet>
+                  ))}
+                </>
+              ) : (
+                <View>
+                  {!!priceError && <Text style={styles.p}>{priceError}</Text>}
+                  {kbPrices.length > 0 ? (
+                    <>
+                      <Text style={styles.meta}>{t(language, 'pricingKbFallback')}</Text>
+                      {kbPrices.slice(0, 6).map((p, i) => (
+                        <Bullet key={i}>{p}</Bullet>
+                      ))}
+                    </>
+                  ) : (
+                    <Text style={styles.p}>{t(language, 'emptyTab')}</Text>
+                  )}
+                </View>
+              )}
+              <Text style={styles.tiny}>{t(language, 'pricingNote')}</Text>
+              <Text style={styles.tiny}>{disclaimerFor(language)}</Text>
+            </View>
           </ScrollView>
-          <Pressable style={styles.btn} onPress={onClose}>
-            <Text style={styles.btnText}>{t(language, 'close')}</Text>
-          </Pressable>
+
+          <View style={styles.footer}>
+            <Pressable style={styles.btn} onPress={onClose}>
+              <Text style={styles.btnText}>{t(language, 'close')}</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>
@@ -286,31 +366,205 @@ export function MedicineModal({ visible, medicine, language, onClose }) {
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(26,29,33,0.45)',
+    backgroundColor: 'rgba(1, 2, 4, 0.4)',
     justifyContent: 'flex-end',
   },
-  sheet: {
-    maxHeight: '88%',
-    backgroundColor: colors.bgElevated,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    borderColor: colors.border,
-    borderWidth: 1,
+  backdropTap: {
+    ...StyleSheet.absoluteFillObject,
   },
-  pad: { padding: 20, paddingBottom: 12 },
-  title: { fontSize: 22, fontWeight: '800', color: colors.graphite, marginBottom: 6 },
-  h: { fontSize: 15, fontWeight: '700', color: colors.graphite, marginTop: 14, marginBottom: 4 },
-  p: { fontSize: 14, lineHeight: 20, color: colors.muted, marginBottom: 3 },
-  meta: { fontSize: 13, color: colors.accent, marginBottom: 2 },
-  tiny: { fontSize: 11, color: colors.muted, marginTop: 10, lineHeight: 16 },
-  danger: { color: colors.errorText, fontWeight: '600' },
-  priceLoading: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4 },
+  sheet: {
+    maxHeight: '90%',
+    backgroundColor: colors.bgElevated,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    borderColor: colors.border,
+    borderTopWidth: 1,
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: -8 },
+    elevation: 16,
+    zIndex: 1,
+  },
+  grabberWrap: {
+    alignItems: 'center',
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
+  },
+  grabber: {
+    width: 48,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(197, 198, 202, 0.5)',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.margin,
+    paddingBottom: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceHigh,
+    gap: spacing.sm,
+  },
+  headerText: { flex: 1, minWidth: 0 },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 4,
+  },
+  title: {
+    fontSize: 20,
+    lineHeight: 26,
+    letterSpacing: -0.2,
+    color: colors.graphite,
+    fontFamily: fonts.display,
+  },
+  badge: {
+    backgroundColor: colors.surfaceContainer,
+    borderRadius: radii.sm,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+  },
+  badgeText: {
+    fontSize: 10,
+    lineHeight: 12,
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+    color: colors.mutedVariant,
+    fontFamily: fonts.bodyBold,
+  },
+  generic: {
+    fontSize: 13,
+    lineHeight: 18,
+    color: colors.mutedVariant,
+    fontFamily: fonts.body,
+  },
+  closeBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.surfaceContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scroll: { flexShrink: 1 },
+  pad: {
+    paddingHorizontal: spacing.margin,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.lg,
+    gap: spacing.md,
+  },
+  timingCard: {
+    backgroundColor: colors.foilLight,
+    borderRadius: radii.md,
+    padding: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.silver,
+  },
+  timingHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs,
+    gap: spacing.sm,
+  },
+  labelCaps: {
+    fontSize: 10,
+    lineHeight: 14,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+    color: colors.mutedVariant,
+    fontFamily: fonts.bodyBold,
+  },
+  doseSummary: {
+    fontSize: 13,
+    color: colors.graphite,
+    fontFamily: fonts.bodyBold,
+  },
+  timingIcons: {
+    marginTop: 2,
+    justifyContent: 'space-around',
+    gap: 0,
+  },
+  timingMeta: {
+    marginTop: spacing.xs,
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.muted,
+    fontFamily: fonts.body,
+  },
+  section: { gap: 4 },
+  sectionHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 2,
+  },
+  h: {
+    fontSize: 15,
+    lineHeight: 20,
+    color: colors.graphite,
+    fontFamily: fonts.display,
+  },
+  bodyLg: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: colors.mutedVariant,
+    fontFamily: fonts.body,
+    paddingLeft: 26,
+  },
+  p: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: colors.mutedVariant,
+    fontFamily: fonts.body,
+    marginBottom: 2,
+  },
+  bullet: {
+    paddingLeft: 26,
+  },
+  meta: {
+    fontSize: 12,
+    color: colors.accent,
+    marginBottom: 4,
+    fontFamily: fonts.bodyMedium,
+    paddingLeft: 26,
+  },
+  tiny: {
+    fontSize: 11,
+    color: colors.muted,
+    marginTop: 8,
+    lineHeight: 15,
+    fontFamily: fonts.body,
+  },
+  danger: { color: colors.errorText, fontFamily: fonts.bodyMedium },
+  priceLoading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 4,
+    paddingLeft: 26,
+  },
+  footer: {
+    paddingHorizontal: spacing.margin,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: colors.surfaceHigh,
+    backgroundColor: colors.bgElevated,
+  },
   btn: {
-    margin: 16,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.primaryCta,
     paddingVertical: 14,
-    borderRadius: 10,
+    borderRadius: radii.pill,
     alignItems: 'center',
   },
-  btnText: { color: '#fff', fontWeight: '700' },
+  btnText: {
+    color: colors.onPrimary,
+    fontSize: 17,
+    fontFamily: fonts.bodyBold,
+  },
 });

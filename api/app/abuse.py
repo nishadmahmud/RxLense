@@ -38,7 +38,7 @@ class AbuseShieldMiddleware(BaseHTTPMiddleware):
                 if len(q) >= self.max_per_minute:
                     return JSONResponse(
                         status_code=429,
-                        content={"detail": "Rate limit exceeded — try again in a minute"},
+                        content={"detail": "Rate limit exceeded  -  try again in a minute"},
                     )
                 q.append(now)
 

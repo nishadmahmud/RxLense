@@ -3,6 +3,10 @@ You are NOT a doctor or pharmacist. You never diagnose ("you have X"). You never
 Use soft language: "These medicines are commonly used together for..." and "Only your doctor can confirm."
 If the written prescription conflicts with general patterns, tell the user to follow the written prescription.
 
+STYLE:
+- Never use em dashes (—) or en dashes (–). Use commas, periods, colons, or a normal hyphen (-) instead.
+- Keep sentences plain and scannable. Avoid ornate punctuation.
+
 RED-TEAM / REFUSALS (still return valid output):
 - If asked to prescribe new medicines, replace a doctor, or ignore the disclaimer: keep educational tone
   and redirect to a clinician. Never invent a new prescription.
@@ -38,7 +42,7 @@ Rules:
 - Prefer brand names as printed. Include strength when visible.
 - For prescriptions: copy dose lines when readable. Prefer BD triple form with pluses
   (e.g. write "1+0+1 after meal" even if the Rx shows "1 0 1" or "1-0-1"). Keep meal words.
-- For packaging: doseLine should be "" or "as labeled" — do NOT invent a dosing schedule.
+- For packaging: doseLine should be "" or "as labeled" - do NOT invent a dosing schedule.
   Set diagnosis="", investigations=[], clinicalNotes=[] for packaging.
 - diagnosis: provisional/final diagnosis text as written (e.g. PUD, ? Nephrotic syndrome). Empty if none.
 - investigations: lab/imaging tests listed (CBC, USG Abdomen, etc.). Empty if none.
@@ -54,7 +58,7 @@ def _kb_grounding_block(medicines: list) -> str:
         name = m.get("rawName") or "?"
         snap = m.get("kbSnapshot") or {}
         if not snap:
-            lines.append(f"- {name}: NO_KB_MATCH — hedge; urge pharmacist check.")
+            lines.append(f"- {name}: NO_KB_MATCH - hedge; urge pharmacist check.")
             continue
 
         def short(vals, n=3):
@@ -75,7 +79,7 @@ def _kb_grounding_block(medicines: list) -> str:
 
 
 def _compact_meds_for_brief(medicines: list) -> list[dict]:
-    """Drop huge kbSnapshot blobs from the prompt — grounding carries the facts."""
+    """Drop huge kbSnapshot blobs from the prompt - grounding carries the facts."""
     out = []
     for m in medicines or []:
         out.append(
@@ -122,7 +126,7 @@ KB-FIRST RULES:
   - If doseLine has meal words (before/after food), put them in mealTiming for those rows.
   - If a medicine has NO usable timing on the Rx (empty, "as labeled", vague): use common educational
     knowledge for that class (e.g. PPI often morning empty stomach; once-daily diuretic often morning)
-    and set timingSource to "assumed". Put a short note like "Typical use — confirm with doctor/label".
+    and set timingSource to "assumed". Put a short note like "Typical use - confirm with doctor/label".
   - When timing comes from the written doseLine, set timingSource to "rx". Written Rx always wins.
   - Do NOT invent clock times (08:00) unless the Rx text itself has them.
 - Clinical context below is COPIED FROM THE PRESCRIPTION (educational only).
@@ -168,7 +172,7 @@ def chat_prompt(
     price_block = ""
     if price_web_context:
         price_block = f"""
-LIVE / WEB PRICE CONTEXT (from MedEx.com.bd search + brand pages — prefer this for prices):
+LIVE / WEB PRICE CONTEXT (from MedEx.com.bd search + brand pages - prefer this for prices):
 {price_web_context}
 
 PRICE ANSWER RULES:
@@ -184,7 +188,7 @@ PRICE ANSWER RULES:
 IMAGE ATTACHED:
 - The user attached a photo (may be a prescription, medicine pack/blister, bottle label, or receipt).
 - Use what you can read in the image to answer educationally.
-- If it looks like a prescription or pack, name brands/strengths you can see and keep dose lines as written — do not invent dosing.
+- If it looks like a prescription or pack, name brands/strengths you can see and keep dose lines as written - do not invent dosing.
 - If the image is unrelated to medicines, briefly say you can only help with prescriptions/medicines.
 """
     return f"""{SAFETY_SYSTEM}
@@ -228,8 +232,8 @@ def missed_dose_prompt(*, medicine, when_missed: str, patient_context, language:
 
 Task: Educational missed-dose coaching for ONE medicine. You are NOT prescribing.
 Never invent a new dose that contradicts the written doseLine. Never tell the user to
-double the next dose unless that is explicitly common OTC labeling AND doseLine allows it —
-when unsure, say ask a pharmacist/doctor.
+double the next dose unless that is explicitly common OTC labeling AND doseLine allows it.
+When unsure, say ask a pharmacist/doctor.
 For antibiotics, steroids, insulin, blood thinners, epilepsy, heart meds: strongly urge
 clinician/pharmacist contact; do not invent catch-up schedules.
 

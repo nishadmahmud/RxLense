@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>RxLens AI - Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#000309",
+                      "secondary": "#436086",
+                      "primary": "#010204",
+                      "surface-variant": "#e0e3e6",
+                      "primary-container": "#1a1d21",
+                      "surface": "#f7f9fc",
+                      "outline": "#75777b",
+                      "on-surface-variant": "#45474a",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eceef1",
+                      "primary-fixed-dim": "#c5c6cc",
+                      "on-primary-fixed": "#191c20",
+                      "tertiary-container": "#151e27",
+                      "secondary-container": "#b3d1fd",
+                      "tertiary-fixed": "#dae3f0",
+                      "on-secondary-fixed-variant": "#2a486d",
+                      "surface-container-low": "#f2f4f7",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#191c1e",
+                      "surface-tint": "#5c5e63",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#c5c6ca",
+                      "on-tertiary-fixed": "#141c26",
+                      "on-primary-fixed-variant": "#44474b",
+                      "secondary-fixed": "#d3e3ff",
+                      "on-secondary-fixed": "#001c39",
+                      "background": "#f7f9fc",
+                      "surface-container-high": "#e6e8eb",
+                      "surface-dim": "#d8dadd",
+                      "on-primary-container": "#82858a",
+                      "inverse-on-surface": "#eff1f4",
+                      "primary-fixed": "#e1e2e8",
+                      "on-tertiary-fixed-variant": "#3f4852",
+                      "surface-bright": "#f7f9fc",
+                      "inverse-surface": "#2d3133",
+                      "tertiary-fixed-dim": "#bec7d4",
+                      "on-surface": "#191c1e",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#abc8f4",
+                      "on-secondary-container": "#3c597f",
+                      "on-tertiary-container": "#7d8692",
+                      "surface-container-highest": "#e0e3e6",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#c5c6cc",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "12px",
+                      "margin-main": "20px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "safe-bottom": "34px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Epilogue"
+                      ],
+                      "display-md": [
+                              "Epilogue"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Epilogue"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Epilogue"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "17px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "30px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "15px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "34px",
+                              {
+                                      "lineHeight": "41px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #f7f9fc; /* bg-background equivalent */
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Utility for 1px subtle strokes without changing dimensions */
+        .card-border {
+            box-shadow: inset 0 0 0 1px rgba(117, 119, 123, 0.1); /* outline at 10% */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background antialiased pb-safe-bottom">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-main pt-stack-md pb-stack-sm bg-surface-container-lowest dark:bg-tertiary">
+<div class="flex items-center gap-2 text-primary dark:text-primary-fixed hover:bg-surface-container dark:hover:bg-tertiary-container transition-colors rounded-full p-2 -ml-2">
+<span class="material-symbols-outlined font-display-md text-display-md text-primary dark:text-primary-fixed">menu</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed text-center flex-1">Profile</h1>
+<div class="flex items-center text-primary dark:text-primary-fixed font-label-caps text-label-caps">
+            EN | বাংলা
+        </div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[90px] px-margin-main pb-[100px] max-w-2xl mx-auto flex flex-col gap-stack-lg">
+<!-- Me Section -->
+<section class="flex flex-col gap-stack-md">
+<div class="bg-[#F0F2F5] rounded-xl p-4 card-border flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center shrink-0">
+<img class="w-full h-full object-cover" data-alt="A clean, professional headshot photo of a 28 year old Bangladeshi man with a slight smile. He is wearing a simple dark grey button-down shirt. The background is a soft, light grey studio backdrop. High quality lighting, soft shadows, evoking a trustworthy and approachable medical patient persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8e_R1Y86HzLxF7OcQbBgZa6VGUmeskSxubrZXeyETpMmfrTXo7jxH3daqJFBK82rEdBuBLJHrRoaPOuVZtvIuKtIl6mbdaxRxKfljGTsCXm0F95t0X_gc0XVHoD39ZsPgbE_zRGbxYmamoc6lXX511N9VRd_7sqbMtuXKJ_QRP7FTc549xc4nL6FN-InnTF_T7NrM3R-LG5borval3CilMqkOGLDZqHn7RH-XoqiUf0rJuiSoYV-7Vr3f_InweLa0mDtuF4nU46Q"/>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Nishad</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">28 • Male</p>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/50 text-secondary hover:bg-surface transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+<!-- Language Row -->
+<div class="bg-surface-container-lowest rounded-xl p-4 card-border flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">language</span>
+<span class="font-body-lg text-body-lg text-primary">Language</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span>English</span>
+<span class="material-symbols-outlined text-secondary text-sm">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- People Section -->
+<section class="flex flex-col gap-stack-md">
+<div class="flex justify-between items-end mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">People</h3>
+</div>
+<div class="grid gap-stack-sm">
+<!-- Person 1: Me (Active) -->
+<div class="bg-surface-container-lowest rounded-xl p-4 card-border relative overflow-hidden">
+<!-- Active Indicator Edge -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="pl-2 flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-body-lg text-body-lg font-semibold text-primary">Me (Nishad)</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-2 py-0.5 rounded-full">Active</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">28, Male</p>
+<div class="flex gap-2">
+<span class="inline-flex items-center gap-1 bg-surface-container-low text-secondary font-label-caps text-label-caps px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[14px]">pill</span>
+                                    Medicines
+                                </span>
+<span class="inline-flex items-center gap-1 bg-surface-container-low text-secondary font-label-caps text-label-caps px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[14px]">chat_bubble</span>
+                                    Chat
+                                </span>
+</div>
+</div>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Person 2: Amina -->
+<div class="bg-[#F0F2F5] rounded-xl p-4 card-border">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-primary mb-1">Amina</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">25, Female</p>
+<div class="flex items-start gap-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant mt-0.5">CONDITIONS:</span>
+<span class="bg-surface-container-highest text-primary font-body-md text-body-md px-2 py-0.5 rounded-md text-sm">Asthma</span>
+</div>
+</div>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Add Person CTA -->
+<button class="w-full mt-2 py-4 border border-dashed border-outline-variant/60 rounded-xl flex items-center justify-center gap-2 text-secondary hover:bg-surface-container-low transition-colors font-body-lg text-body-lg">
+<span class="material-symbols-outlined">add</span>
+                    Add person
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-main pb-safe-bottom pt-stack-sm bg-surface-container-lowest/80 dark:bg-tertiary/80 backdrop-blur-xl border-t border-outline-variant/10 dark:border-outline/20">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">document_scanner</span>
+<span class="font-label-caps text-label-caps">Scans</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">pill</span>
+<span class="font-label-caps text-label-caps">Medicines</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-label-caps text-label-caps">Chat</span>
+</a>
+<!-- Active -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+</body></html>

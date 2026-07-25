@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Medicines - RxLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#000309",
+                      "secondary": "#436086",
+                      "primary": "#010204",
+                      "surface-variant": "#e0e3e6",
+                      "primary-container": "#1a1d21",
+                      "surface": "#f7f9fc",
+                      "outline": "#75777b",
+                      "on-surface-variant": "#45474a",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eceef1",
+                      "primary-fixed-dim": "#c5c6cc",
+                      "on-primary-fixed": "#191c20",
+                      "tertiary-container": "#151e27",
+                      "secondary-container": "#b3d1fd",
+                      "tertiary-fixed": "#dae3f0",
+                      "on-secondary-fixed-variant": "#2a486d",
+                      "surface-container-low": "#f2f4f7",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#191c1e",
+                      "surface-tint": "#5c5e63",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#c5c6ca",
+                      "on-tertiary-fixed": "#141c26",
+                      "on-primary-fixed-variant": "#44474b",
+                      "secondary-fixed": "#d3e3ff",
+                      "on-secondary-fixed": "#001c39",
+                      "background": "#f7f9fc",
+                      "surface-container-high": "#e6e8eb",
+                      "surface-dim": "#d8dadd",
+                      "on-primary-container": "#82858a",
+                      "inverse-on-surface": "#eff1f4",
+                      "primary-fixed": "#e1e2e8",
+                      "on-tertiary-fixed-variant": "#3f4852",
+                      "surface-bright": "#f7f9fc",
+                      "inverse-surface": "#2d3133",
+                      "tertiary-fixed-dim": "#bec7d4",
+                      "on-surface": "#191c1e",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#abc8f4",
+                      "on-secondary-container": "#3c597f",
+                      "on-tertiary-container": "#7d8692",
+                      "surface-container-highest": "#e0e3e6",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#c5c6cc",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "12px",
+                      "margin-main": "20px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "safe-bottom": "34px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Epilogue"
+                      ],
+                      "display-md": [
+                              "Epilogue"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Epilogue"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Epilogue"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "17px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "30px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "15px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "34px",
+                              {
+                                      "lineHeight": "41px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .symbol-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Safe Area Utilities */
+        .pt-safe { padding-top: env(safe-area-inset-top, 44px); }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 34px); }
+        
+        /* Subtle foil effect */
+        .bg-foil { background-color: #F0F2F5; }
+        
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface antialiased pt-safe pb-safe select-none">
+<!-- iOS Status Bar Placeholder (Visual only, usually handled by OS) -->
+<div class="fixed top-0 w-full h-[44px] bg-surface-container-lowest/90 backdrop-blur-md z-[60] md:hidden"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-main pt-[calc(44px+16px)] pb-stack-sm bg-surface-container-lowest/90 backdrop-blur-xl border-b border-surface-variant md:pt-stack-md">
+<div class="flex items-center gap-3">
+<button aria-label="Menu" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-primary tracking-tight">Medicines</h1>
+</div>
+<div class="flex items-center">
+<button class="font-label-caps text-label-caps text-secondary px-3 py-1.5 rounded-full hover:bg-surface-container transition-colors">
+                EN | বাংলা
+            </button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-[100px] pb-[100px] px-margin-main max-w-2xl mx-auto min-h-screen">
+<!-- Header Section -->
+<div class="mb-stack-lg animate-fade-in-up">
+<h2 class="font-display-lg-mobile text-display-lg-mobile text-primary mb-1">My Regimen</h2>
+<p class="font-body-lg text-body-lg text-secondary">Nishad</p>
+</div>
+<!-- Populated Regimen -->
+<div class="space-y-stack-md">
+<!-- Expanded Group (Current Regimen) -->
+<section class="bg-surface-container-lowest rounded-xl border border-surface-variant shadow-sm overflow-hidden animate-fade-in-up" style="animation-delay: 0.1s;">
+<!-- Header -->
+<button class="w-full flex items-center justify-between p-4 bg-foil hover:bg-surface-container-low transition-colors text-left" onclick="toggleAccordion('med-group-1', 'icon-group-1')">
+<div class="flex-1">
+<h3 class="font-body-lg text-body-lg font-semibold text-primary truncate max-w-[250px]">Fusid, Emistat, Pantonix</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-caps text-label-caps text-secondary bg-surface-container px-2 py-0.5 rounded-full">3 medicines</span>
+<span class="font-body-md text-body-md text-outline">Oct 24</span>
+</div>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-lowest text-primary">
+<span class="material-symbols-outlined transition-transform duration-300 transform rotate-180" id="icon-group-1">expand_more</span>
+</div>
+</button>
+<!-- Content (Expanded) -->
+<div class="divide-y divide-surface-variant transition-all duration-300" id="med-group-1">
+<!-- Morning Block -->
+<div class="p-4">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">sunny</span>
+</div>
+<h4 class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Morning</h4>
+</div>
+<div class="space-y-3 pl-8">
+<!-- Fusid 40 -->
+<div class="group">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-lg text-body-lg text-primary font-medium">Fusid 40</p>
+<p class="font-body-md text-body-md text-secondary">1 Tablet • After meal</p>
+</div>
+<div class="flex gap-1">
+<!-- Active Sun -->
+<div aria-label="Morning Dose Active" class="w-6 h-6 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary symbol-filled">sunny</span>
+</div>
+<!-- Inactive Noon -->
+<div aria-label="Noon Dose Inactive" class="w-6 h-6 rounded border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-outline">partly_cloudy_day</span>
+</div>
+<!-- Inactive Night -->
+<div aria-label="Night Dose Inactive" class="w-6 h-6 rounded border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-outline">clear_night</span>
+</div>
+</div>
+</div>
+<button class="mt-1 font-label-caps text-label-caps text-secondary underline hover:text-primary transition-colors focus:outline-none">Missed dose?</button>
+</div>
+<!-- Emistat 8mg -->
+<div class="group pt-2 border-t border-surface-container-high border-dashed">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-lg text-body-lg text-primary font-medium">Emistat 8mg</p>
+<p class="font-body-md text-body-md text-secondary">1 Tablet • Before meal</p>
+</div>
+<div class="flex gap-1">
+<!-- Active Sun -->
+<div aria-label="Morning Dose Active" class="w-6 h-6 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary symbol-filled">sunny</span>
+</div>
+<!-- Active Noon -->
+<div aria-label="Noon Dose Active" class="w-6 h-6 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary symbol-filled">partly_cloudy_day</span>
+</div>
+<!-- Active Night -->
+<div aria-label="Night Dose Active" class="w-6 h-6 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary symbol-filled">clear_night</span>
+</div>
+</div>
+</div>
+<button class="mt-1 font-label-caps text-label-caps text-secondary underline hover:text-primary transition-colors focus:outline-none">Missed dose?</button>
+</div>
+</div>
+</div>
+<!-- Afternoon Block -->
+<div class="p-4 bg-surface-container-lowest">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">partly_cloudy_day</span>
+</div>
+<h4 class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Afternoon</h4>
+</div>
+<div class="space-y-3 pl-8">
+<!-- Emistat 8mg -->
+<div class="group">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-lg text-body-lg text-primary font-medium">Emistat 8mg</p>
+<p class="font-body-md text-body-md text-secondary">1 Tablet • Before meal</p>
+</div>
+<div class="flex gap-1 opacity-50 pointer-events-none">
+<!-- Show active states faintly just for context, real indication is the section -->
+<div class="w-4 h-4 rounded-full bg-primary-container flex items-center justify-center"></div>
+<div class="w-4 h-4 rounded-full bg-primary-container flex items-center justify-center"></div>
+<div class="w-4 h-4 rounded-full bg-primary-container flex items-center justify-center"></div>
+</div>
+</div>
+<button class="mt-1 font-label-caps text-label-caps text-secondary underline hover:text-primary transition-colors focus:outline-none">Missed dose?</button>
+</div>
+</div>
+</div>
+<!-- Night Block -->
+<div class="p-4 bg-surface-container-lowest">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">clear_night</span>
+</div>
+<h4 class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Night</h4>
+</div>
+<div class="space-y-3 pl-8">
+<!-- Emistat 8mg -->
+<div class="group">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-lg text-body-lg text-primary font-medium">Emistat 8mg</p>
+<p class="font-body-md text-body-md text-secondary">1 Tablet • Before meal</p>
+</div>
+</div>
+<button class="mt-1 font-label-caps text-label-caps text-secondary underline hover:text-primary transition-colors focus:outline-none">Missed dose?</button>
+</div>
+<!-- Pantonix 20 -->
+<div class="group pt-2 border-t border-surface-container-high border-dashed">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-lg text-body-lg text-primary font-medium">Pantonix 20</p>
+<p class="font-body-md text-body-md text-secondary">1 Tablet • Before meal</p>
+</div>
+<div class="flex gap-1">
+<!-- Active Sun -->
+<div aria-label="Morning Dose Active" class="w-6 h-6 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary symbol-filled">sunny</span>
+</div>
+<!-- Inactive Noon -->
+<div aria-label="Noon Dose Inactive" class="w-6 h-6 rounded border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-outline">partly_cloudy_day</span>
+</div>
+<!-- Active Night -->
+<div aria-label="Night Dose Active" class="w-6 h-6 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary symbol-filled">clear_night</span>
+</div>
+</div>
+</div>
+<button class="mt-1 font-label-caps text-label-caps text-secondary underline hover:text-primary transition-colors focus:outline-none">Missed dose?</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Collapsed Group (Past History Example) -->
+<section class="bg-surface-container-lowest rounded-xl border border-surface-variant shadow-sm overflow-hidden opacity-70 hover:opacity-100 transition-opacity animate-fade-in-up" style="animation-delay: 0.2s;">
+<button class="w-full flex items-center justify-between p-4 bg-foil hover:bg-surface-container-low transition-colors text-left" onclick="toggleAccordion('med-group-2', 'icon-group-2')">
+<div class="flex-1">
+<h3 class="font-body-lg text-body-lg font-semibold text-primary truncate max-w-[250px]">Napa Extend, Cef-3</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-caps text-label-caps text-secondary bg-surface-container px-2 py-0.5 rounded-full">2 medicines</span>
+<span class="font-body-md text-body-md text-outline">Aug 24</span>
+</div>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-lowest text-primary">
+<span class="material-symbols-outlined transition-transform duration-300" id="icon-group-2">expand_more</span>
+</div>
+</button>
+<div class="hidden" id="med-group-2">
+<div class="p-6 text-center text-secondary font-body-md">
+                        Past regimen details would appear here.
+                    </div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-main pb-safe-bottom pt-stack-sm bg-surface-container-lowest/90 backdrop-blur-xl border-t border-surface-variant">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity w-16" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">home</span>
+<span class="font-label-caps text-label-caps text-[10px]">Home</span>
+</a>
+<!-- Scans -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity w-16" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">document_scanner</span>
+<span class="font-label-caps text-label-caps text-[10px]">Scans</span>
+</a>
+<!-- Medicines (Active) -->
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-105 transition-transform duration-200 w-16" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px] symbol-filled">pill</span>
+<span class="font-label-caps text-label-caps text-[10px]">Medicines</span>
+</a>
+<!-- Chat -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity w-16" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">chat_bubble</span>
+<span class="font-label-caps text-label-caps text-[10px]">Chat</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity w-16" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">person</span>
+<span class="font-label-caps text-label-caps text-[10px]">Profile</span>
+</a>
+</nav>
+<!-- Home Indicator Placeholder (iOS) -->
+<div class="md:hidden fixed bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary rounded-full z-[60]"></div>
+<style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+    </style>
+<script>
+        // Simple accordion logic
+        function toggleAccordion(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+    </script>
+</body></html>

@@ -9,22 +9,29 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { analyzePrescription, generateBrief } from '../api';
 import { useAppState } from '../AppState';
 import { t } from '../i18n';
-import { colors } from '../theme';
+import { colors, fonts, radii, spacing } from '../theme';
 import { disclaimerFor } from '../config';
 import { ageBandFromYears } from '../conditions';
 import { MedicineModal } from '../components/MedicineModal';
 import { MedicineConfirmCard } from '../components/MedicineConfirmCard';
 import { ClinicalPrescriptionCard } from '../components/ClinicalPrescriptionCard';
 import { BriefingTabs } from '../components/BriefingTabs';
+import { AppChromeHeader } from '../components/AppChromeHeader';
+import { PillButton, OutlinePillButton } from '../components/PillButton';
 import { formatDoseSlots, parseDoseTiming, slotsToTimeOfDay } from '../doseTiming';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   const {
     language,
+    setLanguage,
     profile,
     activePerson,
     scanSession,
@@ -34,6 +41,7 @@ export default function HomeScreen() {
     addFamily,
     history,
     openHistoryScan,
+    setChatHandoff,
   } = useAppState();
 
   const [step, setStep] = useState('home');
@@ -199,13 +207,27 @@ export default function HomeScreen() {
     }
   }, [scanSession.openResults, scanSession.briefing, setScanSession]);
 
+  // Tab bar Home while already on Home (e.g. briefing open) — return to landing
+  useEffect(() => {
+    const unsub = navigation.addListener('tabPress', () => {
+      setStep('home');
+      setModalMed(null);
+      setSaveMsg('');
+      setError('');
+      setConfirmUnmatched(false);
+      setLoading(false);
+      setLoadingPhase('');
+    });
+    return unsub;
+  }, [navigation]);
+
   async function pickImage(fromCamera) {
     setError('');
     const perm = fromCamera
       ? await ImagePicker.requestCameraPermissionsAsync()
       : await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) {
-      setError('Permission required.');
+      setError(t(language, 'permissionRequired'));
       return;
     }
     const result = fromCamera
@@ -376,7 +398,8 @@ export default function HomeScreen() {
   }
 
   async function onSaveRegimen() {
-    const personId = guestMode ? 'me' : selectedPersonId;
+    if (guestMode) return;
+    const personId = selectedPersonId;
     const scanId = scanSession.scanId || `local-${Date.now()}`;
     const scanTitle =
       scanSession.scanTitle ||
@@ -502,233 +525,434 @@ export default function HomeScreen() {
   }
 
   function renderSaveBlock() {
+    if (guestMode) {
+      return (
+        <View style={{ marginTop: spacing.xs }}>
+          <Text style={styles.tiny}>{t(language, 'guestNoSave')}</Text>
+        </View>
+      );
+    }
     return (
-      <View style={{ marginTop: 8 }}>
-        <Pressable style={styles.primary} onPress={onSaveRegimen}>
-          <Text style={styles.primaryText}>{t(language, 'saveToMeds')}</Text>
-        </Pressable>
+      <View style={{ marginTop: spacing.xs }}>
+        <PillButton label={t(language, 'saveToMeds')} onPress={onSaveRegimen} />
         <Text style={styles.tiny}>{t(language, 'saveToMedsHint')}</Text>
         {!!saveMsg && <Text style={styles.meta}>{saveMsg}</Text>}
       </View>
     );
   }
 
-  return (
-    <ScrollView style={styles.safe} contentContainerStyle={styles.pad} keyboardShouldPersistTaps="handled">
-      {!!error && (
-        <View style={styles.errorBox}>
-          <Text style={styles.errorText}>{error}</Text>
-          <Text style={styles.hint}>{t(language, 'networkHint')}</Text>
-          <Pressable style={styles.secondary} onPress={() => runAnalyze('throat')}>
-            <Text style={styles.secondaryText}>{t(language, 'tryDemoShort')}</Text>
-          </Pressable>
-        </View>
-      )}
-      {loading && !!loadingPhase && (
-        <View style={styles.loadingBox}>
-          <ActivityIndicator color={colors.accent} />
-          <Text style={styles.loadingText}>{loadingPhase}</Text>
-        </View>
-      )}
+  function renderAskBlock() {
+    return (
+      <OutlinePillButton
+        label={t(language, 'askAboutRx')}
+        style={{ marginTop: spacing.xs }}
+        onPress={() => {
+          setChatHandoff({ type: 'prompt', text: t(language, 'chipScan') });
+          navigation.navigate('Chat');
+        }}
+      />
+    );
+  }
 
-      {step === 'home' && (
-        <View>
-          <Text style={styles.h1}>{t(language, 'scanTitle')}</Text>
-          <Text style={styles.p}>{t(language, 'scanBody')}</Text>
-          {scanSession.imageUri ? (
-            <Image source={{ uri: scanSession.imageUri }} style={styles.preview} />
-          ) : null}
-          <View style={styles.row}>
-            <Pressable style={styles.secondary} onPress={() => pickImage(true)}>
-              <Text style={styles.secondaryText}>{t(language, 'camera')}</Text>
-            </Pressable>
-            <Pressable style={styles.secondary} onPress={() => pickImage(false)}>
-              <Text style={styles.secondaryText}>{t(language, 'gallery')}</Text>
+  function formatScanDate(iso) {
+    if (!iso) return '';
+    try {
+      return new Date(iso).toLocaleString(language === 'bn' ? 'bn-BD' : 'en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return iso;
+    }
+  }
+
+  return (
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.pad}
+        keyboardShouldPersistTaps="handled"
+      >
+        {!!error && (
+          <View style={styles.errorBox}>
+            <Text style={styles.errorText}>{error}</Text>
+            <Text style={styles.hint}>{t(language, 'networkHint')}</Text>
+            <OutlinePillButton
+              label={t(language, 'tryDemoShort')}
+              onPress={() => runAnalyze('throat')}
+              style={{ marginTop: spacing.sm, alignSelf: 'flex-start', minHeight: 44, paddingVertical: 10 }}
+            />
+          </View>
+        )}
+        {loading && !!loadingPhase && (
+          <View style={styles.loadingBox}>
+            <ActivityIndicator color={colors.accent} />
+            <Text style={styles.loadingText}>{loadingPhase}</Text>
+          </View>
+        )}
+
+        {step === 'home' && (
+          <View>
+            <AppChromeHeader
+              language={language}
+              onToggleLanguage={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+            />
+            <Text style={styles.scanTitle}>{t(language, 'scanTitle')}</Text>
+            <Text style={styles.scanBody}>{t(language, 'scanBody')}</Text>
+            {scanSession.imageUri ? (
+              <Image source={{ uri: scanSession.imageUri }} style={styles.preview} />
+            ) : null}
+            <View style={styles.row}>
+              <OutlinePillButton
+                label={t(language, 'camera')}
+                onPress={() => pickImage(true)}
+                style={styles.halfBtn}
+                iconLeft={<Ionicons name="camera-outline" size={18} color={colors.onSurface} />}
+              />
+              <OutlinePillButton
+                label={t(language, 'gallery')}
+                onPress={() => pickImage(false)}
+                style={styles.halfBtn}
+                iconLeft={<Ionicons name="images-outline" size={18} color={colors.onSurface} />}
+              />
+            </View>
+            {scanSession.imageBase64 ? (
+              <PillButton
+                label={t(language, 'analyze')}
+                onPress={() => runAnalyze()}
+                loading={loading}
+                disabled={loading}
+                style={{ marginTop: spacing.sm }}
+              />
+            ) : (
+              <Pressable
+                style={styles.demoLink}
+                onPress={() => runAnalyze('throat')}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color={colors.accent} />
+                ) : (
+                  <Text style={styles.demoLinkText}>{t(language, 'tryDemo')}</Text>
+                )}
+              </Pressable>
+            )}
+            <View style={styles.peachBox}>
+              <Text style={styles.peachText}>{disclaimerFor(language)}</Text>
+            </View>
+
+            {recentScans.length > 0 && (
+              <View style={styles.recentSection}>
+                <View style={styles.recentHeader}>
+                  <Text style={styles.h2}>{t(language, 'history')}</Text>
+                  <Pressable onPress={() => navigation.navigate('Scans')} hitSlop={8}>
+                    <Text style={styles.viewAll}>{t(language, 'viewAll')}</Text>
+                  </Pressable>
+                </View>
+                {recentScans.map((entry) => (
+                  <Pressable
+                    key={entry.id}
+                    style={styles.recentCard}
+                    onPress={() => {
+                      openHistoryScan(entry);
+                      setStep('results');
+                    }}
+                  >
+                    <View style={styles.recentThumb}>
+                      <Ionicons name="document-text-outline" size={22} color={colors.mutedVariant} />
+                    </View>
+                    <View style={styles.recentText}>
+                      <Text style={styles.recentTitle} numberOfLines={1}>
+                        {entry.title || t(language, 'scans')}
+                      </Text>
+                      <Text style={styles.recentMeta} numberOfLines={1}>
+                        {t(language, 'medsCount').replace(
+                          '{n}',
+                          String((entry.medicines || []).length)
+                        )}
+                        {entry.createdAt ? (
+                          <>
+                            <Text style={styles.recentDot}>{'  \u2022  '}</Text>
+                            {formatScanDate(entry.createdAt)}
+                          </>
+                        ) : null}
+                      </Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={18} color={colors.silverDeep} />
+                  </Pressable>
+                ))}
+              </View>
+            )}
+          </View>
+        )}
+
+        {step === 'confirm' && (
+          <View>
+            {scanSession.sourceType === 'packaging' ? (
+              <View style={styles.packBadge}>
+                <Text style={styles.packBadgeText}>{t(language, 'packDetected')}</Text>
+              </View>
+            ) : null}
+            <Text style={styles.h1}>
+              {scanSession.sourceType === 'packaging'
+                ? t(language, 'confirmPackTitle')
+                : t(language, 'confirmTitle')}
+            </Text>
+            <Text style={styles.p}>
+              {scanSession.sourceType === 'packaging'
+                ? t(language, 'confirmPackBody')
+                : t(language, 'confirmBody')}
+            </Text>
+            {needsReviewCount > 0 ? (
+              <Text style={styles.lowConfStrip}>
+                {t(language, 'lowConfidenceStrip').replace('{n}', String(needsReviewCount))}
+              </Text>
+            ) : null}
+            <ClinicalPrescriptionCard clinical={clinical} language={language} />
+            {medicines.map((m, i) => (
+              <MedicineConfirmCard
+                key={`${m.rawName}-${i}`}
+                medicine={m}
+                language={language}
+                onChange={(field, value) => updateMed(i, field, value)}
+                onOpenDetail={setModalMed}
+              />
+            ))}
+            {needsReviewCount > 0 && (
+              <Pressable style={styles.checkRow} onPress={() => setConfirmUnmatched((v) => !v)}>
+                <View style={[styles.checkbox, confirmUnmatched && styles.checkboxOn]}>
+                  {confirmUnmatched ? (
+                    <Ionicons name="checkmark" size={14} color={colors.onPrimary} />
+                  ) : null}
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.h2}>{t(language, 'confirmUnmatched')}</Text>
+                  <Text style={styles.p}>{t(language, 'confirmUnmatchedHint')}</Text>
+                </View>
+              </Pressable>
+            )}
+            {renderWhoseStrip()}
+            <PillButton
+              label={t(language, 'generate')}
+              onPress={() => runBrief()}
+              loading={loading}
+              disabled={!canGenerate}
+              style={{ marginTop: spacing.xs }}
+            />
+            {prefetchStatus === 'loading' ? (
+              <Text style={styles.prefetchHint}>{t(language, 'prefetchPreparing')}</Text>
+            ) : null}
+            {prefetchStatus === 'ready' ? (
+              <Text style={styles.prefetchHint}>{t(language, 'prefetchReady')}</Text>
+            ) : null}
+            {prefetchStatus === 'error' ? (
+              <Text style={[styles.prefetchHint, { color: colors.errorText }]}>
+                {t(language, 'prefetchFailed')}
+              </Text>
+            ) : null}
+            <Pressable style={styles.link} onPress={() => setStep('home')}>
+              <Text style={styles.linkText}>{t(language, 'back')}</Text>
             </Pressable>
           </View>
-          <Pressable
-            style={[styles.primary, loading && styles.disabled]}
-            disabled={loading}
-            onPress={() => runAnalyze()}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.primaryText}>
-                {scanSession.imageBase64 ? t(language, 'analyze') : t(language, 'tryDemo')}
-              </Text>
-            )}
-          </Pressable>
-          <Text style={styles.tiny}>{disclaimerFor(language)}</Text>
+        )}
 
-          {recentScans.length > 0 && (
-            <View style={{ marginTop: 28 }}>
-              <Text style={styles.h2}>{t(language, 'history')}</Text>
-              {recentScans.map((entry) => (
-                <Pressable
-                  key={entry.id}
-                  style={styles.recentCard}
-                  onPress={() => {
-                    openHistoryScan(entry);
-                    setStep('results');
-                  }}
-                >
-                  <Text style={styles.recentTitle}>{entry.title || t(language, 'scans')}</Text>
-                  <Text style={styles.meta}>
-                    {t(language, 'medsCount').replace(
-                      '{n}',
-                      String((entry.medicines || []).length)
-                    )}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-          )}
-        </View>
-      )}
-
-      {step === 'confirm' && (
-        <View>
-          <Text style={styles.h1}>
-            {scanSession.sourceType === 'packaging'
-              ? t(language, 'confirmPackTitle')
-              : t(language, 'confirmTitle')}
-          </Text>
-          <Text style={styles.p}>
-            {scanSession.sourceType === 'packaging'
-              ? t(language, 'confirmPackBody')
-              : t(language, 'confirmBody')}
-          </Text>
-          <ClinicalPrescriptionCard clinical={clinical} language={language} />
-          {medicines.map((m, i) => (
-            <MedicineConfirmCard
-              key={`${m.rawName}-${i}`}
-              medicine={m}
-              language={language}
-              onChange={(field, value) => updateMed(i, field, value)}
-              onOpenDetail={setModalMed}
-            />
-          ))}
-          {needsReviewCount > 0 && (
-            <Pressable style={styles.checkRow} onPress={() => setConfirmUnmatched((v) => !v)}>
-              <View style={[styles.checkbox, confirmUnmatched && styles.checkboxOn]} />
-              <View style={{ flex: 1 }}>
-                <Text style={styles.h2}>{t(language, 'confirmUnmatched')}</Text>
-                <Text style={styles.p}>{t(language, 'confirmUnmatchedHint')}</Text>
+        {step === 'results' && briefing && (
+          <View>
+            <Text style={styles.forLabel}>
+              {t(language, 'forWhom')}{' '}
+              <Text style={styles.forName}>{patientContext.personLabel}</Text>
+            </Text>
+            <Text style={styles.h1}>{t(language, 'briefingTitle')}</Text>
+            {!!scanSession.scannedAt && (
+              <View style={styles.dateChip}>
+                <Ionicons name="calendar-outline" size={14} color={colors.accent} />
+                <Text style={styles.dateChipText}>{formatScanDate(scanSession.scannedAt)}</Text>
               </View>
-            </Pressable>
-          )}
-          {renderWhoseStrip()}
-          <Pressable
-            style={[styles.primary, !canGenerate && styles.disabled]}
-            disabled={!canGenerate}
-            onPress={() => runBrief()}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.primaryText}>{t(language, 'generate')}</Text>
             )}
-          </Pressable>
-          {step === 'confirm' && prefetchStatus === 'loading' ? (
-            <Text style={styles.prefetchHint}>{t(language, 'prefetchPreparing')}</Text>
-          ) : null}
-          {step === 'confirm' && prefetchStatus === 'ready' ? (
-            <Text style={styles.prefetchHint}>{t(language, 'prefetchReady')}</Text>
-          ) : null}
-          <Pressable style={styles.link} onPress={() => setStep('home')}>
-            <Text style={styles.linkText}>{t(language, 'back')}</Text>
-          </Pressable>
-        </View>
-      )}
+            <BriefingTabs
+              language={language}
+              briefing={briefing}
+              medicines={medicines}
+              clinical={clinical}
+              onOpenMedicine={setModalMed}
+              saveBlock={renderSaveBlock()}
+              askBlock={renderAskBlock()}
+            />
 
-      {step === 'results' && briefing && (
-        <View>
-          <Text style={styles.h1}>{t(language, 'briefingTitle')}</Text>
-          <Text style={styles.meta}>
-            {t(language, 'forWhom')} {patientContext.personLabel}
-          </Text>
-          <BriefingTabs
-            language={language}
-            briefing={briefing}
-            medicines={medicines}
-            clinical={clinical}
-            onOpenMedicine={setModalMed}
-            saveBlock={renderSaveBlock()}
-          />
+            <OutlinePillButton
+              label={t(language, 'newScan')}
+              style={{ marginTop: spacing.md }}
+              onPress={() => {
+                setScanSession({
+                  medicines: [],
+                  briefing: null,
+                  disclaimer: '',
+                  forPersonId: 'me',
+                  guest: null,
+                  imageUri: null,
+                  imageBase64: null,
+                  sourceType: 'prescription',
+                  clinical: null,
+                  openResults: false,
+                });
+                setStep('home');
+                setSaveMsg('');
+                setConfirmUnmatched(false);
+                invalidatePrefetch();
+              }}
+            />
+            <View style={styles.peachBox}>
+              <Text style={styles.peachText}>
+                {scanSession.disclaimer || disclaimerFor(language)}
+              </Text>
+            </View>
+          </View>
+        )}
 
-          <Pressable
-            style={styles.secondary}
-            onPress={() => {
-              setScanSession({
-                medicines: [],
-                briefing: null,
-                disclaimer: '',
-                forPersonId: 'me',
-                guest: null,
-                imageUri: null,
-                imageBase64: null,
-                sourceType: 'prescription',
-                clinical: null,
-                openResults: false,
-              });
-              setStep('home');
-              setSaveMsg('');
-              setConfirmUnmatched(false);
-              invalidatePrefetch();
-            }}
-          >
-            <Text style={styles.secondaryText}>{t(language, 'newScan')}</Text>
-          </Pressable>
-          <Text style={styles.tiny}>{scanSession.disclaimer || disclaimerFor(language)}</Text>
-        </View>
-      )}
-
-      <MedicineModal
-        visible={!!modalMed}
-        medicine={modalMed}
-        language={language}
-        onClose={() => setModalMed(null)}
-      />
-    </ScrollView>
+        <MedicineModal
+          visible={!!modalMed}
+          medicine={modalMed}
+          language={language}
+          onClose={() => setModalMed(null)}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
-  pad: { padding: 20, paddingBottom: 48 },
-  h1: { fontSize: 24, fontWeight: '750', color: colors.graphite, marginBottom: 8 },
-  h2: { fontSize: 16, fontWeight: '700', color: colors.graphite, marginBottom: 6 },
-  p: { fontSize: 14, lineHeight: 21, color: colors.muted, marginBottom: 6 },
-  tiny: { fontSize: 11, color: colors.muted, marginTop: 12, lineHeight: 16 },
-  primary: {
-    backgroundColor: colors.accent,
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 10,
+  pad: {
+    paddingHorizontal: spacing.margin,
+    paddingTop: 4,
+    paddingBottom: 48,
   },
-  primaryText: { color: '#fff', fontWeight: '700' },
+  scanTitle: {
+    fontSize: 22,
+    lineHeight: 28,
+    fontFamily: fonts.displayBold,
+    color: colors.onSurface,
+    marginBottom: spacing.xs,
+    letterSpacing: -0.2,
+  },
+  scanBody: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: colors.muted,
+    fontFamily: fonts.body,
+    marginBottom: spacing.sm,
+  },
+  h1: {
+    fontSize: 22,
+    lineHeight: 28,
+    fontFamily: fonts.displayBold,
+    color: colors.onSurface,
+    marginBottom: spacing.xs,
+    letterSpacing: -0.2,
+  },
+  h2: {
+    fontSize: 14,
+    fontFamily: fonts.bodyBold,
+    color: colors.onSurface,
+    marginBottom: 4,
+  },
+  p: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: colors.muted,
+    fontFamily: fonts.body,
+    marginBottom: 4,
+  },
+  tiny: {
+    fontSize: 12,
+    color: colors.muted,
+    marginTop: spacing.sm,
+    lineHeight: 17,
+    fontFamily: fonts.body,
+  },
+  forLabel: {
+    fontSize: 14,
+    fontFamily: fonts.body,
+    color: colors.muted,
+    marginBottom: 4,
+  },
+  forName: {
+    fontFamily: fonts.bodyBold,
+    color: colors.accent,
+  },
+  dateChip: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: colors.accentSoftBg,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: radii.pill,
+    marginBottom: spacing.md,
+  },
+  dateChipText: {
+    fontSize: 13,
+    fontFamily: fonts.bodyMedium,
+    color: colors.accentDark,
+  },
+  packBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.accent,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: radii.pill,
+    marginBottom: spacing.sm,
+  },
+  packBadgeText: {
+    color: colors.onPrimary,
+    fontFamily: fonts.bodyBold,
+    fontSize: 12,
+  },
+  lowConfStrip: {
+    backgroundColor: colors.warnBg,
+    color: colors.warnText,
+    padding: spacing.sm,
+    borderRadius: radii.md,
+    marginBottom: spacing.sm,
+    fontSize: 13,
+    fontFamily: fonts.bodyBold,
+    overflow: 'hidden',
+  },
+  // Kept for renderWhoseStrip add-person actions (above rewrite boundary)
   secondary: {
-    flex: 1,
     backgroundColor: colors.silver,
     paddingVertical: 12,
-    borderRadius: 10,
+    paddingHorizontal: 14,
+    borderRadius: radii.md,
     alignItems: 'center',
     marginTop: 10,
+    alignSelf: 'flex-start',
   },
-  secondaryText: { color: colors.accentDark, fontWeight: '700' },
+  secondaryText: {
+    color: colors.accentDark,
+    fontFamily: fonts.bodyBold,
+  },
   row: { flexDirection: 'row', gap: 10 },
+  halfBtn: { flex: 1, paddingHorizontal: 12 },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
-  chip: { backgroundColor: colors.silver, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8 },
+  chip: {
+    backgroundColor: colors.silver,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
   chipOn: { backgroundColor: colors.accent },
-  chipText: { color: colors.graphite, fontWeight: '600' },
-  chipTextOn: { color: '#fff', fontWeight: '600' },
+  chipText: { color: colors.graphite, fontFamily: fonts.bodyBold },
+  chipTextOn: { color: '#fff', fontFamily: fonts.bodyBold },
   whoseBox: {
     backgroundColor: colors.foilLight,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
+    borderRadius: radii.lg,
+    padding: spacing.sm,
+    marginBottom: spacing.sm,
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -736,91 +960,141 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.bgElevated,
-    borderRadius: 8,
+    borderRadius: radii.md,
     paddingHorizontal: 10,
     paddingVertical: 8,
     marginBottom: 8,
     color: colors.graphite,
+    fontFamily: fonts.body,
   },
-  card: {
-    backgroundColor: colors.bgElevated,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 10,
+  preview: {
+    width: '100%',
+    height: 180,
+    borderRadius: radii.lg,
+    marginBottom: spacing.md,
+  },
+  demoLink: { alignItems: 'center', marginTop: spacing.sm, paddingVertical: 4 },
+  demoLinkText: {
+    color: colors.accent,
+    fontFamily: fonts.bodyMedium,
+    fontSize: 14,
+  },
+  peachBox: {
+    backgroundColor: colors.peachBg,
+    borderRadius: radii.lg,
+    padding: spacing.md,
+    marginTop: spacing.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.peachBorder,
   },
-  preview: { width: '100%', height: 180, borderRadius: 12, marginVertical: 10 },
-  meta: { color: colors.accent, fontSize: 12, marginBottom: 6 },
+  peachText: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: colors.peachText,
+    fontFamily: fonts.body,
+  },
+  meta: {
+    color: colors.accent,
+    fontSize: 13,
+    marginTop: 6,
+    fontFamily: fonts.bodyMedium,
+  },
+  recentSection: { marginTop: spacing.xl },
+  recentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.sm,
+  },
+  viewAll: {
+    fontSize: 14,
+    fontFamily: fonts.bodyBold,
+    color: colors.accent,
+  },
   recentCard: {
     backgroundColor: colors.bgElevated,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 8,
+    borderRadius: radii.md,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: 'rgba(197, 198, 202, 0.35)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
   },
-  recentTitle: { fontSize: 15, fontWeight: '700', color: colors.graphite, marginBottom: 2 },
-  warn: { color: '#A65B00', fontSize: 12 },
-  badge: {
-    alignSelf: 'flex-start',
-    backgroundColor: colors.warnBg,
-    color: colors.warnText,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    marginBottom: 6,
-    fontWeight: '700',
-    overflow: 'hidden',
+  recentThumb: {
+    width: 48,
+    height: 48,
+    borderRadius: radii.sm + 4,
+    backgroundColor: colors.surfaceLow,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recentText: { flex: 1 },
+  recentTitle: {
+    fontSize: 16,
+    fontFamily: fonts.display,
+    color: colors.onSurface,
+    marginBottom: 2,
+  },
+  recentMeta: {
+    fontSize: 13,
+    lineHeight: 18,
+    color: colors.mutedVariant,
+    fontFamily: fonts.body,
+  },
+  recentDot: { color: colors.silverDeep },
+  errorBox: {
+    backgroundColor: colors.errorBg,
+    padding: spacing.sm,
+    borderRadius: radii.md,
+    marginBottom: spacing.sm,
+  },
+  errorText: { color: colors.errorText, fontFamily: fonts.bodyBold },
+  hint: {
+    color: colors.errorText,
     fontSize: 12,
+    marginTop: 4,
+    fontFamily: fonts.body,
   },
-  errorBox: { backgroundColor: colors.errorBg, padding: 10, borderRadius: 8, marginBottom: 10 },
-  errorText: { color: colors.errorText, fontWeight: '600' },
-  hint: { color: colors.errorText, fontSize: 12, marginTop: 4 },
   loadingBox: {
     flexDirection: 'row',
     gap: 10,
     alignItems: 'center',
     backgroundColor: colors.silver,
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 12,
+    padding: spacing.sm,
+    borderRadius: radii.md,
+    marginBottom: spacing.sm,
   },
-  loadingText: { color: colors.graphite, fontWeight: '600', flex: 1 },
-  disabled: { opacity: 0.55 },
+  loadingText: {
+    color: colors.graphite,
+    fontFamily: fonts.bodyBold,
+    flex: 1,
+  },
   prefetchHint: {
     marginTop: 8,
     marginBottom: 4,
     fontSize: 12,
     color: colors.accent,
     lineHeight: 16,
+    fontFamily: fonts.body,
   },
   checkRow: { flexDirection: 'row', gap: 10, marginBottom: 10 },
   checkbox: {
     width: 22,
     height: 22,
-    borderRadius: 6,
+    borderRadius: radii.sm,
     borderWidth: 2,
     borderColor: colors.accent,
-    marginTop: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 2,
   },
-  checkboxOn: { backgroundColor: colors.accent },
-  tabs: { marginBottom: 10 },
-  tab: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: colors.silver,
-    marginRight: 8,
+  checkboxOn: { backgroundColor: colors.accent, borderColor: colors.accent },
+  link: { alignItems: 'center', marginTop: spacing.md },
+  linkText: {
+    color: colors.accent,
+    fontFamily: fonts.bodyBold,
+    marginBottom: 4,
   },
-  tabOn: { backgroundColor: colors.accent },
-  tabText: { color: colors.graphite, fontWeight: '600' },
-  tabTextOn: { color: '#fff', fontWeight: '700' },
-  timelineRow: { flexDirection: 'row', gap: 10 },
-  rail: { width: 14, alignItems: 'center' },
-  dot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.accent, marginTop: 18 },
-  line: { flex: 1, width: 2, backgroundColor: colors.silverDeep, marginVertical: 4 },
-  link: { alignItems: 'center', marginTop: 12 },
-  linkText: { color: colors.accent, fontWeight: '700', marginBottom: 4 },
-  danger: { color: colors.errorText, fontWeight: '600' },
 });

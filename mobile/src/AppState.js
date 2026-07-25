@@ -17,6 +17,7 @@ export function AppStateProvider({ children }) {
   const [ready, setReady] = useState(false);
   const [profile, setProfile] = useState(defaultProfile());
   const [history, setHistory] = useState([]);
+  const [chatHandoff, setChatHandoff] = useState(null);
   const [scanSession, setScanSession] = useState({
     medicines: [],
     briefing: null,
@@ -90,10 +91,14 @@ export function AppStateProvider({ children }) {
     },
     upsertPerson: async (person) => persist(upsertPerson(profile, person)),
     addFamily: async (fields) => persist(addFamilyPerson(profile, fields)),
+    setActivePersonId: async (id) => persist({ ...profile, activePersonId: id }),
     saveRegimen: async (personId, items) => persist(mergeRegimen(profile, personId, items)),
     removeRegimenItem: async (personId, index) =>
       persist(removeRegimenItemFromStore(profile, personId, index)),
     completeOnboarding: async () => persist({ ...profile, onboardingDone: true }),
+    chatHandoff,
+    setChatHandoff,
+    clearChatHandoff: () => setChatHandoff(null),
   };
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;

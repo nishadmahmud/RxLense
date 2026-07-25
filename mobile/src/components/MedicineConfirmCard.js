@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, fonts, radii, spacing } from '../theme';
 import { t } from '../i18n';
 import { formatDoseSlots } from '../doseTiming';
+import { ConfidenceBadge } from './ConfidenceBadge';
 import { DoseTimingIcons } from './DoseTimingIcons';
 
 function slotLabels(language) {
@@ -23,27 +24,72 @@ export function MedicineConfirmCard({
   const [editing, setEditing] = useState(false);
   const m = medicine;
   const slotLabel = formatDoseSlots(m.doseLine, slotLabels(language));
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(opacity, { toValue: 1, duration: 280, useNativeDriver: true }).start();
+  }, [opacity]);
 
   return (
-    <View style={styles.card}>
+    <Animated.View style={[styles.card, { opacity }]}>
       <View style={styles.header}>
-        {m.needsReview ? <Text style={styles.badge}>{t(language, 'needsReview')}</Text> : <View />}
+        <View style={styles.headerLeft}>
+          {!editing ? (
+            <Pressable
+              style={styles.titleBlock}
+              onPress={() =>
+                onOpenDetail({
+                  ...m,
+                  brandName: m.rawName,
+                  examplePrices: m.kbSnapshot?.examplePrices,
+                })
+              }
+            >
+              <View style={styles.titleRow}>
+                <Text style={styles.title} numberOfLines={2}>
+                  {m.rawName}
+                </Text>
+                <ConfidenceBadge
+                  language={language}
+                  confidence={m.confidence}
+                  needsReview={m.needsReview}
+                  compact
+                />
+              </View>
+              {!!m.strength && (
+                <Text style={styles.strength}>
+                  {t(language, 'strength')}: {m.strength}
+                </Text>
+              )}
+              {m.kbSnapshot ? (
+                <Text style={styles.matched}>
+                  {t(language, 'matched')}: {m.kbSnapshot.generic}
+                  {m.kbSnapshot.drugClass ? ` · ${m.kbSnapshot.drugClass}` : ''}
+                </Text>
+              ) : (
+                <Text style={styles.warn}>{t(language, 'notInKb')}</Text>
+              )}
+            </Pressable>
+          ) : (
+            <Text style={styles.editHeading}>{t(language, 'fieldName')}</Text>
+          )}
+        </View>
         <Pressable
           hitSlop={10}
           onPress={() => setEditing((v) => !v)}
-          accessibilityLabel="Edit medicine"
+          accessibilityLabel={t(language, 'editProfile')}
+          style={styles.editBtn}
         >
           <Ionicons
             name={editing ? 'checkmark-circle' : 'create-outline'}
             size={22}
-            color={colors.accent}
+            color={editing ? colors.accent : colors.outline}
           />
         </Pressable>
       </View>
 
       {editing ? (
         <View>
-          <Text style={styles.label}>Name</Text>
           <TextInput
             style={styles.input}
             value={m.rawName}
@@ -55,7 +101,7 @@ export function MedicineConfirmCard({
             value={m.strength || ''}
             onChangeText={(txt) => onChange('strength', txt)}
           />
-          <Text style={styles.label}>Dose</Text>
+          <Text style={styles.label}>{t(language, 'fieldDose')}</Text>
           <TextInput
             style={styles.input}
             value={m.doseLine || ''}
@@ -72,75 +118,135 @@ export function MedicineConfirmCard({
             })
           }
         >
-          <Text style={styles.title}>{m.rawName}</Text>
-          {!!m.strength && (
-            <Text style={styles.line}>
-              {t(language, 'strength')}: {m.strength}
-            </Text>
+          {(!!m.doseLine || !!slotLabel) && (
+            <View style={styles.doseBox}>
+              <View style={styles.doseLeft}>
+                {!!m.doseLine && <Text style={styles.doseLine}>{m.doseLine}</Text>}
+                {!!slotLabel && (
+                  <Text style={styles.slotLabel}>
+                    {t(language, 'timing')}: {slotLabel}
+                  </Text>
+                )}
+              </View>
+              <DoseTimingIcons
+                doseLine={m.doseLine}
+                language={language}
+                compact
+                size={14}
+                style={styles.doseIcons}
+              />
+            </View>
           )}
-          {!!m.doseLine && <Text style={styles.line}>{m.doseLine}</Text>}
-          <DoseTimingIcons doseLine={m.doseLine} />
-          {!!slotLabel && (
-            <Text style={styles.slotLabel}>
-              {t(language, 'timing')}: {slotLabel}
-            </Text>
-          )}
-          {m.kbSnapshot ? (
-            <Text style={styles.meta}>
-              {t(language, 'matched')}: {m.kbSnapshot.generic}
-              {m.kbSnapshot.drugClass ? ` · ${m.kbSnapshot.drugClass}` : ''}
-            </Text>
-          ) : (
-            <Text style={styles.warn}>{t(language, 'notInKb')}</Text>
-          )}
-          <Text style={styles.tapHint}>Tap for details</Text>
+          <Text style={styles.tapHint}>{t(language, 'tapForDetails')}</Text>
         </Pressable>
       )}
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.bgElevated,
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 12,
+    borderRadius: radii.lg,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
     borderWidth: 1,
     borderColor: colors.border,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: spacing.xs,
+  },
+  headerLeft: { flex: 1, marginRight: spacing.xs },
+  titleBlock: { flex: 1 },
+  titleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
-    marginBottom: 6,
+    gap: 8,
+    marginBottom: 4,
   },
-  title: { fontSize: 18, fontWeight: '800', color: colors.graphite, marginBottom: 4 },
-  line: { fontSize: 14, color: colors.muted, marginBottom: 2 },
-  slotLabel: { marginTop: 4, fontSize: 13, color: colors.accent, fontWeight: '600' },
-  meta: { marginTop: 8, color: colors.accent, fontSize: 12, fontWeight: '600' },
-  warn: { marginTop: 8, color: '#A65B00', fontSize: 12 },
-  tapHint: { marginTop: 8, fontSize: 11, color: colors.foil },
-  badge: {
-    alignSelf: 'flex-start',
-    backgroundColor: colors.warnBg,
-    color: colors.warnText,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    fontWeight: '700',
-    overflow: 'hidden',
+  title: {
+    fontSize: 16,
+    color: colors.onSurface,
+    fontFamily: fonts.display,
+    flexShrink: 1,
+  },
+  editHeading: {
     fontSize: 12,
+    color: colors.muted,
+    fontFamily: fonts.bodyMedium,
+    marginBottom: 4,
   },
-  label: { fontSize: 12, color: colors.muted, marginBottom: 4, marginTop: 4 },
+  editBtn: { padding: 2 },
+  strength: {
+    fontSize: 14,
+    color: colors.muted,
+    fontFamily: fonts.body,
+    marginBottom: 2,
+  },
+  matched: {
+    marginTop: 2,
+    color: colors.accent,
+    fontSize: 13,
+    fontFamily: fonts.bodyMedium,
+  },
+  warn: {
+    marginTop: 2,
+    color: colors.warnText,
+    fontSize: 12,
+    fontFamily: fonts.bodyMedium,
+  },
+  doseBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: spacing.xs,
+    backgroundColor: colors.bg,
+    borderRadius: radii.md,
+    padding: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  doseLeft: { flex: 1, marginRight: spacing.sm },
+  doseLine: {
+    fontSize: 14,
+    color: colors.onSurface,
+    fontFamily: fonts.bodyMedium,
+    letterSpacing: 0.4,
+  },
+  slotLabel: {
+    marginTop: 2,
+    fontSize: 11,
+    color: colors.muted,
+    fontFamily: fonts.body,
+  },
+  doseIcons: { marginTop: 0 },
+  tapHint: {
+    marginTop: spacing.xs,
+    fontSize: 11,
+    color: colors.foil,
+    fontFamily: fonts.body,
+  },
+  label: {
+    fontSize: 12,
+    color: colors.muted,
+    marginBottom: 4,
+    marginTop: 4,
+    fontFamily: fonts.bodyMedium,
+  },
   input: {
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.foilLight,
-    borderRadius: 8,
+    borderRadius: radii.md,
     paddingHorizontal: 10,
     paddingVertical: 8,
     marginBottom: 6,
-    color: colors.graphite,
+    color: colors.onSurface,
+    fontFamily: fonts.body,
+    fontSize: 15,
   },
 });

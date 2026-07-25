@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Briefing Results - RxLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#000309",
+                      "secondary": "#436086",
+                      "primary": "#010204",
+                      "surface-variant": "#e0e3e6",
+                      "primary-container": "#1a1d21",
+                      "surface": "#f7f9fc",
+                      "outline": "#75777b",
+                      "on-surface-variant": "#45474a",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eceef1",
+                      "primary-fixed-dim": "#c5c6cc",
+                      "on-primary-fixed": "#191c20",
+                      "tertiary-container": "#151e27",
+                      "secondary-container": "#b3d1fd",
+                      "tertiary-fixed": "#dae3f0",
+                      "on-secondary-fixed-variant": "#2a486d",
+                      "surface-container-low": "#f2f4f7",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#191c1e",
+                      "surface-tint": "#5c5e63",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#c5c6ca",
+                      "on-tertiary-fixed": "#141c26",
+                      "on-primary-fixed-variant": "#44474b",
+                      "secondary-fixed": "#d3e3ff",
+                      "on-secondary-fixed": "#001c39",
+                      "background": "#f7f9fc",
+                      "surface-container-high": "#e6e8eb",
+                      "surface-dim": "#d8dadd",
+                      "on-primary-container": "#82858a",
+                      "inverse-on-surface": "#eff1f4",
+                      "primary-fixed": "#e1e2e8",
+                      "on-tertiary-fixed-variant": "#3f4852",
+                      "surface-bright": "#f7f9fc",
+                      "inverse-surface": "#2d3133",
+                      "tertiary-fixed-dim": "#bec7d4",
+                      "on-surface": "#191c1e",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#abc8f4",
+                      "on-secondary-container": "#3c597f",
+                      "on-tertiary-container": "#7d8692",
+                      "surface-container-highest": "#e0e3e6",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#c5c6cc",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "12px",
+                      "margin-main": "20px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "safe-bottom": "34px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Epilogue"],
+                      "display-md": ["Epilogue"],
+                      "label-caps": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg-mobile": ["Epilogue"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Epilogue"]
+              },
+              "fontSize": {
+                      "headline-sm": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-md": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["17px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["30px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "body-md": ["15px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display-lg": ["34px", {"lineHeight": "41px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen relative pb-[90px] pt-[72px]">
+<!-- iOS Status Bar (Simulated) -->
+<div class="fixed top-0 left-0 w-full h-[44px] bg-surface-container-lowest z-[60] flex justify-between items-center px-6 text-primary text-sm font-semibold pointer-events-none">
+<div>9:41</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 16px;">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined" style="font-size: 16px;">wifi</span>
+<span class="material-symbols-outlined" style="font-size: 16px;">battery_full</span>
+</div>
+</div>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-main pt-[44px] pb-stack-sm bg-surface-container-lowest">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center text-primary rounded-full hover:bg-surface-container transition-colors opacity-80 transition-opacity">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-display-md text-display-md text-primary font-bold">RxLens AI</h1>
+</div>
+<div>
+<button class="font-label-caps text-label-caps text-primary hover:bg-surface-container transition-colors px-3 py-2 rounded-full border border-outline-variant/30">
+                EN | বাংলা
+            </button>
+</div>
+</header>
+<main class="px-margin-main">
+<!-- Header Section -->
+<div class="pt-stack-md pb-stack-md border-b border-surface-container">
+<div class="flex justify-between items-end mb-2">
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-1">For: Me</p>
+<h2 class="font-headline-sm text-headline-sm text-primary">Your briefing</h2>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-2 py-1 rounded">12 Oct 2023</p>
+</div>
+</div>
+</div>
+<!-- Horizontal Scrollable Tabs -->
+<div class="flex overflow-x-auto hide-scrollbar py-stack-md gap-4 border-b border-surface-container">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-primary text-on-primary font-label-caps text-label-caps">Summary</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full text-secondary hover:bg-surface-container font-label-caps text-label-caps">Schedule</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full text-secondary hover:bg-surface-container font-label-caps text-label-caps">Interactions</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full text-secondary hover:bg-surface-container font-label-caps text-label-caps">Side effects</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full text-secondary hover:bg-surface-container font-label-caps text-label-caps">Notes</button>
+</div>
+<!-- Summary Content Area -->
+<section class="py-stack-lg">
+<!-- Bento Layout for Summary -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md mb-stack-lg">
+<!-- Holistic Explanation Card -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/30 md:col-span-2">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">insights</span>
+<h3 class="font-headline-sm text-headline-sm text-primary text-[18px]">Overview</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        This prescription is primarily focused on managing upper respiratory tract inflammation and secondary bacterial infections. The doctor has prescribed a combination of a broad-spectrum antibiotic (Amoxicillin-Clavulanate) and a short course of oral corticosteroids to reduce swelling. It's crucial to complete the entire antibiotic course even if you feel better, to prevent resistance.
+                    </p>
+</div>
+<!-- Key Metrics/Info Cards -->
+<div class="bg-[#F0F2F5] p-5 rounded-xl flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">pill</span>
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-1">Medications</p>
+<p class="font-headline-sm text-headline-sm text-primary">3 Prescribed</p>
+</div>
+</div>
+<div class="bg-[#F0F2F5] p-5 rounded-xl flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">calendar_clock</span>
+<div>
+<p class="font-label-caps text-label-caps text-secondary mb-1">Duration</p>
+<p class="font-headline-sm text-headline-sm text-primary">7 Days Course</p>
+</div>
+</div>
+</div>
+<!-- AI Confidence Badge -->
+<div class="inline-flex items-center gap-2 bg-[#A65B00]/10 border border-[#A65B00] px-3 py-1.5 rounded-full mb-stack-lg">
+<span class="material-symbols-outlined text-[#A65B00] text-sm" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-caps text-label-caps text-[#A65B00]">AI Confidence: High. Review with doctor if unsure.</span>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 mt-stack-md">
+<button class="w-full bg-primary-container text-on-primary font-body-lg text-body-lg py-4 rounded-full flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">bookmark_add</span>
+                    Save to my medicines
+                </button>
+<button class="w-full border-2 border-secondary text-secondary font-body-lg text-body-lg py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+                    Ask about this Rx
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-main pb-safe-bottom pt-stack-sm bg-surface-container-lowest/80 backdrop-blur-xl border-t border-outline-variant/10 md:hidden">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-primary scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps text-[10px]">Home</span>
+</a>
+<!-- Scans -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">document_scanner</span>
+<span class="font-label-caps text-label-caps text-[10px]">Scans</span>
+</a>
+<!-- Medicines -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">pill</span>
+<span class="font-label-caps text-label-caps text-[10px]">Medicines</span>
+</a>
+<!-- Chat -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-label-caps text-label-caps text-[10px]">Chat</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-70 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-caps text-label-caps text-[10px]">Profile</span>
+</a>
+</nav>
+<!-- iOS Home Indicator (Simulated) -->
+<div class="fixed bottom-2 left-1/2 transform -translate-x-1/2 w-[134px] h-[5px] bg-primary rounded-full z-[60] pointer-events-none md:hidden"></div>
+</body></html>

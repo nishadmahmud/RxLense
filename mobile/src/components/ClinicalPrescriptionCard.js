@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors } from '../theme';
+import { colors, fonts, radii, spacing } from '../theme';
 import { t } from '../i18n';
 
 function hasClinical(clinical) {
@@ -17,7 +17,7 @@ export function ClinicalPrescriptionCard({ clinical, language, style }) {
   if (!hasClinical(clinical)) return null;
   return (
     <View style={[styles.card, style]}>
-      <Text style={styles.eyebrow}>{t(language, 'onPrescription')}</Text>
+      <Text style={styles.eyebrow}>{t(language, 'onPrescription').toUpperCase()}</Text>
       <Text style={styles.hint}>{t(language, 'clinicalEducational')}</Text>
       {!!(clinical.diagnosis || '').trim() && (
         <View style={styles.block}>
@@ -53,23 +53,44 @@ export { hasClinical };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.bgElevated,
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 12,
+    backgroundColor: colors.surfaceLow,
+    borderRadius: radii.lg,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.silverDeep + '4D',
   },
   eyebrow: {
     fontSize: 12,
-    fontWeight: '700',
-    color: colors.accent,
-    marginBottom: 4,
-    letterSpacing: 0.2,
+    color: colors.mutedVariant,
+    marginBottom: 6,
+    letterSpacing: 0.8,
+    fontFamily: fonts.bodyBold,
   },
-  hint: { fontSize: 12, color: colors.muted, marginBottom: 10, lineHeight: 17 },
-  block: { marginBottom: 8 },
-  label: { fontSize: 12, fontWeight: '700', color: colors.muted, marginBottom: 4 },
-  value: { fontSize: 16, fontWeight: '750', color: colors.graphite },
-  bullet: { fontSize: 14, color: colors.graphite, lineHeight: 20, marginBottom: 2 },
+  hint: {
+    fontSize: 12,
+    color: colors.muted,
+    marginBottom: spacing.sm,
+    lineHeight: 17,
+    fontFamily: fonts.body,
+  },
+  block: { marginBottom: spacing.sm },
+  label: {
+    fontSize: 13,
+    color: colors.muted,
+    marginBottom: 4,
+    fontFamily: fonts.bodyMedium,
+  },
+  value: {
+    fontSize: 15,
+    color: colors.onSurface,
+    fontFamily: fonts.display,
+  },
+  bullet: {
+    fontSize: 13,
+    color: colors.onSurface,
+    lineHeight: 19,
+    marginBottom: 2,
+    fontFamily: fonts.bodyMedium,
+  },
 });

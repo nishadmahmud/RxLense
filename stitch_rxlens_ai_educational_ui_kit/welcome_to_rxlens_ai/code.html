@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RxLens AI - Onboarding Welcome</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#000309",
+                      "secondary": "#436086",
+                      "primary": "#010204",
+                      "surface-variant": "#e0e3e6",
+                      "primary-container": "#1a1d21",
+                      "surface": "#f7f9fc",
+                      "outline": "#75777b",
+                      "on-surface-variant": "#45474a",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eceef1",
+                      "primary-fixed-dim": "#c5c6cc",
+                      "on-primary-fixed": "#191c20",
+                      "tertiary-container": "#151e27",
+                      "secondary-container": "#b3d1fd",
+                      "tertiary-fixed": "#dae3f0",
+                      "on-secondary-fixed-variant": "#2a486d",
+                      "surface-container-low": "#f2f4f7",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#191c1e",
+                      "surface-tint": "#5c5e63",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#c5c6ca",
+                      "on-tertiary-fixed": "#141c26",
+                      "on-primary-fixed-variant": "#44474b",
+                      "secondary-fixed": "#d3e3ff",
+                      "on-secondary-fixed": "#001c39",
+                      "background": "#f7f9fc",
+                      "surface-container-high": "#e6e8eb",
+                      "surface-dim": "#d8dadd",
+                      "on-primary-container": "#82858a",
+                      "inverse-on-surface": "#eff1f4",
+                      "primary-fixed": "#e1e2e8",
+                      "on-tertiary-fixed-variant": "#3f4852",
+                      "surface-bright": "#f7f9fc",
+                      "inverse-surface": "#2d3133",
+                      "tertiary-fixed-dim": "#bec7d4",
+                      "on-surface": "#191c1e",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#abc8f4",
+                      "on-secondary-container": "#3c597f",
+                      "on-tertiary-container": "#7d8692",
+                      "surface-container-highest": "#e0e3e6",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#c5c6cc",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "12px",
+                      "margin-main": "20px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "safe-bottom": "34px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Epilogue"
+                      ],
+                      "display-md": [
+                              "Epilogue"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Epilogue"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Epilogue"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "17px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "30px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "15px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "34px",
+                              {
+                                      "lineHeight": "41px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .lens-flare {
+            background: radial-gradient(circle at 50% -20%, rgba(179, 209, 253, 0.15) 0%, transparent 60%);
+        }
+        .foil-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen relative overflow-hidden font-body-md text-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Atmospheric Background -->
+<div class="absolute inset-0 z-0">
+<!-- Base gradient simulating tactile paper/foil -->
+<div class="absolute inset-0 bg-gradient-to-br from-surface-container-lowest via-[#F0F2F5] to-surface-variant"></div>
+<!-- Lens flare effect -->
+<div class="absolute inset-0 lens-flare pointer-events-none"></div>
+<!-- Subtle foil texture overlay -->
+<div class="absolute inset-0 foil-texture opacity-50 mix-blend-multiply pointer-events-none"></div>
+<!-- Abstract Lens Elements (Subtle UI decoration) -->
+<div class="absolute top-1/4 -right-20 w-96 h-96 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-1/4 -left-20 w-80 h-80 bg-secondary-fixed/30 rounded-full blur-3xl pointer-events-none"></div>
+</div>
+<!-- Main Content Container -->
+<main class="relative z-10 flex flex-col min-h-screen px-margin-main pb-safe-bottom">
+<!-- iOS Status Bar Area (Visual Spacer) -->
+<div class="h-12 w-full flex justify-between items-center pt-2 px-4 pointer-events-none opacity-0 md:opacity-100 hidden">
+<!-- Simulated iOS elements for framing -->
+<span class="text-[14px] font-semibold text-primary">9:41</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[16px] text-primary">wifi</span>
+<span class="material-symbols-outlined text-[16px] text-primary">battery_full</span>
+</div>
+</div>
+<!-- Dynamic Island Spacer (Mobile only) -->
+<div class="h-14 w-full md:hidden pointer-events-none flex justify-center pt-2">
+<!-- Simulated Dynamic Island -->
+<div class="w-32 h-8 bg-black rounded-full shadow-sm hidden"></div>
+</div>
+<!-- Header / Language Toggle -->
+<header class="w-full flex justify-end pt-stack-md">
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-full p-1 flex shadow-sm backdrop-blur-md">
+<button class="px-4 py-1.5 rounded-full bg-primary-container text-on-primary font-label-caps text-label-caps transition-colors">
+                    EN
+                </button>
+<button class="px-4 py-1.5 rounded-full text-secondary hover:text-primary transition-colors font-label-caps text-label-caps">
+                    বাংলা
+                </button>
+</div>
+</header>
+<!-- Hero Section -->
+<div class="flex-grow flex flex-col justify-center items-center text-center mt-stack-lg mb-stack-lg">
+<!-- Minimalist Brand Icon (Lens metaphor) -->
+<div class="w-24 h-24 rounded-full bg-white border border-[#E8EBEE] shadow-sm flex items-center justify-center mb-stack-lg relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/50 to-white/80 z-10 pointer-events-none"></div>
+<span class="material-symbols-outlined text-[48px] text-primary font-light" style="font-variation-settings: 'wght' 200;">document_scanner</span>
+</div>
+<!-- Typography Anchor -->
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary-container mb-stack-sm tracking-tight">
+                RxLens AI
+            </h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-[280px] md:max-w-md mx-auto leading-relaxed">
+                Educational prescription companion for Bangladesh.
+            </p>
+<!-- Abstract scan line decoration -->
+<div class="w-12 h-0.5 bg-outline-variant/50 mt-stack-md mb-stack-md rounded-full"></div>
+</div>
+<!-- Footer Actions & Disclaimer -->
+<div class="w-full mt-auto flex flex-col gap-stack-md pb-stack-lg">
+<!-- Controls -->
+<div class="flex flex-col gap-stack-sm w-full">
+<button class="w-full bg-primary-container text-on-primary py-4 px-6 rounded-full font-body-lg text-body-lg font-semibold hover:bg-tertiary transition-colors shadow-sm active:scale-[0.98] transform duration-150 flex items-center justify-center gap-2">
+                    Continue
+                    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'wght' 500;">arrow_forward</span>
+</button>
+<button class="w-full py-4 px-6 rounded-full font-body-md text-body-md font-medium text-secondary hover:text-primary transition-colors active:opacity-70">
+                    Skip
+                </button>
+</div>
+<!-- Disclaimer -->
+<div class="text-center px-4 mt-stack-sm">
+<p class="font-label-caps text-[10px] leading-[14px] text-outline tracking-wider uppercase opacity-80 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">cloud_download</span>
+                    Does not diagnose or prescribe. Seek emergency care for severe symptoms.
+                </p>
+</div>
+</div>
+<!-- iOS Home Indicator (Visual) -->
+<div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-primary/20 rounded-full md:hidden pointer-events-none"></div>
+</main>
+<script>
+        // Simple subtle entrance animation for the main elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('main > div, main > header');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(10px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 * index + 100);
+            });
+        });
+    </script>
+</body></html>

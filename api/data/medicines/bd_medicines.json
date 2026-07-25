@@ -24,11 +24,11 @@
       "Stomach upset"
     ],
     "seriousSideEffects": [
-      "Severe skin reaction — stop and seek care",
+      "Severe skin reaction - stop and seek care",
       "Liver signs"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Rash can be serious — seek care promptly."
+    "notes": "Rash can be serious - seek care promptly."
   },
   {
     "id": "antacid_simethicone",
@@ -45,7 +45,7 @@
       "Gas-related discomfort"
     ],
     "foodFlags": [
-      "Can reduce absorption of some medicines — space doses"
+      "Can reduce absorption of some medicines - space doses"
     ],
     "interactionTags": [
       "antibiotics_tetracycline_quinolone",
@@ -60,7 +60,7 @@
       "Severe allergy"
     ],
     "pregnancyNote": "Ask pharmacist which antacid is suitable.",
-    "notes": "Separate from many oral medicines by 1–2 hours if advised."
+    "notes": "Separate from many oral medicines by 1-2 hours if advised."
   },
   {
     "id": "amiodarone",
@@ -90,7 +90,7 @@
       "Vision changes"
     ],
     "pregnancyNote": "Specialist advice.",
-    "notes": "Many interactions — pharmacist review essential."
+    "notes": "Many interactions - pharmacist review essential."
   },
   {
     "id": "amlodipine",
@@ -106,7 +106,7 @@
       "Angina as prescribed"
     ],
     "foodFlags": [
-      "Grapefruit caution for some calcium blockers — ask pharmacist"
+      "Grapefruit caution for some calcium blockers - ask pharmacist"
     ],
     "interactionTags": [
       "grapefruit",
@@ -215,7 +215,7 @@
       "Rare"
     ],
     "pregnancyNote": "Ask doctor about dose.",
-    "notes": "Supplement — not a cure for infection."
+    "notes": "Supplement - not a cure for infection."
   },
   {
     "id": "aspirin_low",
@@ -247,7 +247,7 @@
       "Severe allergy",
       "Breathing issues in some asthma"
     ],
-    "pregnancyNote": "Ask doctor — not for self-medication in pregnancy.",
+    "pregnancyNote": "Ask doctor - not for self-medication in pregnancy.",
     "notes": "Bleeding risk; never combine casually with other blood thinners."
   },
   {
@@ -293,7 +293,7 @@
     ],
     "foodFlags": [
       "Limit grapefruit for some statins",
-      "Prefer evening for some regimens — follow label"
+      "Prefer evening for some regimens - follow label"
     ],
     "interactionTags": [
       "grapefruit",
@@ -308,7 +308,7 @@
       "Dark urine",
       "Yellowing skin"
     ],
-    "pregnancyNote": "Usually avoided — ask doctor.",
+    "pregnancyNote": "Usually avoided - ask doctor.",
     "notes": "Report unexplained muscle pain."
   },
   {
@@ -401,7 +401,7 @@
       "Severe breathing worsening"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Technique matters — ask pharmacist to check inhaler use."
+    "notes": "Technique matters - ask pharmacist to check inhaler use."
   },
   {
     "id": "calcium",
@@ -578,7 +578,7 @@
       "Mood changes"
     ],
     "pregnancyNote": "Often avoided; ask doctor.",
-    "notes": "Serious tendon risks possible — seek care for sudden joint/tendon pain."
+    "notes": "Serious tendon risks possible - seek care for sudden joint/tendon pain."
   },
   {
     "id": "clarithromycin",
@@ -609,7 +609,7 @@
       "Liver signs"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Many drug interactions — tell pharmacist everything you take."
+    "notes": "Many drug interactions - tell pharmacist everything you take."
   },
   {
     "id": "clonazepam",
@@ -821,7 +821,7 @@
       "Toxicity signs"
     ],
     "pregnancyNote": "Specialist care.",
-    "notes": "Narrow therapeutic window — app cannot manage digoxin."
+    "notes": "Narrow therapeutic window - app cannot manage digoxin."
   },
   {
     "id": "domperidone",
@@ -852,7 +852,7 @@
       "Severe allergy"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Heart warnings exist in some guidelines — follow clinician."
+    "notes": "Heart warnings exist in some guidelines - follow clinician."
   },
   {
     "id": "doxycycline",
@@ -885,7 +885,7 @@
       "Severe headache/vision changes",
       "Severe allergy"
     ],
-    "pregnancyNote": "Usually avoided — ask doctor.",
+    "pregnancyNote": "Usually avoided - ask doctor.",
     "notes": "Sun protection often advised."
   },
   {
@@ -947,10 +947,10 @@
     "seriousSideEffects": [
       "Chest pain",
       "Leg swelling",
-      "Severe headache — clot warnings"
+      "Severe headache - clot warnings"
     ],
     "pregnancyNote": "Stop and test if pregnancy suspected.",
-    "notes": "Smoking + age increases clot risk — clinician counseling."
+    "notes": "Smoking + age increases clot risk - clinician counseling."
   },
   {
     "id": "famotidine",
@@ -975,7 +975,7 @@
       "Severe allergy"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Educational only — follow label."
+    "notes": "Educational only - follow label."
   },
   {
     "id": "fenofibrate",
@@ -1020,7 +1020,7 @@
       "Hay fever"
     ],
     "foodFlags": [
-      "Fruit juice may reduce absorption for some products — follow label"
+      "Fruit juice may reduce absorption for some products - follow label"
     ],
     "interactionTags": [
       "antacids"
@@ -1055,7 +1055,7 @@
       "Mood changes",
       "Allergic swelling"
     ],
-    "pregnancyNote": "Teratogenic handling warnings — keep away from pregnant contact with crushed tabs.",
+    "pregnancyNote": "Teratogenic handling warnings - keep away from pregnant contact with crushed tabs.",
     "notes": "Important pregnancy handling caution."
   },
   {
@@ -1146,7 +1146,7 @@
       "Hearing issues rare"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Dose timing affects sleep — ask clinician."
+    "notes": "Dose timing affects sleep - ask clinician."
   },
   {
     "id": "gabapentin",
@@ -1266,7 +1266,7 @@
       "Unconsciousness"
     ],
     "pregnancyNote": "Specialist obstetric diabetes care.",
-    "notes": "Never change insulin doses from an app — education only."
+    "notes": "Never change insulin doses from an app - education only."
   },
   {
     "id": "hydroxychloroquine",
@@ -1288,7 +1288,7 @@
       "Stomach upset"
     ],
     "seriousSideEffects": [
-      "Vision changes — eye monitoring",
+      "Vision changes - eye monitoring",
       "Severe allergy"
     ],
     "pregnancyNote": "Specialist advice.",
@@ -1354,7 +1354,7 @@
       "Chest pain",
       "Severe allergy"
     ],
-    "pregnancyNote": "Often avoided especially later pregnancy — ask doctor.",
+    "pregnancyNote": "Often avoided especially later pregnancy - ask doctor.",
     "notes": "Can irritate stomach; caution with ulcers or kidney disease."
   },
   {
@@ -1383,7 +1383,7 @@
       "Muscle weakness"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Hydration and electrolytes — clinician guided."
+    "notes": "Hydration and electrolytes - clinician guided."
   },
   {
     "id": "iron_folate",
@@ -1416,7 +1416,7 @@
       "Allergic reaction"
     ],
     "pregnancyNote": "Common in pregnancy when prescribed.",
-    "notes": "Keep away from children — iron overdose is dangerous."
+    "notes": "Keep away from children - iron overdose is dangerous."
   },
   {
     "id": "itopride",
@@ -1498,7 +1498,7 @@
       "Chest pain",
       "Severe symptoms of over/under replacement"
     ],
-    "pregnancyNote": "Dose often needs adjustment — obstetric/endocrine advice.",
+    "pregnancyNote": "Dose often needs adjustment - obstetric/endocrine advice.",
     "notes": "Timing consistency matters."
   },
   {
@@ -1540,7 +1540,7 @@
       "Kidney protection in some diabetics as prescribed"
     ],
     "foodFlags": [
-      "Potassium-rich salt substitutes — ask doctor"
+      "Potassium-rich salt substitutes - ask doctor"
     ],
     "interactionTags": [
       "potassium",
@@ -1554,7 +1554,7 @@
       "Swelling of face/lips",
       "Very high potassium symptoms"
     ],
-    "pregnancyNote": "Usually avoided in pregnancy — critical to tell doctor if pregnant.",
+    "pregnancyNote": "Usually avoided in pregnancy - critical to tell doctor if pregnant.",
     "notes": "Pregnancy warning is important."
   },
   {
@@ -1615,8 +1615,8 @@
       "Breathing issues",
       "Severe blood count problems"
     ],
-    "pregnancyNote": "Contraindicated in pregnancy — specialist only.",
-    "notes": "Weekly dosing confusion is dangerous — clinician only."
+    "pregnancyNote": "Contraindicated in pregnancy - specialist only.",
+    "notes": "Weekly dosing confusion is dangerous - clinician only."
   },
   {
     "id": "metoclopramide",
@@ -1647,7 +1647,7 @@
       "Severe allergy"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Short courses preferred in many guidelines — follow clinician."
+    "notes": "Short courses preferred in many guidelines - follow clinician."
   },
   {
     "id": "metronidazole",
@@ -1664,7 +1664,7 @@
       "Protozoal infections as prescribed"
     ],
     "foodFlags": [
-      "Avoid alcohol during and for 48h after — can cause severe reaction"
+      "Avoid alcohol during and for 48h after - can cause severe reaction"
     ],
     "interactionTags": [
       "alcohol",
@@ -1680,7 +1680,7 @@
       "Numbness",
       "Seizure-like symptoms"
     ],
-    "pregnancyNote": "Ask doctor — trimester matters.",
+    "pregnancyNote": "Ask doctor - trimester matters.",
     "notes": "Alcohol warning is critical."
   },
   {
@@ -1732,7 +1732,7 @@
       "Stomach upset"
     ],
     "seriousSideEffects": [
-      "Mood/behavior changes — seek advice",
+      "Mood/behavior changes - seek advice",
       "Severe allergy"
     ],
     "pregnancyNote": "Ask doctor.",
@@ -1796,7 +1796,7 @@
       "Severe allergy",
       "Numbness"
     ],
-    "pregnancyNote": "Timing in pregnancy matters — ask doctor.",
+    "pregnancyNote": "Timing in pregnancy matters - ask doctor.",
     "notes": ""
   },
   {
@@ -1880,7 +1880,7 @@
       "None usual if mixed correctly"
     ],
     "seriousSideEffects": [
-      "Worsening dehydration — seek care"
+      "Worsening dehydration - seek care"
     ],
     "pregnancyNote": "Generally supportive; seek care if severe.",
     "notes": "Not a substitute for emergency care in severe dehydration."
@@ -1914,7 +1914,7 @@
     "seriousSideEffects": [
       "Severe allergy",
       "Persistent diarrhea",
-      "Bone fracture risk with long use — ask doctor"
+      "Bone fracture risk with long use - ask doctor"
     ],
     "pregnancyNote": "Ask doctor.",
     "notes": "Common in BD for PUD / GERD regimens."
@@ -2015,7 +2015,7 @@
       "Mood changes"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Sedation risk — caution with driving."
+    "notes": "Sedation risk - caution with driving."
   },
   {
     "id": "rabeprazole",
@@ -2074,7 +2074,7 @@
       "Face/lip swelling",
       "High potassium symptoms"
     ],
-    "pregnancyNote": "Usually avoided in pregnancy — tell doctor if pregnant.",
+    "pregnancyNote": "Usually avoided in pregnancy - tell doctor if pregnant.",
     "notes": "Pregnancy warning is critical."
   },
   {
@@ -2095,7 +2095,7 @@
       "Headache"
     ],
     "seriousSideEffects": [
-      "Ask pharmacist — regulatory status may vary"
+      "Ask pharmacist - regulatory status may vary"
     ],
     "pregnancyNote": "Ask doctor.",
     "notes": "Confirm current local availability with pharmacist."
@@ -2176,7 +2176,7 @@
       "Chest pain",
       "Severe breathing worsening"
     ],
-    "pregnancyNote": "Ask doctor — often continued when needed.",
+    "pregnancyNote": "Ask doctor - often continued when needed.",
     "notes": "Know your rescue vs preventer inhalers."
   },
   {
@@ -2202,7 +2202,7 @@
       "Worsening breathing",
       "Severe allergy"
     ],
-    "pregnancyNote": "Ask doctor — often continued when needed.",
+    "pregnancyNote": "Ask doctor - often continued when needed.",
     "notes": "Not a substitute for rescue inhaler unless labeled."
   },
   {
@@ -2292,7 +2292,7 @@
       "Severe allergy"
     ],
     "pregnancyNote": "Specialist advice.",
-    "notes": "Educational only — follow diabetes clinic plan."
+    "notes": "Educational only - follow diabetes clinic plan."
   },
   {
     "id": "alginate_antacid",
@@ -2309,7 +2309,7 @@
       "Reflux symptom relief"
     ],
     "foodFlags": [
-      "Often after meals and at bedtime — follow label"
+      "Often after meals and at bedtime - follow label"
     ],
     "interactionTags": [
       "separate_from_some_antibiotics"
@@ -2414,7 +2414,7 @@
       "Confusion in older adults"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Common BD brand Algin is tiemonium — not the same as alginate antacids."
+    "notes": "Common BD brand Algin is tiemonium - not the same as alginate antacids."
   },
   {
     "id": "tramadol",
@@ -2448,7 +2448,7 @@
       "Serotonin syndrome signs"
     ],
     "pregnancyNote": "Ask doctor.",
-    "notes": "Dependence and interaction risks — clinician only."
+    "notes": "Dependence and interaction risks - clinician only."
   },
   {
     "id": "warfarin",
@@ -2478,8 +2478,8 @@
       "Severe headache",
       "Black stools"
     ],
-    "pregnancyNote": "Usually avoided — critical specialist care.",
-    "notes": "INR monitoring required — educational app cannot manage warfarin."
+    "pregnancyNote": "Usually avoided - critical specialist care.",
+    "notes": "INR monitoring required - educational app cannot manage warfarin."
   },
   {
     "id": "ors_zinc",
@@ -2503,6 +2503,6 @@
       "Seek care if dehydration worsens"
     ],
     "pregnancyNote": "Ask doctor for dose.",
-    "notes": "Supportive — not a substitute for emergency care."
+    "notes": "Supportive - not a substitute for emergency care."
   }
 ]

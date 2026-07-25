@@ -59,7 +59,7 @@ def prepare_image_part(image_base64: str) -> dict[str, Any]:
         raise ValueError("Invalid image base64") from exc
 
     if not data:
-        raise ValueError("Empty image — try a clearer photo of the prescription")
+        raise ValueError("Empty image  -  try a clearer photo of the prescription")
     if len(data) > MAX_IMAGE_BYTES:
         mb = MAX_IMAGE_BYTES // (1024 * 1024)
         raise ValueError(f"Image too large (max {mb}MB). Compress or retake the photo.")

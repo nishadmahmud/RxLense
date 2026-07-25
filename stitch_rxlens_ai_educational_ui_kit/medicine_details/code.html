@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>RxLens AI - Medicine Detail Sheet</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#000309",
+                        "secondary": "#436086",
+                        "primary": "#010204",
+                        "surface-variant": "#e0e3e6",
+                        "primary-container": "#1a1d21",
+                        "surface": "#f7f9fc",
+                        "outline": "#75777b",
+                        "on-surface-variant": "#45474a",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eceef1",
+                        "primary-fixed-dim": "#c5c6cc",
+                        "on-primary-fixed": "#191c20",
+                        "tertiary-container": "#151e27",
+                        "secondary-container": "#b3d1fd",
+                        "tertiary-fixed": "#dae3f0",
+                        "on-secondary-fixed-variant": "#2a486d",
+                        "surface-container-low": "#f2f4f7",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "surface-tint": "#5c5e63",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c5c6ca",
+                        "on-tertiary-fixed": "#141c26",
+                        "on-primary-fixed-variant": "#44474b",
+                        "secondary-fixed": "#d3e3ff",
+                        "on-secondary-fixed": "#001c39",
+                        "background": "#f7f9fc",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-dim": "#d8dadd",
+                        "on-primary-container": "#82858a",
+                        "inverse-on-surface": "#eff1f4",
+                        "primary-fixed": "#e1e2e8",
+                        "on-tertiary-fixed-variant": "#3f4852",
+                        "surface-bright": "#f7f9fc",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#bec7d4",
+                        "on-surface": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#abc8f4",
+                        "on-secondary-container": "#3c597f",
+                        "on-tertiary-container": "#7d8692",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#c5c6cc",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "12px",
+                        "margin-main": "20px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "safe-bottom": "34px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Epilogue"],
+                        "display-md": ["Epilogue"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Epilogue"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Epilogue"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-md": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["17px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["30px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "body-md": ["15px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["34px", { "lineHeight": "41px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Modal animation styles */
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface antialiased overflow-hidden">
+<!-- Dimmed Background Overlay -->
+<div class="fixed inset-0 bg-primary/40 backdrop-blur-sm z-40 animate-fade-in" id="modalOverlay"></div>
+<!-- Background Content (Simulated for context) -->
+<div class="p-margin-main pt-stack-lg filter blur-sm h-screen">
+<div class="h-64 bg-surface-container rounded-xl w-full mb-stack-md"></div>
+<div class="h-32 bg-surface-container rounded-xl w-full mb-stack-md"></div>
+<div class="h-32 bg-surface-container rounded-xl w-full mb-stack-md"></div>
+</div>
+<!-- Bottom Sheet Modal -->
+<div class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest rounded-t-[32px] z-50 h-[751px] flex flex-col shadow-[0_-8px_30px_rgba(0,0,0,0.12)] animate-slide-up" id="bottomSheet">
+<!-- Drag Handle Indicator -->
+<div class="w-full flex justify-center pt-4 pb-2 cursor-grab active:cursor-grabbing" id="dragHandle">
+<div class="w-12 h-1.5 bg-outline-variant/50 rounded-full"></div>
+</div>
+<!-- Sticky Header Area -->
+<div class="px-margin-main pb-stack-md border-b border-surface-container-high shrink-0 flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h2 class="font-display-md text-display-md text-primary">Fusid 40</h2>
+<span class="px-2 py-1 bg-surface-container rounded-md font-label-caps text-label-caps text-on-surface-variant">40mg</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Generic: Furosemide</p>
+</div>
+<button aria-label="Close modal" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="close">close</span>
+</button>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-margin-main py-stack-md space-y-stack-lg custom-scrollbar pb-safe-bottom">
+<!-- Dose Timing Card -->
+<section class="bg-[#F0F2F5] rounded-xl p-4 border border-[#E8EBEE]">
+<div class="flex items-center justify-between mb-3">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase">Prescribed Timing</h3>
+<span class="font-body-md text-body-md font-semibold text-primary">1 + 0 + 0</span>
+</div>
+<div class="flex items-center justify-around">
+<!-- Morning (Active) -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center border-2 border-secondary shadow-sm">
+<span class="material-symbols-outlined filled text-secondary" data-icon="light_mode">light_mode</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary">Morning</span>
+</div>
+<!-- Noon (Inactive) -->
+<div class="flex flex-col items-center gap-2 opacity-50">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-outline" data-icon="partly_cloudy_day">partly_cloudy_day</span>
+</div>
+<span class="font-label-caps text-label-caps text-outline">Noon</span>
+</div>
+<!-- Night (Inactive) -->
+<div class="flex flex-col items-center gap-2 opacity-50">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-outline" data-icon="dark_mode">dark_mode</span>
+</div>
+<span class="font-label-caps text-label-caps text-outline">Night</span>
+</div>
+</div>
+</section>
+<!-- Drug Class -->
+<section>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="category">category</span>
+                    Drug Class
+                </h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant pl-8">Loop diuretic</p>
+</section>
+<!-- Why it is used -->
+<section>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="healing">healing</span>
+                    Why it is used
+                </h3>
+<ul class="space-y-2 pl-8 font-body-lg text-body-lg text-on-surface-variant list-disc">
+<li>Treats fluid retention (edema) in people with congestive heart failure.</li>
+<li>Treats edema caused by liver disease.</li>
+<li>Treats edema caused by a kidney disorder such as nephrotic syndrome.</li>
+<li>Used alone or with other medications to treat high blood pressure (hypertension).</li>
+</ul>
+</section>
+<!-- Side Effects -->
+<section>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+                    Side Effects
+                </h3>
+<ul class="space-y-2 pl-8 font-body-lg text-body-lg text-on-surface-variant list-disc">
+<li>Increased urination (expected effect)</li>
+<li>Thirst, dry mouth</li>
+<li>Muscle cramps or weakness</li>
+<li>Dizziness, especially when standing up</li>
+<li>Electrolyte imbalances (low potassium)</li>
+</ul>
+</section>
+<!-- Cautions -->
+<section>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[#A65B00]" data-icon="info">info</span>
+                    Cautions
+                </h3>
+<ul class="space-y-2 pl-8 font-body-lg text-body-lg text-on-surface-variant list-disc">
+<li>Do not take if you are unable to urinate.</li>
+<li>May increase blood sugar levels. Monitor if diabetic.</li>
+<li>Use caution if taking lithium or digoxin.</li>
+<li>Avoid excessive sun exposure.</li>
+</ul>
+</section>
+<!-- Spacer to ensure bottom content doesn't hit safe area abruptly -->
+<div class="h-stack-lg"></div>
+</div>
+<!-- Sticky Footer (Pricing/Actions) -->
+<div class="px-margin-main py-stack-md border-t border-surface-container-high bg-surface-container-lowest shrink-0 flex items-center justify-between pb-safe-bottom">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">MedEx Price (BD)</span>
+<span class="font-headline-sm text-headline-sm text-primary">৳ 2.50 <span class="font-body-md text-body-md font-normal text-on-surface-variant">/ tablet</span></span>
+</div>
+<button class="bg-primary-container text-on-primary px-6 py-3 rounded-full font-body-lg text-body-lg font-semibold hover:opacity-90 transition-opacity">
+                Add to Cart
+            </button>
+</div>
+</div>
+<script>
+        // Simple drag to close logic (simulation)
+        const bottomSheet = document.getElementById('bottomSheet');
+        const dragHandle = document.getElementById('dragHandle');
+        const overlay = document.getElementById('modalOverlay');
+        const closeBtn = document.querySelector('button[aria-label="Close modal"]');
+
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        const closeBottomSheet = () => {
+            bottomSheet.style.transform = `translateY(100%)`;
+            bottomSheet.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 0.3s ease-out';
+            
+            setTimeout(() => {
+                // In a real app, you might remove the elements or go back
+                // For this demo, we'll just reset them after a delay if needed, 
+                // but usually, this signifies closing the view.
+            }, 300);
+        };
+
+        closeBtn.addEventListener('click', closeBottomSheet);
+        overlay.addEventListener('click', closeBottomSheet);
+
+        dragHandle.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            bottomSheet.style.transition = 'none';
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentY = e.touches[0].clientY - startY;
+            
+            // Only allow dragging down
+            if (currentY > 0) {
+                bottomSheet.style.transform = `translateY(${currentY}px)`;
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            // If dragged down more than 100px, close it. Otherwise snap back.
+            if (currentY > 100) {
+                closeBottomSheet();
+            } else {
+                bottomSheet.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                bottomSheet.style.transform = 'translateY(0)';
+            }
+            currentY = 0;
+        });
+    </script>
+</body></html>

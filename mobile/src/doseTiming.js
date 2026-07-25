@@ -1,5 +1,5 @@
 /**
- * Parse BD-style dose lines: "1+0+1", "1 0 0", "1-0-0", Bangla digits, meal words.
+ * Parse BD-style dose lines: "1+0+1", "1 0 0", "1-0-0", "1/0/1", Bangla digits, meal words.
  * Returns morning / noon / night booleans. Unparseable → all false.
  */
 
@@ -17,13 +17,20 @@ const BN_DIGITS = {
 };
 
 function toAsciiDigits(s) {
-  return String(s).replace(/[০-৯]/g, (ch) => BN_DIGITS[ch] ?? ch);
+  return String(s)
+    .replace(/[০-৯]/g, (ch) => BN_DIGITS[ch] ?? ch)
+    // fullwidth / fancy separators → ASCII
+    .replace(/[＋﹢]/g, '+')
+    .replace(/[－−–—‒]/g, '-')
+    .replace(/[／⁄]/g, '/')
+    .replace(/[・·•]/g, '.')
+    .replace(/[ｘＸ]/g, 'x');
 }
 
 const EMPTY = { morning: false, noon: false, night: false };
 
-/** Match N[+| |−|-|–]N[+| |−|-|–]N anywhere in the line. */
-const TRIPLE_RE = /(\d+)\s*[+\-–−]\s*(\d+)\s*[+\-–−]\s*(\d+)/;
+/** Match N[+| |−|-|/|.|x]N[+| |−|-|/|.|x]N anywhere in the line. */
+const TRIPLE_RE = /(\d+)\s*[+\-–−／\/.xX]\s*(\d+)\s*[+\-–−／\/.xX]\s*(\d+)/;
 const SPACE_TRIPLE_RE = /(\d+)\s+(\d+)\s+(\d+)(?!\s*\d)/;
 
 export function parseDoseTiming(doseLine) {
@@ -79,6 +86,26 @@ export function slotsToTimeOfDay(timing) {
   if (timing?.noon) out.push('Afternoon');
   if (timing?.night) out.push('Night');
   return out;
+}
+
+/** From labels like "Morning", "Afternoon · Night", or schedule timeOfDay. */
+export function slotsFromTimingLabel(label) {
+  const t = String(label || '').toLowerCase();
+  if (!t.trim()) return { ...EMPTY };
+  return {
+    morning: /morning/.test(t),
+    noon: /afternoon|noon/.test(t),
+    night: /night/.test(t),
+  };
+}
+
+/** Prefer dose-line triple; else timing / timeOfDay label. */
+export function resolveDoseSlots({ doseLine, timing, timeOfDay } = {}) {
+  const fromDose = parseDoseTiming(doseLine);
+  if (hasAnyTiming(fromDose)) return fromDose;
+  const fromLabel = slotsFromTimingLabel(timing || timeOfDay);
+  if (hasAnyTiming(fromLabel)) return fromLabel;
+  return { ...EMPTY };
 }
 
 /**

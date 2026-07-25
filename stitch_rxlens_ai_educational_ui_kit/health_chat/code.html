@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Chat - RxLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#000309",
+                        "secondary": "#436086",
+                        "primary": "#010204",
+                        "surface-variant": "#e0e3e6",
+                        "primary-container": "#1a1d21",
+                        "surface": "#f7f9fc",
+                        "outline": "#75777b",
+                        "on-surface-variant": "#45474a",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eceef1",
+                        "primary-fixed-dim": "#c5c6cc",
+                        "on-primary-fixed": "#191c20",
+                        "tertiary-container": "#151e27",
+                        "secondary-container": "#b3d1fd",
+                        "tertiary-fixed": "#dae3f0",
+                        "on-secondary-fixed-variant": "#2a486d",
+                        "surface-container-low": "#f2f4f7",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "surface-tint": "#5c5e63",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c5c6ca",
+                        "on-tertiary-fixed": "#141c26",
+                        "on-primary-fixed-variant": "#44474b",
+                        "secondary-fixed": "#d3e3ff",
+                        "on-secondary-fixed": "#001c39",
+                        "background": "#f7f9fc",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-dim": "#d8dadd",
+                        "on-primary-container": "#82858a",
+                        "inverse-on-surface": "#eff1f4",
+                        "primary-fixed": "#e1e2e8",
+                        "on-tertiary-fixed-variant": "#3f4852",
+                        "surface-bright": "#f7f9fc",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#bec7d4",
+                        "on-surface": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#abc8f4",
+                        "on-secondary-container": "#3c597f",
+                        "on-tertiary-container": "#7d8692",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#c5c6cc",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "12px",
+                        "margin-main": "20px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "safe-bottom": "34px",
+                        "safe-top": "44px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Epilogue"],
+                        "display-md": ["Epilogue"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Epilogue"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Epilogue"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-md": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["17px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["30px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "body-md": ["15px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["34px", { "lineHeight": "41px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased h-screen flex flex-col font-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-main pt-stack-md pb-stack-sm bg-surface-container-lowest dark:bg-tertiary">
+<div class="flex items-center gap-2 text-primary dark:text-primary-fixed">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container dark:hover:bg-tertiary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-display-md text-display-md">RxLens AI</h1>
+</div>
+<div>
+<button class="font-label-caps text-label-caps text-secondary dark:text-secondary-fixed hover:bg-surface-container dark:hover:bg-tertiary-container transition-colors px-3 py-1.5 rounded-full">EN | বাংলা</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto pt-[80px] pb-[160px] px-margin-main">
+<!-- In-content title -->
+<div class="py-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-primary">Chat</h2>
+</div>
+<!-- Suggestion Chips -->
+<div class="flex overflow-x-auto gap-3 pb-stack-md no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant/50 bg-surface-container-lowest text-on-surface-variant text-sm font-body-md hover:bg-surface-container transition-colors shadow-sm">Explain my last scan</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant/50 bg-surface-container-lowest text-on-surface-variant text-sm font-body-md hover:bg-surface-container transition-colors shadow-sm">About my saved meds</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant/50 bg-surface-container-lowest text-on-surface-variant text-sm font-body-md hover:bg-surface-container transition-colors shadow-sm">Price check</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant/50 bg-surface-container-lowest text-on-surface-variant text-sm font-body-md hover:bg-surface-container transition-colors shadow-sm">I missed a dose</button>
+</div>
+<!-- Chat Thread -->
+<div class="flex flex-col gap-stack-md pb-stack-lg">
+<!-- Date separator -->
+<div class="flex justify-center my-2">
+<span class="font-label-caps text-label-caps text-outline bg-surface-container-low px-3 py-1 rounded-full">TODAY</span>
+</div>
+<!-- User Message -->
+<div class="flex justify-end w-full">
+<div class="max-w-[85%] bg-secondary-container text-on-secondary-container p-4 rounded-xl rounded-tr-sm">
+<p class="font-body-md text-body-md">I missed my noon dose of Emistat.</p>
+</div>
+</div>
+<!-- Assistant Message -->
+<div class="flex justify-start w-full">
+<div class="flex gap-3 max-w-[90%]">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="robot_2">robot_2</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/20 shadow-sm p-4 rounded-xl rounded-tl-sm text-on-surface">
+<p class="font-body-md text-body-md leading-relaxed">I can help with that. Since Emistat is for nausea, it's generally best to take it as soon as you remember, unless it's almost time for your next dose...</p>
+<!-- Clinical Insight Card embedded in chat -->
+<div class="mt-3 bg-surface-container-low p-3 rounded-lg border border-outline-variant/30 flex gap-3 items-start">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="info">info</span>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface mb-1">Clinical Note</h4>
+<p class="text-sm text-on-surface-variant">Do not double up doses to make up for a missed one.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Typing Indicator (Simulated) -->
+<div class="flex justify-start w-full opacity-50">
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center flex-shrink-0 mt-1"></div>
+<div class="bg-surface-container-lowest border border-outline-variant/20 shadow-sm px-4 py-3 rounded-xl rounded-tl-sm flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-outline animate-pulse"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline animate-pulse delay-75"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline animate-pulse delay-150"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Composer -->
+<div class="fixed bottom-[80px] left-0 w-full bg-background/95 backdrop-blur-md pb-stack-md pt-stack-sm px-margin-main z-40 border-t border-outline-variant/10">
+<!-- Attachment Menu (Hidden by default, shown via JS logic in a real app) -->
+<div class="hidden absolute bottom-[70px] left-margin-main bg-surface-container-lowest border border-outline-variant/20 shadow-lg rounded-xl p-2 flex flex-col gap-1 w-48" id="attachmentMenu">
+<button class="flex items-center gap-3 px-3 py-2 hover:bg-surface-container-low rounded-lg transition-colors text-on-surface w-full text-left">
+<span class="material-symbols-outlined text-primary" data-icon="photo_camera">photo_camera</span>
+<span class="font-body-md text-body-md">Camera</span>
+</button>
+<button class="flex items-center gap-3 px-3 py-2 hover:bg-surface-container-low rounded-lg transition-colors text-on-surface w-full text-left">
+<span class="material-symbols-outlined text-primary" data-icon="image">image</span>
+<span class="font-body-md text-body-md">Gallery</span>
+</button>
+</div>
+<div class="flex items-end gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-[24px] p-2 shadow-sm focus-within:border-secondary transition-colors">
+<button class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors" id="addBtn" onclick="document.getElementById('attachmentMenu').classList.toggle('hidden')">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 resize-none max-h-[120px] min-h-[40px] py-2.5 px-2 font-body-md text-body-md text-on-surface placeholder:text-outline" placeholder="Ask about medicines..." rows="1"></textarea>
+<button class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-main pb-safe-bottom pt-stack-sm bg-surface-container-lowest/80 dark:bg-tertiary/80 backdrop-blur-xl border-t border-outline-variant/10 dark:border-outline/20">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined mb-1" data-icon="document_scanner">document_scanner</span>
+<span class="font-label-caps text-label-caps">Scans</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined mb-1" data-icon="pill">pill</span>
+<span class="font-label-caps text-label-caps">Medicines</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble" data-weight="fill" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-label-caps text-label-caps">Chat</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</button>
+</nav>
+</body></html>
