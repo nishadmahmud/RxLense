@@ -14,7 +14,8 @@ KB_PATH = Path(_KB_ENV) if _KB_ENV else (_ENRICHED if _ENRICHED.exists() else _C
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMMA_VISION_MODEL = os.getenv("GEMMA_VISION_MODEL", "gemma-4-31b-it")
-GEMMA_TEXT_MODEL = os.getenv("GEMMA_TEXT_MODEL", "gemma-4-31b-it")
+# 26B MoE is faster for brief/chat; keep 31B dense for vision extract
+GEMMA_TEXT_MODEL = os.getenv("GEMMA_TEXT_MODEL", "gemma-4-26b-a4b-it")
 MOCK_AI = os.getenv("MOCK_AI", "true").lower() == "true"
 PORT = int(os.getenv("PORT", "4000"))
 # Public demo abuse shield (empty DEMO_TOKEN = no token required)

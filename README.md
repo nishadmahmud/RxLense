@@ -8,7 +8,7 @@ Educational companion only — not a doctor or pharmacist. Powered by **Gemma 4 
 |-------|------|
 | Mobile | Expo 54 · React Native · JavaScript (`mobile/`) |
 | API | FastAPI · Python · Pydantic · Uvicorn (`api/`) |
-| AI | `gemma-4-31b-it` via Google AI Studio / Generative Language API |
+| AI | Gemma 4 via Google AI Studio — vision `gemma-4-31b-it`, text `gemma-4-26b-a4b-it` |
 | Data | Bangladesh medicine KB (JSON) · MedEx indicative prices |
 | Hosting | DigitalOcean API · EAS (Android APK + iOS Expo Go) |
 
@@ -60,7 +60,7 @@ More detail: [ARCHITECTURE.md](./ARCHITECTURE.md) · [RXLENS.md](./RXLENS.md)
 | Step | Model env | Endpoint / code |
 |------|-----------|-----------------|
 | Rx / pack image → medicines JSON | `GEMMA_VISION_MODEL` = `gemma-4-31b-it` | `POST /api/analyze` · [`api/app/gemma.py`](api/app/gemma.py) |
-| Confirmed meds + KB → briefing JSON | `GEMMA_TEXT_MODEL` = `gemma-4-31b-it` | `POST /api/brief` |
+| Confirmed meds + KB → briefing JSON | `GEMMA_TEXT_MODEL` = `gemma-4-26b-a4b-it` | `POST /api/brief` |
 | Health chat (± photo) | same | `POST /api/chat` |
 | Missed-dose coaching | same | `POST /api/coach/missed-dose` |
 | Prompts & safety | — | [`api/app/prompts.py`](api/app/prompts.py) |
@@ -117,8 +117,8 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 4000
 |-----|---------|
 | `GEMINI_API_KEY` | Google AI Studio key (required when not mocking) |
 | `MOCK_AI` | `true` = offline demo; `false` = real Gemma 4 |
-| `GEMMA_VISION_MODEL` | default `gemma-4-31b-it` |
-| `GEMMA_TEXT_MODEL` | default `gemma-4-31b-it` |
+| `GEMMA_VISION_MODEL` | default `gemma-4-31b-it` (Rx photo extract) |
+| `GEMMA_TEXT_MODEL` | default `gemma-4-26b-a4b-it` (brief / chat — faster MoE) |
 | `DEMO_TOKEN` | optional shared demo token |
 | `RATE_LIMIT_PER_MINUTE` | abuse shield |
 | `KB_PATH` | optional path to enriched KB JSON |

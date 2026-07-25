@@ -28,7 +28,7 @@ Hackathon rules require Gemma 4 as the only generative model. We use it as the *
 | Capability | Model id | API |
 |------------|----------|-----|
 | Image → medicine JSON | `gemma-4-31b-it` (`GEMMA_VISION_MODEL`) | `POST /api/analyze` |
-| Confirmed meds + KB → briefing JSON | `gemma-4-31b-it` (`GEMMA_TEXT_MODEL`) | `POST /api/brief` |
+| Confirmed meds + KB → briefing JSON | `gemma-4-26b-a4b-it` (`GEMMA_TEXT_MODEL`) | `POST /api/brief` |
 | Health chat (± image) | same | `POST /api/chat` |
 | Missed-dose coaching | same | `POST /api/coach/missed-dose` |
 

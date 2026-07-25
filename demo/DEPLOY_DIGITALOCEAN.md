@@ -11,7 +11,7 @@ docker run -d --name rxlens-api -p 4000:4000 \
   -e GEMINI_API_KEY=YOUR_KEY \
   -e MOCK_AI=false \
   -e GEMMA_VISION_MODEL=gemma-4-31b-it \
-  -e GEMMA_TEXT_MODEL=gemma-4-31b-it \
+  -e GEMMA_TEXT_MODEL=gemma-4-26b-a4b-it \
   -e DEMO_TOKEN=optional-shared-token \
   -e RATE_LIMIT_PER_MINUTE=30 \
   rxlens-api
@@ -28,7 +28,7 @@ Put Nginx/Caddy in front for HTTPS.
    - `GEMINI_API_KEY`
    - `MOCK_AI=false`
    - `GEMMA_VISION_MODEL=gemma-4-31b-it`
-   - `GEMMA_TEXT_MODEL=gemma-4-31b-it`
+   - `GEMMA_TEXT_MODEL=gemma-4-26b-a4b-it`
    - `DEMO_TOKEN` (optional shared header — not a login wall)
    - `RATE_LIMIT_PER_MINUTE=30`
    - `KB_PATH=/data/medicines/bd_medicines_enriched.json`
