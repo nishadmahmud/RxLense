@@ -183,6 +183,10 @@ export const STR = {
     back: 'Back',
     regenerating: 'Updating language...',
     replayOnboarding: 'Replay onboarding',
+    chatErrorGeneric: 'Something went wrong. Please try again.',
+    chatCopied: 'Copied',
+    copy: 'Copy',
+    prefetchRetrying: 'AI busy - retrying background briefing…',
   },
   bn: {
     brand: 'RxLens AI',
@@ -368,6 +372,10 @@ export const STR = {
     back: 'পিছনে',
     regenerating: 'ভাষা আপডেট হচ্ছে...',
     replayOnboarding: 'অনবোর্ডিং আবার দেখুন',
+    chatErrorGeneric: 'কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।',
+    chatCopied: 'কপি হয়েছে',
+    copy: 'কপি',
+    prefetchRetrying: 'এআই ব্যস্ত - পটভূমি ব্রিফিং আবার চেষ্টা…',
   },
 };
 

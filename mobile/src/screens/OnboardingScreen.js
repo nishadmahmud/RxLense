@@ -209,6 +209,9 @@ export default function OnboardingScreen() {
               onPress={() => setStep(0)}
               style={{ marginTop: 10 }}
             />
+            <Pressable style={styles.skipLink} onPress={() => setStep(2)}>
+              <Text style={styles.skipLinkText}>{t(language, 'skip')}</Text>
+            </Pressable>
           </View>
         )}
 

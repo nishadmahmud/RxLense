@@ -15,13 +15,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Markdown from 'react-native-markdown-display';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import { chatWithGemma, missedDoseCoach } from '../api';
+import { chatWithGemma, missedDoseCoach, friendlyApiMessage } from '../api';
 import { useAppState } from '../AppState';
 import { ageBandFromYears } from '../conditions';
 import { t } from '../i18n';
 import { colors, fonts, radii, spacing } from '../theme';
 import { stripEmDashes } from '../stripEmDashes';
 import { AppChromeHeader } from '../components/AppChromeHeader';
+import * as Clipboard from 'expo-clipboard';
 
 const STATUS_KEYS = [
   'chatStatusLooking',
@@ -111,7 +112,9 @@ function ClinicalNoteCard({ text }) {
       <Ionicons name="information-circle-outline" size={20} color={colors.accent} />
       <View style={styles.clinicalNoteBody}>
         <Text style={styles.clinicalNoteLabel}>Clinical Note</Text>
-        <Text style={styles.clinicalNoteText}>{text}</Text>
+        <Text style={styles.clinicalNoteText} selectable>
+          {text}
+        </Text>
       </View>
     </View>
   );
@@ -177,6 +180,19 @@ export default function ChatScreen() {
   const [attachError, setAttachError] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
+  const [copyToast, setCopyToast] = useState('');
+
+  async function copyText(text) {
+    const value = stripEmDashes(text || '').trim();
+    if (!value) return;
+    try {
+      await Clipboard.setStringAsync(value);
+      setCopyToast(t(language, 'chatCopied'));
+      setTimeout(() => setCopyToast(''), 1600);
+    } catch {
+      /* selectable still works as fallback */
+    }
+  }
 
   const hasUserMessage = messages.some((m) => m.role === 'user' && !m.local);
 
@@ -335,12 +351,13 @@ export default function ChatScreen() {
     setPendingImage({ uri: asset.uri, base64: asset.base64 });
   }
 
-  async function send(text) {
+  async function send(text, opts = {}) {
     const typed = (text || input).trim();
     const content = typed || (pendingImage ? t(language, 'chatImageOnly') : '');
-    if ((!content && !pendingImage) || loading) return;
-    const imageBase64 = pendingImage?.base64;
-    const imageUri = pendingImage?.uri;
+    const imageBase64 = opts.imageBase64 ?? pendingImage?.base64;
+    const imageUri = opts.imageUri ?? pendingImage?.uri;
+    if ((!content && !imageBase64) || loading) return;
+
     setPricePicker(false);
     setMissedStep(null);
     setMissedMed(null);
@@ -348,17 +365,23 @@ export default function ChatScreen() {
     setPendingImage(null);
     setAttachError('');
     setShowSuggestions(false);
-    const userMsg = {
-      role: 'user',
-      content,
-      imageUri: imageUri || undefined,
-    };
-    const nextUi = [...messages, userMsg];
+
+    let nextUi;
+    if (opts.replaceErrorIndex != null) {
+      nextUi = messages.filter((_, i) => i !== opts.replaceErrorIndex);
+    } else {
+      const userMsg = {
+        role: 'user',
+        content: content || t(language, 'chatImageOnly'),
+        imageUri: imageUri || undefined,
+      };
+      nextUi = [...messages, userMsg];
+      setInput('');
+    }
     setMessages(nextUi);
-    setInput('');
     setLoading(true);
     const forApi = nextUi
-      .filter((m) => !m.local)
+      .filter((m) => !m.local && !m.error)
       .map(({ role, content: c }) => ({ role, content: c }));
     try {
       const data = await chatWithGemma({
@@ -370,7 +393,70 @@ export default function ChatScreen() {
       });
       setMessages([...nextUi, { role: 'assistant', content: data.reply || '...' }]);
     } catch (e) {
-      setMessages([...nextUi, { role: 'assistant', content: e.message }]);
+      setMessages([
+        ...nextUi,
+        {
+          role: 'assistant',
+          content: friendlyApiMessage(e, language),
+          local: true,
+          error: true,
+          retry: {
+            kind: 'chat',
+            imageBase64: imageBase64 || undefined,
+            imageUri: imageUri || undefined,
+          },
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function retryFailedMessage(index, msg) {
+    if (loading || !msg?.retry) return;
+    if (msg.retry.kind === 'missedDose') {
+      retryMissedDose(index, msg.retry);
+      return;
+    }
+    send('', {
+      replaceErrorIndex: index,
+      imageBase64: msg.retry.imageBase64,
+      imageUri: msg.retry.imageUri,
+    });
+  }
+
+  async function retryMissedDose(errorIndex, payload) {
+    if (!payload?.medicine || loading) return;
+    const nextUi = messages.filter((_, i) => i !== errorIndex);
+    setMessages(nextUi);
+    setLoading(true);
+    try {
+      const data = await missedDoseCoach({
+        medicine: payload.medicine,
+        whenMissed: payload.whenMissed,
+        patientContext: patientContextForApi(),
+        language,
+      });
+      const md = formatCoachMarkdown(data.coach, language);
+      const note =
+        data.coach?.disclaimer ||
+        (data.coach?.seekCareIf || [])[0] ||
+        null;
+      setMessages([
+        ...nextUi,
+        { role: 'assistant', content: md, clinicalNote: note || undefined },
+      ]);
+    } catch (e) {
+      setMessages([
+        ...nextUi,
+        {
+          role: 'assistant',
+          content: friendlyApiMessage(e, language),
+          local: true,
+          error: true,
+          retry: { kind: 'missedDose', ...payload },
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -418,13 +504,14 @@ export default function ChatScreen() {
     if (!missedMed || loading) return;
     const medLabel = missedMed.brandName || missedMed.rawName;
     const userLine = `${medLabel}  -  ${whenLabel}`;
+    const medSnapshot = missedMed;
     const nextUi = [...messages, { role: 'user', content: userLine }];
     setMessages(nextUi);
     setMissedStep(null);
     setLoading(true);
     try {
       const data = await missedDoseCoach({
-        medicine: missedMed,
+        medicine: medSnapshot,
         whenMissed: whenKey,
         patientContext: patientContextForApi(),
         language,
@@ -439,7 +526,20 @@ export default function ChatScreen() {
         { role: 'assistant', content: md, clinicalNote: note || undefined },
       ]);
     } catch (e) {
-      setMessages([...nextUi, { role: 'assistant', content: e.message }]);
+      setMessages([
+        ...nextUi,
+        {
+          role: 'assistant',
+          content: friendlyApiMessage(e, language),
+          local: true,
+          error: true,
+          retry: {
+            kind: 'missedDose',
+            medicine: medSnapshot,
+            whenMissed: whenKey,
+          },
+        },
+      ]);
     } finally {
       setMissedMed(null);
       setLoading(false);
@@ -532,26 +632,61 @@ export default function ChatScreen() {
           ) : null}
 
           {messages.map((m, i) => (
-            <View
+            <Pressable
               key={i}
-              style={[styles.bubble, m.role === 'user' ? styles.user : styles.bot]}
+              style={[
+                styles.bubble,
+                m.role === 'user' ? styles.user : styles.bot,
+                m.error && styles.errorBubble,
+              ]}
+              onLongPress={() => copyText(m.content)}
+              delayLongPress={350}
             >
               {m.role === 'user' ? (
                 <View>
                   {!!m.imageUri && (
                     <Image source={{ uri: m.imageUri }} style={styles.bubbleImage} />
                   )}
-                  <Text style={styles.userText}>{stripEmDashes(m.content)}</Text>
+                  <Text style={styles.userText} selectable>
+                    {stripEmDashes(m.content)}
+                  </Text>
                 </View>
               ) : (
                 <View>
-                  <Markdown style={mdStyles}>{stripEmDashes(m.content)}</Markdown>
+                  {m.error ? (
+                    <Text style={styles.errorText} selectable>
+                      {stripEmDashes(m.content)}
+                    </Text>
+                  ) : (
+                    <Markdown style={mdStyles}>{stripEmDashes(m.content)}</Markdown>
+                  )}
                   {!!m.clinicalNote && (
                     <ClinicalNoteCard text={stripEmDashes(m.clinicalNote)} />
                   )}
+                  <View style={styles.bubbleActions}>
+                    <Pressable
+                      onPress={() => copyText(m.content)}
+                      hitSlop={8}
+                      style={styles.bubbleActionBtn}
+                    >
+                      <Ionicons name="copy-outline" size={14} color={colors.accent} />
+                      <Text style={styles.bubbleActionText}>{t(language, 'copy')}</Text>
+                    </Pressable>
+                    {m.error && m.retry ? (
+                      <Pressable
+                        onPress={() => retryFailedMessage(i, m)}
+                        disabled={loading}
+                        hitSlop={8}
+                        style={[styles.bubbleActionBtn, styles.retryBtn]}
+                      >
+                        <Ionicons name="refresh" size={14} color={colors.onPrimary} />
+                        <Text style={styles.retryBtnText}>{t(language, 'retry')}</Text>
+                      </Pressable>
+                    ) : null}
+                  </View>
                 </View>
               )}
-            </View>
+            </Pressable>
           ))}
           {pricePicker && (
             <View style={styles.chipsWrap}>
@@ -670,6 +805,11 @@ export default function ChatScreen() {
           </View>
         </View>
       </KeyboardAvoidingView>
+      {!!copyToast && (
+        <View style={styles.copyToast} pointerEvents="none">
+          <Text style={styles.copyToastText}>{copyToast}</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -774,6 +914,59 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 1 },
     elevation: 1,
+  },
+  errorBubble: {
+    borderColor: colors.errorText,
+    backgroundColor: colors.errorBg,
+  },
+  errorText: {
+    color: colors.errorText,
+    fontSize: 15,
+    lineHeight: 22,
+    fontFamily: fonts.body,
+  },
+  bubbleActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 10,
+  },
+  bubbleActionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  bubbleActionText: {
+    color: colors.accent,
+    fontSize: 12,
+    fontFamily: fonts.bodyBold,
+  },
+  retryBtn: {
+    backgroundColor: colors.graphite,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: radii.pill,
+  },
+  retryBtnText: {
+    color: colors.onPrimary,
+    fontSize: 12,
+    fontFamily: fonts.bodyBold,
+  },
+  copyToast: {
+    position: 'absolute',
+    bottom: 88,
+    alignSelf: 'center',
+    backgroundColor: colors.graphite,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: radii.pill,
+    zIndex: 20,
+  },
+  copyToastText: {
+    color: colors.onPrimary,
+    fontSize: 12,
+    fontFamily: fonts.bodyBold,
   },
   clinicalNote: {
     marginTop: 10,

@@ -10,6 +10,7 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "studio.eurus.rxlens",
       "infoPlist": {
         "NSCameraUsageDescription": "RxLens needs the camera to photograph prescriptions.",
         "NSPhotoLibraryUsageDescription": "RxLens needs photo access to upload prescriptions.",
@@ -19,8 +20,12 @@
       }
     },
     "android": {
+      "package": "studio.eurus.rxlens",
+      "versionCode": 1,
       "usesCleartextTraffic": true,
       "permissions": [
+        "CAMERA",
+        "READ_MEDIA_IMAGES",
         "CAMERA",
         "READ_MEDIA_IMAGES"
       ]
@@ -28,6 +33,18 @@
     "plugins": [
       "expo-asset",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d6247684-a42e-44ba-a246-2b816da61dc9"
+      }
+    },
+    "owner": "nishad_mahmud",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d6247684-a42e-44ba-a246-2b816da61dc9"
+    }
   }
 }

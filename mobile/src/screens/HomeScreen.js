@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { analyzePrescription, generateBrief } from '../api';
+import { analyzePrescription, generateBrief, friendlyApiMessage, getRetryAfterMs } from '../api';
 import { useAppState } from '../AppState';
 import { t } from '../i18n';
 import { colors, fonts, radii, spacing } from '../theme';
@@ -166,14 +166,28 @@ export default function HomeScreen() {
     };
     setPrefetchStatus('loading');
 
-    const promise = generateBrief({
-      medicines,
-      patientContext,
-      language,
-      confirmUnmatched: prefetchConfirmFlag,
-      clinicalContext: clinical || undefined,
-    })
+    const runOnce = () =>
+      generateBrief({
+        medicines,
+        patientContext,
+        language,
+        confirmUnmatched: prefetchConfirmFlag,
+        clinicalContext: clinical || undefined,
+      });
+
+    const promise = runOnce()
+      .catch(async (err) => {
+        if (prefetchRef.current.gen !== gen) return null;
+        const waitMs = getRetryAfterMs(err) || (err?.isQuota || err?.status === 429 ? 45000 : 0);
+        if (!waitMs) throw err;
+        setPrefetchStatus('loading');
+        // Keep hint informative while waiting out quota
+        await new Promise((r) => setTimeout(r, Math.min(waitMs, 60000)));
+        if (prefetchRef.current.gen !== gen || prefetchRef.current.key !== key) return null;
+        return runOnce();
+      })
       .then((data) => {
+        if (!data) return null;
         if (prefetchRef.current.gen !== gen || prefetchRef.current.key !== key) return null;
         prefetchRef.current.result = data;
         prefetchRef.current.promise = null;
@@ -195,7 +209,8 @@ export default function HomeScreen() {
     if (step !== 'confirm' || medicines.length === 0 || briefBusyRef.current) {
       return undefined;
     }
-    const timer = setTimeout(() => startBriefPrefetch(), 600);
+    // Debounce so analyze Gemma quota can cool down before brief prefetch
+    const timer = setTimeout(() => startBriefPrefetch(), 2800);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, briefStableKey]);
@@ -265,7 +280,7 @@ export default function HomeScreen() {
       invalidatePrefetch();
       setStep('confirm');
     } catch (e) {
-      setError(e.message);
+      setError(friendlyApiMessage(e, language));
     } finally {
       setLoading(false);
       setLoadingPhase('');
@@ -332,7 +347,7 @@ export default function HomeScreen() {
       };
       setPrefetchStatus('idle');
     } catch (e) {
-      setError(e.message);
+      setError(friendlyApiMessage(e, language));
       setStep('confirm');
     } finally {
       briefBusyRef.current = false;
