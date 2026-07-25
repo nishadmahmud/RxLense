@@ -6,10 +6,11 @@ Use these in the Kaggle Writeup **Attachments → Project Links** (and embed scr
 
 | Label | URL |
 |-------|-----|
+| Demo video (YouTube walkthrough) | https://www.youtube.com/watch?v=bjXdwUWmSBg |
 | Public GitHub repository | https://github.com/nishadmahmud/RxLense |
 | Live API health | https://api.eurus.studio/api/health |
-| Android APK (EAS preview build) | https://expo.dev/accounts/nishad_mahmud/projects/rxlens-ai/builds/e71d9462-4333-4ef4-b71c-281b2c20fea5 |
-| iOS Expo Go update (click **Preview** for QR) | https://expo.dev/accounts/nishad_mahmud/projects/rxlens-ai/updates/3551ded6-d5c3-463f-bb72-8245ae6ac8ab |
+| Android APK (EAS preview build) | https://expo.dev/accounts/nishad_mahmud/projects/rxlens-ai/builds/35f66017-d48d-47e2-8f92-7f1de75b5dcb |
+| iOS Expo Go update (click **Preview** for QR) | https://expo.dev/accounts/nishad_mahmud/projects/rxlens-ai/updates/afafafed-dcf1-4374-9c70-73f17320fd3a |
 
 ## Optional helpers
 
