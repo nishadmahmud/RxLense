@@ -182,6 +182,7 @@ export const STR = {
     noMedsListed: 'No saved medicines yet',
     back: 'Back',
     regenerating: 'Updating language...',
+    replayOnboarding: 'Replay onboarding',
   },
   bn: {
     brand: 'RxLens AI',
@@ -366,6 +367,7 @@ export const STR = {
     noMedsListed: 'এখনও সেভ করা ওষুধ নেই',
     back: 'পিছনে',
     regenerating: 'ভাষা আপডেট হচ্ছে...',
+    replayOnboarding: 'অনবোর্ডিং আবার দেখুন',
   },
 };
 

@@ -34,6 +34,7 @@ export default function ProfileScreen() {
     scanSession,
     setScanSession,
     setActivePersonId,
+    resetOnboarding,
   } = useAppState();
   const me = profile.people.find((p) => p.id === 'me') || activePerson;
   const [editing, setEditing] = useState(false);
@@ -317,6 +318,12 @@ export default function ProfileScreen() {
             <Text style={styles.addPersonText}>{t(language, 'addPerson')}</Text>
           </Pressable>
         )}
+
+        <OutlinePillButton
+          label={t(language, 'replayOnboarding')}
+          onPress={() => resetOnboarding()}
+          style={styles.replayBtn}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -329,6 +336,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xs,
     paddingBottom: 40,
   },
+  replayBtn: { marginTop: spacing.lg, alignSelf: 'stretch' },
   h1: {
     fontSize: 22,
     lineHeight: 28,

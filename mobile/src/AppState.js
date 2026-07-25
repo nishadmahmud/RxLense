@@ -96,6 +96,7 @@ export function AppStateProvider({ children }) {
     removeRegimenItem: async (personId, index) =>
       persist(removeRegimenItemFromStore(profile, personId, index)),
     completeOnboarding: async () => persist({ ...profile, onboardingDone: true }),
+    resetOnboarding: async () => persist({ ...profile, onboardingDone: false }),
     chatHandoff,
     setChatHandoff,
     clearChatHandoff: () => setChatHandoff(null),

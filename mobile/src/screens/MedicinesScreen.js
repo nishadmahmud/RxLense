@@ -62,48 +62,51 @@ function groupByScan(regimen) {
 }
 
 function MedRow({ m, language, onOpen, onMissed, onRemove, showTimingSquares }) {
+  const doseHint =
+    m.doseLine ||
+    (m.strength ? `${t(language, 'strength')}: ${m.strength}` : '') ||
+    (m.timing ? `${t(language, 'timing')}: ${m.timing}` : '');
+
   return (
     <View style={styles.medRow}>
-      <Pressable style={{ flex: 1 }} onPress={() => onOpen(m)}>
-        <View style={styles.medTop}>
-          <View style={{ flex: 1, paddingRight: 8 }}>
-            <Text style={styles.medName}>{m.brandName}</Text>
-            {!!m.doseLine && <Text style={styles.medDose}>{m.doseLine}</Text>}
-            {!!m.strength && !m.doseLine && (
-              <Text style={styles.medDose}>
-                {t(language, 'strength')}: {m.strength}
-              </Text>
-            )}
-            {!!m.timing && !m.doseLine && (
-              <Text style={styles.medDose}>
-                {t(language, 'timing')}: {m.timing}
-              </Text>
-            )}
-            {m.timingSource === 'assumed' && (
-              <Text style={styles.assumed}>{t(language, 'timingAssumed')}</Text>
-            )}
-          </View>
-          {showTimingSquares ? (
-            <DoseTimingIcons
-              doseLine={m.doseLine}
-              language={language}
-              compact
-              size={14}
-              style={{ marginTop: 2 }}
-            />
-          ) : null}
-        </View>
-        <Pressable onPress={() => onMissed(m)} hitSlop={6} style={styles.missedLink}>
-          <Text style={styles.missedText}>{t(language, 'missedDoseShort')}</Text>
-        </Pressable>
+      <Pressable style={styles.medCopy} onPress={() => onOpen(m)}>
+        <Text style={styles.medName} numberOfLines={2} ellipsizeMode="tail">
+          {m.brandName}
+        </Text>
+        {!!doseHint && (
+          <Text style={styles.medDose} numberOfLines={2} ellipsizeMode="tail">
+            {doseHint}
+          </Text>
+        )}
+        {m.timingSource === 'assumed' && (
+          <Text style={styles.assumed} numberOfLines={2} ellipsizeMode="tail">
+            {t(language, 'timingAssumed')}
+          </Text>
+        )}
       </Pressable>
+      <View style={styles.medRight}>
+        {showTimingSquares ? (
+          <DoseTimingIcons
+            doseLine={m.doseLine}
+            timing={m.timing}
+            language={language}
+            compact
+            size={13}
+          />
+        ) : null}
+        <Pressable onPress={() => onMissed(m)} hitSlop={6} style={styles.missedLink}>
+          <Text style={styles.missedText} numberOfLines={1} ellipsizeMode="tail">
+            {t(language, 'missedDoseShort')}
+          </Text>
+        </Pressable>
+      </View>
       <Pressable
         style={styles.removeBtn}
         hitSlop={10}
         onPress={() => onRemove(m._index, m.brandName)}
         accessibilityLabel={t(language, 'removeMed')}
       >
-        <Ionicons name="trash-outline" size={18} color={colors.mutedVariant} />
+        <Ionicons name="trash-outline" size={17} color={colors.mutedVariant} />
       </Pressable>
     </View>
   );
@@ -227,21 +230,24 @@ export default function MedicinesScreen() {
 
                 {!isCollapsed && (
                   <View style={styles.groupBody}>
-                    {scheduleRows.map((row) => (
-                      <View key={`${group.scanId}-${row.timeOfDay}`} style={styles.slotBlock}>
-                        <View style={styles.slotHeader}>
-                          <View style={styles.slotIconWrap}>
+                    {scheduleRows.map((row, ri) => (
+                      <View key={`${group.scanId}-${row.timeOfDay}`} style={styles.timelineRow}>
+                        <View style={styles.rail}>
+                          <View style={styles.railDot}>
                             <Ionicons
                               name={SLOT_ICONS[row.timeOfDay] || 'time-outline'}
-                              size={16}
-                              color={colors.accentDark}
+                              size={12}
+                              color={colors.onPrimary}
                             />
                           </View>
+                          {ri < scheduleRows.length - 1 || unslotted.length > 0 ? (
+                            <View style={styles.railLine} />
+                          ) : null}
+                        </View>
+                        <View style={styles.slotCard}>
                           <Text style={styles.slotLabel}>
                             {t(language, SLOT_LABEL_KEYS[row.timeOfDay] || 'slotMorning')}
                           </Text>
-                        </View>
-                        <View style={styles.slotMeds}>
                           {row.medicines.map((m, mi) => (
                             <View
                               key={`${m.brandName}-${m._index}`}
@@ -258,22 +264,32 @@ export default function MedicinesScreen() {
                             </View>
                           ))}
                           {!!row.mealTiming && (
-                            <Text style={styles.mealNote}>{row.mealTiming}</Text>
+                            <Text style={styles.mealNote} numberOfLines={2} ellipsizeMode="tail">
+                              {row.mealTiming}
+                            </Text>
                           )}
                         </View>
                       </View>
                     ))}
 
-                    {unslotted.map((m) => (
-                      <View key={`u-${m._index}`} style={styles.slotBlock}>
-                        <MedRow
-                          m={m}
-                          language={language}
-                          onOpen={setModalMed}
-                          onMissed={openMissedDose}
-                          onRemove={confirmRemove}
-                          showTimingSquares={false}
-                        />
+                    {unslotted.map((m, ui) => (
+                      <View key={`u-${m._index}`} style={styles.timelineRow}>
+                        <View style={styles.rail}>
+                          <View style={[styles.railDot, styles.railDotMuted]}>
+                            <Ionicons name="ellipse" size={6} color={colors.outline} />
+                          </View>
+                          {ui < unslotted.length - 1 ? <View style={styles.railLine} /> : null}
+                        </View>
+                        <View style={styles.slotCard}>
+                          <MedRow
+                            m={m}
+                            language={language}
+                            onOpen={setModalMed}
+                            onMissed={openMissedDose}
+                            onRemove={confirmRemove}
+                            showTimingSquares={false}
+                          />
+                        </View>
                       </View>
                     ))}
                   </View>
@@ -299,18 +315,18 @@ const styles = StyleSheet.create({
   pad: { paddingHorizontal: spacing.margin, paddingBottom: 40, paddingTop: 4 },
   h1: {
     fontSize: 22,
-    lineHeight: 36,
+    lineHeight: 28,
     fontFamily: fonts.displayBold,
     color: colors.onSurface,
-    marginBottom: 4,
+    marginBottom: 2,
     letterSpacing: -0.2,
   },
   personName: {
-    fontSize: 17,
-    lineHeight: 24,
+    fontSize: 15,
+    lineHeight: 20,
     fontFamily: fonts.body,
     color: colors.accent,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
   },
   p: { color: colors.muted, lineHeight: 22, fontSize: 15, fontFamily: fonts.body },
   emptyWrap: { marginTop: spacing.xs },
@@ -371,77 +387,126 @@ const styles = StyleSheet.create({
   groupBody: {
     borderTopWidth: 1,
     borderTopColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
   },
-  slotBlock: {
-    padding: spacing.md,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
-  },
-  slotHeader: {
+  timelineRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
+    alignItems: 'stretch',
+    maxWidth: '100%',
   },
-  slotIconWrap: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: 'rgba(179, 209, 253, 0.35)',
+  rail: {
+    width: 22,
+    alignItems: 'center',
+    marginRight: 10,
+    flexShrink: 0,
+  },
+  railDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  railDotMuted: {
+    backgroundColor: colors.surfaceHigh,
+  },
+  railLine: {
+    flex: 1,
+    width: 2,
+    backgroundColor: colors.accentSoft,
+    marginVertical: 4,
+    minHeight: 12,
+  },
+  slotCard: {
+    flex: 1,
+    minWidth: 0,
+    backgroundColor: colors.surfaceLow,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 12,
+    paddingTop: 10,
+    paddingBottom: 8,
+    marginBottom: spacing.sm,
+  },
   slotLabel: {
-    fontSize: 12,
-    letterSpacing: 0.8,
+    fontSize: 11,
+    lineHeight: 14,
+    letterSpacing: 0.7,
     textTransform: 'uppercase',
     fontFamily: fonts.bodyBold,
     color: colors.accent,
+    marginBottom: 6,
   },
-  slotMeds: { paddingLeft: 8 },
-  slotMedItem: { paddingTop: 0 },
+  slotMedItem: { paddingTop: 0, width: '100%' },
   slotMedDivider: {
-    marginTop: 10,
-    paddingTop: 10,
+    marginTop: 8,
+    paddingTop: 8,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.surfaceHigh,
+    borderTopColor: colors.border,
   },
-  medRow: { flexDirection: 'row', alignItems: 'flex-start' },
-  medTop: { flexDirection: 'row', alignItems: 'flex-start' },
+  medRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    width: '100%',
+    maxWidth: '100%',
+  },
+  medCopy: {
+    flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
+    paddingRight: 8,
+  },
+  medRight: {
+    alignItems: 'flex-end',
+    gap: 4,
+    width: 78,
+    flexShrink: 0,
+  },
   medName: {
-    fontSize: 17,
-    lineHeight: 24,
+    fontSize: 15,
+    lineHeight: 20,
     fontFamily: fonts.bodyMedium,
     color: colors.onSurface,
+    flexShrink: 1,
   },
   medDose: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 12,
+    lineHeight: 16,
     color: colors.accent,
     fontFamily: fonts.body,
-    marginTop: 2,
+    marginTop: 1,
+    flexShrink: 1,
   },
   assumed: {
     color: colors.muted,
-    fontSize: 11,
-    marginTop: 4,
+    fontSize: 10,
+    lineHeight: 13,
+    marginTop: 2,
     fontStyle: 'italic',
     fontFamily: fonts.body,
+    flexShrink: 1,
   },
-  missedLink: { marginTop: 6, alignSelf: 'flex-start' },
+  missedLink: { alignSelf: 'stretch', maxWidth: '100%' },
   missedText: {
     color: colors.accent,
-    fontSize: 12,
-    letterSpacing: 0.4,
+    fontSize: 10,
+    lineHeight: 13,
+    letterSpacing: 0.3,
     textTransform: 'uppercase',
     fontFamily: fonts.bodyBold,
     textDecorationLine: 'underline',
+    textAlign: 'right',
   },
   mealNote: {
-    marginTop: 8,
-    fontSize: 12,
+    marginTop: 6,
+    fontSize: 11,
+    lineHeight: 14,
     color: colors.muted,
     fontFamily: fonts.body,
   },
-  removeBtn: { padding: 4, marginTop: 2, marginLeft: 4 },
+  removeBtn: { padding: 2, marginTop: 0, marginLeft: 2, flexShrink: 0 },
 });
